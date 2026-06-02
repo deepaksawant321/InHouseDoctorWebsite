@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 import { Box, Container, Typography, Grid, useTheme, alpha } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useRef, useState } from 'react';
@@ -132,9 +134,10 @@ export const HeroSection = () => {
               <motion.div variants={fadeInUp}>
                 <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 5 }}>
                   <Box
-                    component="button"
+                    component={Link}
+                    href="/request-doctor"
                     sx={{
-                      display: 'inline-flex', alignItems: 'center', gap: 1,
+                      display: 'inline-flex', alignItems: 'center', gap: 1, textDecoration: 'none',
                       py: 1.75, px: 3.5, borderRadius: 3, border: 'none', cursor: 'pointer',
                       background: 'linear-gradient(135deg, #1976D2, #00BFA5)',
                       color: 'white', fontWeight: 700, fontSize: '1rem',

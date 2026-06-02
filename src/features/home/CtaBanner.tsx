@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 import { Box, Container, Typography, useTheme, alpha } from '@mui/material';
 import { motion } from 'framer-motion';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -98,9 +100,10 @@ export const CtaBanner = () => {
 
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Box
-              component="button"
+              component={Link}
+              href="/request-doctor"
               sx={{
-                display: 'inline-flex', alignItems: 'center', gap: 1,
+                display: 'inline-flex', alignItems: 'center', gap: 1, textDecoration: 'none',
                 py: 2, px: 4, borderRadius: 3, border: 'none', cursor: 'pointer',
                 bgcolor: 'white', color: '#1976D2', fontWeight: 800, fontSize: '1rem',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.2)',

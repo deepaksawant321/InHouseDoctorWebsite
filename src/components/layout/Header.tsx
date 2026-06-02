@@ -75,8 +75,11 @@ export const Header = () => {
       </List>
       <Box sx={{ pt: 3, borderTop: '1px solid', borderColor: 'divider' }}>
         <Box
-          component="button"
+          component={Link}
+          href="/request-doctor"
+          onClick={handleDrawerToggle}
           sx={{
+            display: 'block', textAlign: 'center', textDecoration: 'none',
             width: '100%', py: 1.5, px: 3, borderRadius: 3, border: 'none', cursor: 'pointer',
             background: 'linear-gradient(135deg, #1976D2, #00BFA5)',
             color: 'white', fontWeight: 700, fontSize: '0.95rem',
@@ -165,9 +168,11 @@ export const Header = () => {
                 <PhoneIcon sx={{ fontSize: 16 }} /> 1800-123-4567
               </Box>
               <Box
-                component="button"
+                component={Link}
+                href="/request-doctor"
                 aria-label="Request Doctor Home Visit"
                 sx={{
+                  display: 'inline-flex', alignItems: 'center', textDecoration: 'none',
                   py: 1, px: 2.5, borderRadius: 3, border: 'none', cursor: 'pointer',
                   background: 'linear-gradient(135deg, #1976D2, #00BFA5)',
                   color: 'white', fontWeight: 700, fontSize: '0.875rem',
