@@ -4,6 +4,7 @@ import { Box, Typography, TextField, MenuItem } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
+import { useBooking } from '@/providers/BookingProvider';
 
 interface PatientForm {
   fullName: string;
@@ -15,6 +16,7 @@ interface PatientForm {
 
 export default function PatientDetailsPage() {
   const router = useRouter();
+  const { setSymptoms } = useBooking();
   
   const { control, handleSubmit, formState: { errors } } = useForm<PatientForm>({
     defaultValues: {
@@ -27,8 +29,7 @@ export default function PatientDetailsPage() {
   });
 
   const onSubmit = (data: PatientForm) => {
-    // In a real app, save to context/store
-    console.log(data);
+    setSymptoms(data.symptoms);
     router.push('/book/address');
   };
 

@@ -6,20 +6,54 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { OTPInput } from '@/features/booking/OTPInput';
 import { BookingStepper } from '@/features/booking/BookingStepper';
+import { apiClient } from '@/services/apiClient';
 
 export default function LoginPage() {
   const router = useRouter();
   const [step, setStep] = useState<'mobile' | 'otp'>('mobile');
   const [mobile, setMobile] = useState('');
   const [otp, setOtp] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSendOTP = () => {
-    if (mobile.length >= 10) setStep('otp');
+  const handleSendOTP = async () => {
+    if (mobile.length >= 10) {
+      setIsLoading(true);
+      try {
+        const res = await apiClient.post('/auth/send-otp', { phoneNumber: `+91${mobile}` });
+        // Dev Note: For ease of testing, logging the OTP generated
+        console.log('OTP Dev Hint:', res.data.data.devOtpHint);
+        setStep('otp');
+      } catch (error) {
+        console.error('Failed to send OTP:', error);
+        alert('Failed to send OTP. Is the backend running?');
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
-  const handleVerifyOTP = () => {
-    if (otp.length === 6) {
-      router.push('/book/service');
+  const handleVerifyOTP = async () => {
+    if (otp.length === 4) {
+      setIsLoading(true);
+      try {
+        const res = await apiClient.post('/auth/login-with-otp', { 
+          phoneNumber: `+91${mobile}`, 
+          otpCode: otp 
+        });
+        const { accessToken, user } = res.data.data;
+        localStorage.setItem('token', accessToken);
+        localStorage.setItem('user', JSON.stringify(user));
+        
+        // Redirect based on role or to booking
+        if (user.role === 'Admin') router.push('/admin/dashboard');
+        else if (user.role === 'Doctor') router.push('/doctor/dashboard');
+        else router.push('/book/service');
+      } catch (error) {
+        console.error('Failed to verify OTP:', error);
+        alert('Invalid OTP');
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -64,18 +98,18 @@ export default function LoginPage() {
                 <Box
                   component="button"
                   onClick={handleSendOTP}
-                  disabled={mobile.length < 10}
+                  disabled={mobile.length < 10 || isLoading}
                   sx={{
-                    width: '100%', py: 2, borderRadius: 3, border: 'none', cursor: mobile.length >= 10 ? 'pointer' : 'not-allowed',
-                    background: mobile.length >= 10 ? 'linear-gradient(135deg, #1976D2, #00BFA5)' : 'action.disabledBackground',
-                    color: mobile.length >= 10 ? 'white' : 'text.disabled', 
+                    width: '100%', py: 2, borderRadius: 3, border: 'none', cursor: mobile.length >= 10 && !isLoading ? 'pointer' : 'not-allowed',
+                    background: mobile.length >= 10 && !isLoading ? 'linear-gradient(135deg, #1976D2, #00BFA5)' : 'action.disabledBackground',
+                    color: mobile.length >= 10 && !isLoading ? 'white' : 'text.disabled', 
                     fontWeight: 700, fontSize: '1rem',
-                    boxShadow: mobile.length >= 10 ? '0 8px 24px rgba(25, 118, 210, 0.3)' : 'none',
+                    boxShadow: mobile.length >= 10 && !isLoading ? '0 8px 24px rgba(25, 118, 210, 0.3)' : 'none',
                     transition: 'all 0.2s',
-                    '&:hover': { transform: mobile.length >= 10 ? 'translateY(-2px)' : 'none' },
+                    '&:hover': { transform: mobile.length >= 10 && !isLoading ? 'translateY(-2px)' : 'none' },
                   }}
                 >
-                  Send OTP
+                  {isLoading ? 'Sending...' : 'Send OTP'}
                 </Box>
               </>
             ) : (
@@ -84,7 +118,7 @@ export default function LoginPage() {
                   Verify Mobile
                 </Typography>
                 <Typography variant="body1" color="text.secondary" sx={{ mb: 6 }}>
-                  Enter the 6-digit code sent to +91 {mobile}
+                  Enter the 4-digit code sent to +91 {mobile}
                 </Typography>
 
                 <Box sx={{ mb: 4 }}>
@@ -95,18 +129,18 @@ export default function LoginPage() {
                   <Box
                     component="button"
                     onClick={handleVerifyOTP}
-                    disabled={otp.length !== 6}
+                    disabled={otp.length !== 4 || isLoading}
                     sx={{
-                      width: '100%', py: 2, borderRadius: 3, border: 'none', cursor: otp.length === 6 ? 'pointer' : 'not-allowed',
-                      background: otp.length === 6 ? 'linear-gradient(135deg, #1976D2, #00BFA5)' : 'action.disabledBackground',
-                      color: otp.length === 6 ? 'white' : 'text.disabled', 
+                      width: '100%', py: 2, borderRadius: 3, border: 'none', cursor: otp.length === 4 && !isLoading ? 'pointer' : 'not-allowed',
+                      background: otp.length === 4 && !isLoading ? 'linear-gradient(135deg, #1976D2, #00BFA5)' : 'action.disabledBackground',
+                      color: otp.length === 4 && !isLoading ? 'white' : 'text.disabled', 
                       fontWeight: 700, fontSize: '1rem',
-                      boxShadow: otp.length === 6 ? '0 8px 24px rgba(25, 118, 210, 0.3)' : 'none',
+                      boxShadow: otp.length === 4 && !isLoading ? '0 8px 24px rgba(25, 118, 210, 0.3)' : 'none',
                       transition: 'all 0.2s',
-                      '&:hover': { transform: otp.length === 6 ? 'translateY(-2px)' : 'none' },
+                      '&:hover': { transform: otp.length === 4 && !isLoading ? 'translateY(-2px)' : 'none' },
                     }}
                   >
-                    Verify & Continue
+                    {isLoading ? 'Verifying...' : 'Verify & Continue'}
                   </Box>
                   <Typography 
                     variant="body2" 

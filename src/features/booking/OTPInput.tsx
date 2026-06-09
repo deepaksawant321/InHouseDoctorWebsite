@@ -9,7 +9,7 @@ interface OTPInputProps {
 }
 
 export const OTPInput = ({ value, onChange }: OTPInputProps) => {
-  const [otp, setOtp] = useState<string[]>(value.split('').concat(Array(6).fill('')).slice(0, 6));
+  const [otp, setOtp] = useState<string[]>(value.split('').concat(Array(4).fill('')).slice(0, 4));
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
   const handleChange = (index: number, val: string) => {
@@ -21,7 +21,7 @@ export const OTPInput = ({ value, onChange }: OTPInputProps) => {
     onChange(newOtp.join(''));
 
     // Move to next input
-    if (val && index < 5) {
+    if (val && index < 3) {
       inputsRef.current[index + 1]?.focus();
     }
   };
@@ -34,7 +34,7 @@ export const OTPInput = ({ value, onChange }: OTPInputProps) => {
 
   const handlePaste = (e: ClipboardEvent<HTMLDivElement>) => {
     e.preventDefault();
-    const pasteData = e.clipboardData.getData('text/plain').slice(0, 6).replace(/\D/g, '');
+    const pasteData = e.clipboardData.getData('text/plain').slice(0, 4).replace(/\D/g, '');
     if (!pasteData) return;
 
     const newOtp = [...otp];
@@ -45,7 +45,7 @@ export const OTPInput = ({ value, onChange }: OTPInputProps) => {
     onChange(newOtp.join(''));
 
     // Focus last filled input
-    const focusIndex = Math.min(pasteData.length, 5);
+    const focusIndex = Math.min(pasteData.length, 3);
     inputsRef.current[focusIndex]?.focus();
   };
 

@@ -2,13 +2,44 @@
 
 import { Box, Typography, TextField, Divider, alpha } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { UploadZone } from '@/features/booking/UploadZone';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { useBooking } from '@/providers/BookingProvider';
+import { apiClient } from '@/services/apiClient';
 
 export default function PaymentPage() {
   const router = useRouter();
+  const { state } = useBooking();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleBooking = async () => {
+    setIsSubmitting(true);
+    try {
+      // 1. Create Booking
+      const bookingRes = await apiClient.post('/bookings', {
+        doctorId: state.doctorId,
+        scheduledDate: state.scheduledDate,
+        symptoms: state.symptoms
+      });
+      const bookingId = bookingRes.data.data.id;
+
+      // 2. Initiate Payment Mock
+      await apiClient.post('/payments/initiate', {
+        bookingId,
+        amount: state.amount,
+        paymentMethod: 'UPI'
+      });
+
+      router.push('/booking-success');
+    } catch (error) {
+      console.error(error);
+      alert('Failed to complete booking. Ensure you are logged in.');
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <Box>
@@ -51,16 +82,12 @@ export default function PaymentPage() {
             
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="body2" color="text.secondary">Service</Typography>
-                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>General Physician</Typography>
-              </Box>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="body2" color="text.secondary">Patient Name</Typography>
-                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>John Doe</Typography>
+                <Typography variant="body2" color="text.secondary">Doctor</Typography>
+                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>{state.doctorName || 'Dr. Unknown'}</Typography>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="body2" color="text.secondary">Date & Time</Typography>
-                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>Tomorrow, Morning</Typography>
+                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>{state.scheduledDate ? new Date(state.scheduledDate).toLocaleString() : 'Tomorrow'}</Typography>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="body2" color="text.secondary">Location</Typography>
@@ -71,17 +98,17 @@ export default function PaymentPage() {
             <Divider sx={{ my: 3 }} />
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-              <Typography variant="body1">Subtotal</Typography>
-              <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>₹999</Typography>
+              <Typography variant="body1">Consultation Fee</Typography>
+              <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>₹{state.amount}</Typography>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
               <Typography variant="body1">Platform Fee</Typography>
-              <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>₹50</Typography>
+              <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>₹0</Typography>
             </Box>
             
             <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 2, bgcolor: alpha('#00BFA5', 0.1), borderRadius: 2 }}>
               <Typography variant="h6" sx={{ fontWeight: 700, color: '#009688' }}>Total Payable</Typography>
-              <Typography variant="h6" sx={{ fontWeight: 800, color: '#009688' }}>₹1049</Typography>
+              <Typography variant="h6" sx={{ fontWeight: 800, color: '#009688' }}>₹{state.amount}</Typography>
             </Box>
             
             <Box sx={{ display: 'flex', gap: 1, mt: 3, alignItems: 'center' }}>
@@ -104,15 +131,15 @@ export default function PaymentPage() {
           Back
         </Box>
         <Box
-          component="button" type="button" onClick={() => router.push('/booking-success')}
+          component="button" type="button" onClick={handleBooking} disabled={isSubmitting}
           sx={{
-            py: 1.5, px: 6, borderRadius: 3, border: 'none', cursor: 'pointer',
-            background: 'linear-gradient(135deg, #1976D2, #00BFA5)', color: 'white', 
-            fontWeight: 700, fontSize: '1rem', boxShadow: '0 8px 24px rgba(25, 118, 210, 0.3)',
-            transition: 'all 0.2s', '&:hover': { transform: 'translateY(-2px)' },
+            py: 1.5, px: 6, borderRadius: 3, border: 'none', cursor: isSubmitting ? 'not-allowed' : 'pointer',
+            background: isSubmitting ? 'action.disabledBackground' : 'linear-gradient(135deg, #1976D2, #00BFA5)', color: 'white', 
+            fontWeight: 700, fontSize: '1rem', boxShadow: isSubmitting ? 'none' : '0 8px 24px rgba(25, 118, 210, 0.3)',
+            transition: 'all 0.2s', '&:hover': { transform: isSubmitting ? 'none' : 'translateY(-2px)' },
           }}
         >
-          Submit Booking
+          {isSubmitting ? 'Processing...' : 'Submit Booking'}
         </Box>
       </Box>
     </Box>
