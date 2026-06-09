@@ -1,19 +1,43 @@
 'use client';
 
-import { Box, Container, Typography, TextField, alpha, useTheme } from '@mui/material';
+import { Box, Container, Typography, TextField, alpha, useTheme, CircularProgress } from '@mui/material';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { adminAuthApi } from '@/services/api';
+import { parseValidationErrors } from '@/utils/errorParser';
 
 export default function AdminLoginPage() {
   const theme = useTheme();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [generalError, setGeneralError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    router.push('/admin');
+    setGeneralError('');
+    setFieldErrors({});
+    setIsLoading(true);
+    try {
+      const res = await adminAuthApi.login(email, password);
+      const { accessToken, admin } = res.data.data;
+      localStorage.setItem('adminToken', accessToken);
+      localStorage.setItem('adminUser', JSON.stringify(admin));
+      router.push('/admin');
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        setGeneralError('Invalid email or password');
+      } else {
+        const { fieldErrors, generalMessage } = parseValidationErrors(err);
+        setFieldErrors(fieldErrors);
+        setGeneralError(generalMessage);
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -33,32 +57,35 @@ export default function AdminLoginPage() {
           <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>Welcome Back</Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>Sign in to manage operations</Typography>
 
+          {generalError && (
+            <Box sx={{ mb: 3, p: 2, borderRadius: 2, bgcolor: alpha('#f44336', 0.1), color: 'error.main', fontWeight: 600, fontSize: '0.9rem' }}>
+              {generalError}
+            </Box>
+          )}
+
           <Box component="form" onSubmit={handleLogin} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             <TextField 
               fullWidth label="Admin Email" variant="outlined" type="email" required
               value={email} onChange={(e) => setEmail(e.target.value)}
+              error={!!fieldErrors.email} helperText={fieldErrors.email}
             />
             <TextField 
               fullWidth label="Password" variant="outlined" type="password" required
               value={password} onChange={(e) => setPassword(e.target.value)}
+              error={!!fieldErrors.password} helperText={fieldErrors.password}
             />
             
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Typography variant="body2" sx={{ color: 'primary.main', fontWeight: 600, cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}>
-                Forgot Password?
-              </Typography>
-            </Box>
-
             <Box
-              component="button" type="submit"
+              component="button" type="submit" disabled={isLoading}
               sx={{
-                width: '100%', py: 1.75, borderRadius: 3, border: 'none', cursor: 'pointer',
-                background: 'linear-gradient(135deg, #1976D2, #00BFA5)', color: 'white', 
-                fontWeight: 700, fontSize: '1.1rem', boxShadow: '0 8px 24px rgba(25, 118, 210, 0.3)',
-                transition: 'all 0.2s', '&:hover': { transform: 'translateY(-2px)' },
+                width: '100%', py: 1.75, borderRadius: 3, border: 'none', cursor: isLoading ? 'not-allowed' : 'pointer',
+                background: isLoading ? 'action.disabledBackground' : 'linear-gradient(135deg, #1976D2, #00BFA5)', color: 'white', 
+                fontWeight: 700, fontSize: '1.1rem', boxShadow: isLoading ? 'none' : '0 8px 24px rgba(25, 118, 210, 0.3)',
+                transition: 'all 0.2s', '&:hover': { transform: isLoading ? 'none' : 'translateY(-2px)' },
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1,
               }}
             >
-              Secure Sign In
+              {isLoading ? <><CircularProgress size={18} sx={{ color: 'inherit' }} /> Signing in...</> : 'Secure Sign In'}
             </Box>
           </Box>
         </Box>

@@ -1,31 +1,48 @@
 'use client';
 
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import { useEffect, useState } from 'react';
 import { StatsCard } from '@/features/admin/StatsCard';
 import { ChartCard } from '@/features/admin/ChartCard';
 import { DataTable } from '@/features/admin/DataTable';
 import { StatusBadge, StatusType } from '@/features/admin/StatusBadge';
 import BookOnlineIcon from '@mui/icons-material/BookOnline';
-import PaymentIcon from '@mui/icons-material/Payment';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import TodayIcon from '@mui/icons-material/Today';
-import { mockBookings, mockRevenueData, mockBookingsTrend } from '@/services/mockAdminData';
+import PeopleIcon from '@mui/icons-material/People';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import PaymentIcon from '@mui/icons-material/Payment';
+import { adminApi } from '@/services/api';
 import Link from 'next/link';
 
 export default function AdminDashboardPage() {
+  const [stats, setStats] = useState<any>(null);
+  const [recentBookings, setRecentBookings] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([
+      adminApi.getDashboardStats(),
+      adminApi.getBookings(),
+    ]).then(([statsRes, bookingsRes]) => {
+      setStats(statsRes.data.data);
+      // Show only the 5 most recent
+      setRecentBookings((bookingsRes.data.data || []).slice(0, 5));
+    }).catch(console.error).finally(() => setLoading(false));
+  }, []);
+
   const columns = [
-    { id: 'id' as const, label: 'ID', minWidth: 100 },
-    { id: 'patientName' as const, label: 'Patient', minWidth: 150 },
-    { id: 'service' as const, label: 'Service', minWidth: 150 },
-    { id: 'paymentStatus' as const, label: 'Payment', minWidth: 120, format: (value: StatusType) => <StatusBadge status={value} /> },
-    { id: 'doctorStatus' as const, label: 'Doctor', minWidth: 120, format: (value: StatusType) => <StatusBadge status={value} /> },
-    { id: 'actions' as const, label: 'Actions', minWidth: 100, align: 'center' as const, format: (value: any, row: any) => (
-      <Button component={Link} href={`/admin/bookings/${row.id}`} variant="outlined" size="small" sx={{ borderRadius: 2 }}>View</Button>
-    ) },
+    { id: 'id' as const, label: 'ID', minWidth: 80, format: (v: string) => `#${String(v).slice(0, 6)}` },
+    { id: 'patient' as const, label: 'Patient', minWidth: 150, format: (_: any, row: any) => row.patient?.fullName || '—' },
+    { id: 'symptoms' as const, label: 'Symptoms', minWidth: 150 },
+    { id: 'status' as const, label: 'Status', minWidth: 120, format: (value: StatusType) => <StatusBadge status={value} /> },
+    { id: 'actions' as const, label: 'Actions', minWidth: 100, align: 'center' as const, format: (_: any, row: any) => (
+      <Button component={Link} href={`/admin/bookings`} variant="outlined" size="small" sx={{ borderRadius: 2 }}>View</Button>
+    )},
   ];
+
+  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}><CircularProgress /></Box>;
 
   return (
     <Box>
@@ -36,32 +53,22 @@ export default function AdminDashboardPage() {
       {/* KPI Cards */}
       <Grid container spacing={3} sx={{ mb: 6 }}>
         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
-          <StatsCard title="Total Bookings" value="1,284" icon={<BookOnlineIcon />} trend="up" trendValue="+12%" />
+          <StatsCard title="Total Bookings" value={String(stats?.totalBookings ?? 0)} icon={<BookOnlineIcon />} trend="up" trendValue="Live" />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
-          <StatsCard title="Pending Payments" value="14" icon={<PaymentIcon />} trend="down" trendValue="-2%" />
+          <StatsCard title="Pending Bookings" value={String(stats?.pendingBookings ?? 0)} icon={<AssignmentIndIcon />} trend="down" trendValue="Pending" />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
-          <StatsCard title="Pending Assign" value="8" icon={<AssignmentIndIcon />} trend="down" trendValue="-5%" />
+          <StatsCard title="Total Users" value={String(stats?.totalUsers ?? 0)} icon={<PeopleIcon />} trend="up" trendValue="Registered" />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
-          <StatsCard title="Completed Visits" value="842" icon={<CheckCircleIcon />} trend="up" trendValue="+18%" />
+          <StatsCard title="Active Doctors" value={String(stats?.totalDoctors ?? 0)} icon={<LocalHospitalIcon />} trend="up" trendValue="Active" />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
-          <StatsCard title="Revenue Today" value="₹12.4k" icon={<TodayIcon />} trend="up" trendValue="+5%" />
+          <StatsCard title="Payments Done" value={String(stats?.completedPayments ?? 0)} icon={<PaymentIcon />} trend="up" trendValue="Success" />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
-          <StatsCard title="Monthly Rev." value="₹2.4M" icon={<AttachMoneyIcon />} trend="up" trendValue="+24%" />
-        </Grid>
-      </Grid>
-
-      {/* Charts */}
-      <Grid container spacing={3} sx={{ mb: 6 }}>
-        <Grid size={{ xs: 12, md: 8 }}>
-          <ChartCard title="Revenue Trend (Past 7 Days)" data={mockRevenueData} type="line" dataKey="revenue" xAxisKey="name" color="#00BFA5" />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <ChartCard title="Bookings by Week" data={mockBookingsTrend} type="bar" dataKey="bookings" xAxisKey="name" color="#1976D2" />
+          <StatsCard title="Completed Visits" value={String(stats?.completedPayments ?? 0)} icon={<CheckCircleIcon />} trend="up" trendValue="Verified" />
         </Grid>
       </Grid>
 
@@ -70,7 +77,7 @@ export default function AdminDashboardPage() {
         <DataTable 
           title="Recent Bookings" 
           columns={columns} 
-          rows={mockBookings} 
+          rows={recentBookings} 
           actions={<Button component={Link} href="/admin/bookings" variant="contained">View All</Button>} 
         />
       </Box>

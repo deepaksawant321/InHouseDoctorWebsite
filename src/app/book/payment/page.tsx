@@ -8,7 +8,7 @@ import { UploadZone } from '@/features/booking/UploadZone';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useBooking } from '@/providers/BookingProvider';
-import { apiClient } from '@/services/apiClient';
+import { bookingsApi, paymentsApi } from '@/services/api';
 
 export default function PaymentPage() {
   const router = useRouter();
@@ -19,19 +19,15 @@ export default function PaymentPage() {
     setIsSubmitting(true);
     try {
       // 1. Create Booking
-      const bookingRes = await apiClient.post('/bookings', {
-        doctorId: state.doctorId,
-        scheduledDate: state.scheduledDate,
-        symptoms: state.symptoms
+      const bookingRes = await bookingsApi.create({
+        doctorId: state.doctorId || undefined,
+        scheduledDate: state.scheduledDate || '',
+        symptoms: state.symptoms || undefined
       });
       const bookingId = bookingRes.data.data.id;
 
-      // 2. Initiate Payment Mock
-      await apiClient.post('/payments/initiate', {
-        bookingId,
-        amount: state.amount,
-        paymentMethod: 'UPI'
-      });
+      // 2. Initiate Payment
+      await paymentsApi.initiate(bookingId, state.amount);
 
       router.push('/booking-success');
     } catch (error) {

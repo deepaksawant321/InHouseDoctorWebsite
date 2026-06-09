@@ -6,7 +6,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { OTPInput } from '@/features/booking/OTPInput';
 import { BookingStepper } from '@/features/booking/BookingStepper';
-import { apiClient } from '@/services/apiClient';
+import { authApi } from '@/services/api';
+import { parseValidationErrors } from '@/utils/errorParser';
+import { alpha } from '@mui/material';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -14,18 +16,24 @@ export default function LoginPage() {
   const [mobile, setMobile] = useState('');
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [generalError, setGeneralError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const handleSendOTP = async () => {
+    setGeneralError('');
+    setFieldErrors({});
     if (mobile.length >= 10) {
       setIsLoading(true);
       try {
-        const res = await apiClient.post('/auth/send-otp', { phoneNumber: `+91${mobile}` });
+        const res = await authApi.sendOtp(`+91${mobile}`);
         // Dev Note: For ease of testing, logging the OTP generated
         console.log('OTP Dev Hint:', res.data.data.devOtpHint);
         setStep('otp');
-      } catch (error) {
-        console.error('Failed to send OTP:', error);
-        alert('Failed to send OTP. Is the backend running?');
+      } catch (err: any) {
+        console.error('Failed to send OTP:', err);
+        const { fieldErrors, generalMessage } = parseValidationErrors(err);
+        setFieldErrors(fieldErrors);
+        setGeneralError(generalMessage);
       } finally {
         setIsLoading(false);
       }
@@ -34,12 +42,11 @@ export default function LoginPage() {
 
   const handleVerifyOTP = async () => {
     if (otp.length === 4) {
+      setGeneralError('');
+      setFieldErrors({});
       setIsLoading(true);
       try {
-        const res = await apiClient.post('/auth/login-with-otp', { 
-          phoneNumber: `+91${mobile}`, 
-          otpCode: otp 
-        });
+        const res = await authApi.loginWithOtp(`+91${mobile}`, otp);
         const { accessToken, user } = res.data.data;
         localStorage.setItem('token', accessToken);
         localStorage.setItem('user', JSON.stringify(user));
@@ -48,9 +55,11 @@ export default function LoginPage() {
         if (user.role === 'Admin') router.push('/admin/dashboard');
         else if (user.role === 'Doctor') router.push('/doctor/dashboard');
         else router.push('/book/service');
-      } catch (error) {
-        console.error('Failed to verify OTP:', error);
-        alert('Invalid OTP');
+      } catch (err: any) {
+        console.error('Failed to verify OTP:', err);
+        const { fieldErrors, generalMessage } = parseValidationErrors(err);
+        setFieldErrors(fieldErrors);
+        setGeneralError(generalMessage || 'Invalid OTP');
       } finally {
         setIsLoading(false);
       }
@@ -80,6 +89,12 @@ export default function LoginPage() {
                   Enter your mobile number to proceed. We will send an OTP for verification.
                 </Typography>
 
+                {generalError && (
+                  <Box sx={{ mb: 3, p: 2, borderRadius: 2, bgcolor: alpha('#f44336', 0.1), color: 'error.main', fontWeight: 600, fontSize: '0.9rem' }}>
+                    {generalError}
+                  </Box>
+                )}
+
                 <TextField
                   fullWidth
                   placeholder="Mobile Number"
@@ -93,6 +108,8 @@ export default function LoginPage() {
                     }
                   }}
                   sx={{ mb: 4 }}
+                  error={!!fieldErrors.phoneNumber}
+                  helperText={fieldErrors.phoneNumber}
                 />
 
                 <Box
@@ -120,6 +137,12 @@ export default function LoginPage() {
                 <Typography variant="body1" color="text.secondary" sx={{ mb: 6 }}>
                   Enter the 4-digit code sent to +91 {mobile}
                 </Typography>
+
+                {generalError && (
+                  <Box sx={{ mb: 3, p: 2, borderRadius: 2, bgcolor: alpha('#f44336', 0.1), color: 'error.main', fontWeight: 600, fontSize: '0.9rem' }}>
+                    {generalError}
+                  </Box>
+                )}
 
                 <Box sx={{ mb: 4 }}>
                   <OTPInput value={otp} onChange={setOtp} />

@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Box, Typography, alpha } from '@mui/material';
+import { Box, Typography, alpha, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
-import { apiClient } from '@/services/apiClient';
+import StarIcon from '@mui/icons-material/Star';
+import { doctorsApi } from '@/services/api';
 import { useBooking } from '@/providers/BookingProvider';
 
 export default function SelectServicePage() {
@@ -15,7 +16,7 @@ export default function SelectServicePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    apiClient.get('/doctors').then(res => {
+    doctorsApi.getAll().then(res => {
       setDoctors(res.data.data || []);
       setLoading(false);
     }).catch(err => {
@@ -33,39 +34,56 @@ export default function SelectServicePage() {
   return (
     <Box>
       <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>Select a Doctor</Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ mb: 6 }}>Choose a verified medical professional.</Typography>
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 6 }}>
+        Choose a verified medical professional for your home visit.
+      </Typography>
 
-      <Grid container spacing={3} sx={{ mb: 6 }}>
-        {loading ? <Typography>Loading doctors...</Typography> : doctors.map((doc) => {
-          const isSelected = state.doctorId === doc.id;
-          return (
-            <Grid size={{ xs: 12, sm: 6 }} key={doc.id}>
-              <Box
-                onClick={() => setDoctor(doc.id, `Dr. ${doc.user.firstName} ${doc.user.lastName}`, doc.consultationFee)}
-                sx={{
-                  p: 3, borderRadius: 4, height: '100%', cursor: 'pointer',
-                  bgcolor: isSelected ? alpha('#1976D2', 0.04) : 'background.paper',
-                  border: '2px solid',
-                  borderColor: isSelected ? 'primary.main' : 'divider',
-                  transition: 'all 0.2s',
-                  '&:hover': { transform: 'translateY(-2px)', borderColor: isSelected ? 'primary.main' : alpha('#1976D2', 0.5) }
-                }}
-              >
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                  <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: isSelected ? 'primary.main' : alpha('#1976D2', 0.1), color: isSelected ? 'white' : 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <MedicalServicesIcon />
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
+          <CircularProgress />
+        </Box>
+      ) : doctors.length === 0 ? (
+        <Box sx={{ textAlign: 'center', py: 10 }}>
+          <Typography color="text.secondary">No doctors available at the moment. Please try again later.</Typography>
+        </Box>
+      ) : (
+        <Grid container spacing={3} sx={{ mb: 6 }}>
+          {doctors.map((doc) => {
+            const isSelected = state.doctorId === doc.id;
+            return (
+              <Grid size={{ xs: 12, sm: 6 }} key={doc.id}>
+                <Box
+                  onClick={() => setDoctor(doc.id, `Dr. ${doc.name}`, doc.consultationFee)}
+                  sx={{
+                    p: 3, borderRadius: 4, height: '100%', cursor: 'pointer',
+                    bgcolor: isSelected ? alpha('#1976D2', 0.04) : 'background.paper',
+                    border: '2px solid',
+                    borderColor: isSelected ? 'primary.main' : 'divider',
+                    transition: 'all 0.2s',
+                    '&:hover': { transform: 'translateY(-2px)', borderColor: isSelected ? 'primary.main' : alpha('#1976D2', 0.5) }
+                  }}
+                >
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                    <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: isSelected ? 'primary.main' : alpha('#1976D2', 0.1), color: isSelected ? 'white' : 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <MedicalServicesIcon />
+                    </Box>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: 'primary.main', bgcolor: alpha('#1976D2', 0.1), px: 1.5, py: 0.5, borderRadius: 2 }}>
+                      ₹{doc.consultationFee}
+                    </Typography>
                   </Box>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 700, color: 'primary.main', bgcolor: alpha('#1976D2', 0.1), px: 1.5, py: 0.5, borderRadius: 2 }}>
-                    ₹{doc.consultationFee}
+                  <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>Dr. {doc.name}</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                    {doc.specialization} • {doc.experienceYears} Years Exp
                   </Typography>
+                  {doc.qualification && (
+                    <Typography variant="caption" color="text.secondary">{doc.qualification}</Typography>
+                  )}
                 </Box>
-                <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>Dr. {doc.user.firstName} {doc.user.lastName}</Typography>
-                <Typography variant="body2" color="text.secondary">{doc.specialization} ({doc.experienceYears} Years)</Typography>
-              </Box>
-            </Grid>
-          );
-        })}
-      </Grid>
+              </Grid>
+            );
+          })}
+        </Grid>
+      )}
 
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Box
