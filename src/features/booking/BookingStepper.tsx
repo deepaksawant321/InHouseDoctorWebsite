@@ -4,13 +4,10 @@ import { Box, Container, Typography, LinearProgress, useTheme } from '@mui/mater
 import { usePathname } from 'next/navigation';
 
 const steps = [
-  { path: '/request-doctor', label: 'Request Doctor' },
-  { path: '/login', label: 'Login' },
+  { path: '/book/patient', label: 'Patient' },
   { path: '/book/service', label: 'Service' },
-  { path: '/book/details', label: 'Details' },
   { path: '/book/address', label: 'Address' },
   { path: '/book/schedule', label: 'Schedule' },
-  { path: '/book/prescription', label: 'Prescription' },
   { path: '/book/payment', label: 'Payment' },
   { path: '/booking-success', label: 'Success' },
 ];
@@ -40,7 +37,7 @@ export const BookingStepper = () => {
           <LinearProgress 
             variant="determinate" 
             value={progress} 
-            sx={{ mt: 2, height: 6, borderRadius: 3, bgcolor: 'action.hover' }}
+            sx={{ mt: 2, height: 6, borderRadius: '16px', bgcolor: 'action.hover' }}
           />
         </Box>
 

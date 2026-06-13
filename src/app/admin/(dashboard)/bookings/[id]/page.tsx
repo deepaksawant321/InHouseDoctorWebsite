@@ -20,7 +20,7 @@ export default function BookingDetailsPage({ params }: { params: { id: string } 
 
       <Grid container spacing={4}>
         <Grid size={{ xs: 12, md: 8 }}>
-          <Box sx={{ p: 4, borderRadius: 4, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', mb: 4 }}>
+          <Box sx={{ p: 4, borderRadius: '24px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', mb: 4 }}>
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 3 }}>Patient Information</Typography>
             <Grid container spacing={3}>
               <Grid size={{ xs: 6, sm: 4 }}>
@@ -50,12 +50,12 @@ export default function BookingDetailsPage({ params }: { params: { id: string } 
             </Typography>
           </Box>
 
-          <Box sx={{ p: 4, borderRadius: 4, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider' }}>
+          <Box sx={{ p: 4, borderRadius: '24px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
               <Typography variant="h6" sx={{ fontWeight: 700 }}>Doctor Assignment</Typography>
               <StatusBadge status="Assigned" />
             </Box>
-            <Box sx={{ p: 3, borderRadius: 3, bgcolor: alpha(theme.palette.primary.main, 0.05), border: '1px solid', borderColor: 'primary.main' }}>
+            <Box sx={{ p: 3, borderRadius: '16px', bgcolor: alpha(theme.palette.primary.main, 0.05), border: '1px solid', borderColor: 'primary.main' }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'primary.main' }}>Dr. Suresh Mehta</Typography>
               <Typography variant="body2" color="text.secondary">General Physician • 12 Years Experience</Typography>
               <Box sx={{ mt: 2 }}>
@@ -67,7 +67,7 @@ export default function BookingDetailsPage({ params }: { params: { id: string } 
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
-          <Box sx={{ p: 4, borderRadius: 4, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', mb: 4 }}>
+          <Box sx={{ p: 4, borderRadius: '24px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', mb: 4 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
               <Typography variant="h6" sx={{ fontWeight: 700 }}>Payment</Typography>
               <StatusBadge status="Verified" />

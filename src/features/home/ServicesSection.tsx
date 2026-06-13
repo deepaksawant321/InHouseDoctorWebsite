@@ -14,29 +14,29 @@ const services = [
     icon: <LocalHospitalIcon sx={{ fontSize: 36 }} />,
     title: 'General Physician',
     description: 'Expert consultation for general health issues, fevers, infections, and routine checkups — all in the comfort of your home.',
-    color: '#1976D2',
-    gradient: 'linear-gradient(135deg, #1976D2, #42A5F5)',
+    color: '#4F46E5', // Indigo
+    gradient: 'linear-gradient(135deg, #4F46E5, #818CF8)',
   },
   {
     icon: <MasksIcon sx={{ fontSize: 36 }} />,
     title: 'Nursing Care',
     description: 'Professional nursing support for injections, wound dressing, IV therapy, catheter care, and post-operative care.',
-    color: '#00BFA5',
-    gradient: 'linear-gradient(135deg, #00BFA5, #33CCBB)',
+    color: '#0D9488', // Teal
+    gradient: 'linear-gradient(135deg, #0D9488, #2DD4BF)',
   },
   {
     icon: <DirectionsWalkIcon sx={{ fontSize: 36 }} />,
     title: 'Physiotherapy',
     description: 'Customised rehabilitation and pain management through expert physical therapy sessions at your home.',
-    color: '#6C63FF',
-    gradient: 'linear-gradient(135deg, #6C63FF, #9D97FF)',
+    color: '#9333EA', // Purple
+    gradient: 'linear-gradient(135deg, #9333EA, #C084FC)',
   },
   {
     icon: <ElderlyIcon sx={{ fontSize: 36 }} />,
     title: 'Elder Care',
     description: 'Compassionate, specialised care designed for senior citizens — medical attention, companionship, and dignity at home.',
-    color: '#1976D2',
-    gradient: 'linear-gradient(135deg, #1565C0, #6C63FF)',
+    color: '#0284C7', // Sky Blue
+    gradient: 'linear-gradient(135deg, #0284C7, #38BDF8)',
   },
 ];
 
@@ -58,12 +58,12 @@ export const ServicesSection = () => {
           {/* Section Header */}
           <motion.div variants={fadeInUp}>
             <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 10 } }}>
-              <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75, borderRadius: 10, mb: 2, border: '1px solid', borderColor: alpha('#00BFA5', 0.3), bgcolor: alpha('#00BFA5', 0.06) }}>
+              <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75, borderRadius: 10, mb: 2, border: '1px solid', borderColor: alpha('#0D9488', 0.3), bgcolor: alpha('#0D9488', 0.06) }}>
                 <Typography variant="caption" sx={{ fontWeight: 600, color: 'secondary.main' }}>What We Offer</Typography>
               </Box>
               <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '2rem', md: '2.75rem' } }}>
                 Our{' '}
-                <Box component="span" sx={{ background: 'linear-gradient(135deg, #00BFA5, #6C63FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                <Box component="span" sx={{ background: 'linear-gradient(135deg, #4F46E5, #0D9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Services
                 </Box>
               </Typography>
@@ -81,7 +81,7 @@ export const ServicesSection = () => {
                     sx={{
                       height: '100%',
                       p: 4,
-                      borderRadius: 4,
+                      borderRadius: '32px', // Was 4 which evaluated to 64px!
                       bgcolor: 'background.paper',
                       border: '1px solid',
                       borderColor: 'divider',
@@ -111,7 +111,7 @@ export const ServicesSection = () => {
                     {/* Icon */}
                     <Box
                       sx={{
-                        width: 68, height: 68, borderRadius: 3, mb: 3,
+                        width: 68, height: 68, borderRadius: '16px', mb: 3,
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         background: service.gradient,
                         boxShadow: `0 8px 20px ${alpha(service.color, 0.35)}`,

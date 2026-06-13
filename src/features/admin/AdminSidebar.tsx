@@ -2,7 +2,7 @@
 
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, alpha, useTheme } from '@mui/material';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import BookOnlineIcon from '@mui/icons-material/BookOnline';
 import PaymentIcon from '@mui/icons-material/Payment';
@@ -35,11 +35,18 @@ interface AdminSidebarProps {
 export const AdminSidebar = ({ mobileOpen, onClose }: AdminSidebarProps) => {
   const pathname = usePathname();
   const theme = useTheme();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem('adminToken');
+    router.push('/admin/login');
+    onClose();
+  };
 
   const drawerContent = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.paper', borderRight: '1px solid', borderColor: 'divider' }}>
       <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <Box sx={{ width: 40, height: 40, borderRadius: 2, background: 'linear-gradient(135deg, #1976D2, #00BFA5)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+        <Box sx={{ width: 40, height: 40, borderRadius: 2, background: 'linear-gradient(135deg, #4F46E5, #0D9488)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
           <MedicalServicesIcon />
         </Box>
         <Typography variant="h6" sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: 'text.primary' }}>
@@ -49,7 +56,7 @@ export const AdminSidebar = ({ mobileOpen, onClose }: AdminSidebarProps) => {
 
       <List sx={{ px: 2, flex: 1 }}>
         {menuItems.map((item) => {
-          const isActive = pathname === item.path || pathname.startsWith(`${item.path}/`);
+          const isActive = item.path === '/admin' ? pathname === '/admin' : pathname === item.path || pathname.startsWith(`${item.path}/`);
           return (
             <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
               <ListItemButton
@@ -73,7 +80,7 @@ export const AdminSidebar = ({ mobileOpen, onClose }: AdminSidebarProps) => {
 
       <Box sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider' }}>
         <ListItem disablePadding>
-          <ListItemButton component={Link} href="/admin/login" sx={{ borderRadius: 2, py: 1.25, color: 'error.main', '&:hover': { bgcolor: alpha(theme.palette.error.main, 0.08) } }}>
+          <ListItemButton component={Link} href="/admin/login" onClick={handleLogout} sx={{ borderRadius: 2, py: 1.25, color: 'error.main', '&:hover': { bgcolor: alpha(theme.palette.error.main, 0.08) } }}>
             <ListItemIcon sx={{ color: 'inherit', minWidth: 40 }}><LogoutIcon /></ListItemIcon>
             <ListItemText primary="Logout" slotProps={{ primary: { sx: { fontWeight: 600, fontSize: '0.9rem' } } }} />
           </ListItemButton>

@@ -42,8 +42,8 @@ export const HeroSection = () => {
             position: 'absolute', top: '-20%', right: '-10%',
             width: 600, height: 600, borderRadius: '50%',
             background: isDark
-              ? 'radial-gradient(circle, rgba(25, 118, 210, 0.18) 0%, transparent 70%)'
-              : 'radial-gradient(circle, rgba(25, 118, 210, 0.12) 0%, transparent 70%)',
+              ? 'radial-gradient(circle, rgba(79, 70, 229, 0.18) 0%, transparent 70%)'
+              : 'radial-gradient(circle, rgba(79, 70, 229, 0.12) 0%, transparent 70%)',
           }}
         />
         <motion.div
@@ -52,8 +52,8 @@ export const HeroSection = () => {
             position: 'absolute', bottom: '-10%', left: '-5%',
             width: 500, height: 500, borderRadius: '50%',
             background: isDark
-              ? 'radial-gradient(circle, rgba(0, 191, 165, 0.15) 0%, transparent 70%)'
-              : 'radial-gradient(circle, rgba(0, 191, 165, 0.1) 0%, transparent 70%)',
+              ? 'radial-gradient(circle, rgba(13, 148, 136, 0.15) 0%, transparent 70%)'
+              : 'radial-gradient(circle, rgba(13, 148, 136, 0.1) 0%, transparent 70%)',
           }}
         />
         <motion.div
@@ -72,7 +72,7 @@ export const HeroSection = () => {
       <Box
         sx={{
           position: 'absolute', inset: 0, pointerEvents: 'none', opacity: isDark ? 0.15 : 0.06,
-          backgroundImage: 'radial-gradient(circle, #1976D2 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(circle, #4F46E5 1px, transparent 1px)',
           backgroundSize: '36px 36px',
         }}
       />
@@ -89,8 +89,8 @@ export const HeroSection = () => {
                     display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75,
                     borderRadius: 10, mb: 3,
                     border: '1px solid',
-                    borderColor: alpha('#1976D2', 0.3),
-                    bgcolor: alpha('#1976D2', 0.06),
+                    borderColor: alpha('#4F46E5', 0.3),
+                    bgcolor: alpha('#4F46E5', 0.06),
                   }}
                 >
                   <VerifiedIcon sx={{ fontSize: 16, color: 'secondary.main' }} />
@@ -105,7 +105,7 @@ export const HeroSection = () => {
                 <Typography
                   variant="h1"
                   sx={{
-                    fontSize: { xs: '2.6rem', sm: '3.2rem', md: '3.8rem', lg: '4.2rem' },
+                    fontSize: { xs: '2.2rem', sm: '3.2rem', md: '3.8rem', lg: '4.2rem' },
                     lineHeight: 1.05,
                     mb: 2,
                     color: 'text.primary',
@@ -114,7 +114,7 @@ export const HeroSection = () => {
                   Doctor At Your{' '}
                   <Box
                     component="span"
-                    sx={{ background: 'linear-gradient(135deg, #1976D2 0%, #00BFA5 60%, #6C63FF 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', display: 'inline' }}
+                    sx={{ background: 'linear-gradient(135deg, #4F46E5 0%, #0D9488 60%, #6C63FF 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', display: 'inline' }}
                   >
                     Doorstep
                   </Box>
@@ -138,12 +138,12 @@ export const HeroSection = () => {
                     href="/request-doctor"
                     sx={{
                       display: 'inline-flex', alignItems: 'center', gap: 1, textDecoration: 'none',
-                      py: 1.75, px: 3.5, borderRadius: 3, border: 'none', cursor: 'pointer',
-                      background: 'linear-gradient(135deg, #1976D2, #00BFA5)',
+                      py: 1.75, px: 3.5, borderRadius: '16px', border: 'none', cursor: 'pointer',
+                      background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
                       color: 'white', fontWeight: 700, fontSize: '1rem',
-                      boxShadow: '0 8px 24px rgba(25, 118, 210, 0.4)',
+                      boxShadow: '0 8px 24px rgba(79, 70, 229, 0.4)',
                       transition: 'all 0.3s ease',
-                      '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 12px 32px rgba(25, 118, 210, 0.5)' },
+                      '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 12px 32px rgba(79, 70, 229, 0.5)' },
                     }}
                   >
                     Request Doctor <ArrowForwardIcon sx={{ fontSize: 18 }} />
@@ -152,11 +152,11 @@ export const HeroSection = () => {
                     component="button"
                     sx={{
                       display: 'inline-flex', alignItems: 'center', gap: 1,
-                      py: 1.75, px: 3.5, borderRadius: 3, cursor: 'pointer',
-                      border: '2px solid', borderColor: alpha('#00BFA5', 0.5),
+                      py: 1.75, px: 3.5, borderRadius: '16px', cursor: 'pointer',
+                      border: '2px solid', borderColor: alpha('#0D9488', 0.5),
                       bgcolor: 'transparent', color: 'text.primary', fontWeight: 700, fontSize: '1rem',
                       transition: 'all 0.3s ease',
-                      '&:hover': { borderColor: 'secondary.main', bgcolor: alpha('#00BFA5', 0.06) },
+                      '&:hover': { borderColor: 'secondary.main', bgcolor: alpha('#0D9488', 0.06) },
                     }}
                   >
                     <PhoneIcon sx={{ fontSize: 18 }} /> Call Now
@@ -178,7 +178,7 @@ export const HeroSection = () => {
                     position: 'absolute',
                     width: 380, height: 380,
                     borderRadius: '50%',
-                    border: `2px dashed ${alpha('#1976D2', 0.2)}`,
+                    border: `2px dashed ${alpha('#4F46E5', 0.2)}`,
                   }}
                 />
                 <motion.div
@@ -187,7 +187,7 @@ export const HeroSection = () => {
                     position: 'absolute',
                     width: 280, height: 280,
                     borderRadius: '50%',
-                    border: `2px dashed ${alpha('#00BFA5', 0.25)}`,
+                    border: `2px dashed ${alpha('#0D9488', 0.25)}`,
                   }}
                 />
 
@@ -195,10 +195,10 @@ export const HeroSection = () => {
                 <Box
                   sx={{
                     width: 220, height: 220, borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #1976D2 0%, #00BFA5 50%, #6C63FF 100%)',
+                    background: 'linear-gradient(135deg, #4F46E5 0%, #0D9488 50%, #6C63FF 100%)',
                     display: 'flex', flexDirection: 'column',
                     alignItems: 'center', justifyContent: 'center',
-                    boxShadow: '0 20px 60px rgba(25, 118, 210, 0.4)',
+                    boxShadow: '0 20px 60px rgba(79, 70, 229, 0.4)',
                     zIndex: 2,
                   }}
                 >
@@ -216,14 +216,14 @@ export const HeroSection = () => {
                   <Box
                     sx={{
                       display: 'flex', alignItems: 'center', gap: 1.5,
-                      px: 2.5, py: 1.5, borderRadius: 3,
+                      px: 2.5, py: 1.5, borderRadius: '16px',
                       bgcolor: isDark ? alpha('#1F2937', 0.95) : 'white',
                       boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-                      border: '1px solid', borderColor: alpha('#00BFA5', 0.2),
+                      border: '1px solid', borderColor: alpha('#0D9488', 0.2),
                       backdropFilter: 'blur(10px)',
                     }}
                   >
-                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#00BFA5', flexShrink: 0, boxShadow: '0 0 0 3px rgba(0,191,165,0.2)' }} />
+                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#0D9488', flexShrink: 0, boxShadow: '0 0 0 3px rgba(13,148,136,0.2)' }} />
                     <Box>
                       <Typography variant="caption" sx={{ fontWeight: 700, display: 'block', color: 'text.primary' }}>
                         Doctor Available
@@ -243,14 +243,14 @@ export const HeroSection = () => {
                   <Box
                     sx={{
                       display: 'flex', alignItems: 'center', gap: 1.5,
-                      px: 2.5, py: 1.5, borderRadius: 3,
+                      px: 2.5, py: 1.5, borderRadius: '16px',
                       bgcolor: isDark ? alpha('#1F2937', 0.95) : 'white',
                       boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-                      border: '1px solid', borderColor: alpha('#1976D2', 0.2),
+                      border: '1px solid', borderColor: alpha('#4F46E5', 0.2),
                       backdropFilter: 'blur(10px)',
                     }}
                   >
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 2, background: 'linear-gradient(135deg, #1976D2, #6C63FF)' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 2, background: 'linear-gradient(135deg, #4F46E5, #6C63FF)' }}>
                       <VerifiedIcon sx={{ fontSize: 18, color: 'white' }} />
                     </Box>
                     <Box>
@@ -274,14 +274,14 @@ export const HeroSection = () => {
                   <Box
                     sx={{
                       display: 'flex', alignItems: 'center', gap: 1.5,
-                      px: 2.5, py: 1.5, borderRadius: 3,
+                      px: 2.5, py: 1.5, borderRadius: '16px',
                       bgcolor: isDark ? alpha('#1F2937', 0.95) : 'white',
                       boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
                       border: '1px solid', borderColor: alpha('#6C63FF', 0.2),
                       backdropFilter: 'blur(10px)',
                     }}
                   >
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 2, background: 'linear-gradient(135deg, #00BFA5, #6C63FF)' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 2, background: 'linear-gradient(135deg, #0D9488, #6C63FF)' }}>
                       <AccessTimeIcon sx={{ fontSize: 18, color: 'white' }} />
                     </Box>
                     <Box>

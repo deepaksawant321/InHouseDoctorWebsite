@@ -59,7 +59,7 @@ export const PageHero = ({ title, subtitle }: PageHeroProps) => {
             sx={{
               fontWeight: 800, mb: 3,
               fontSize: { xs: '2.5rem', sm: '3rem', md: '3.5rem' },
-              background: 'linear-gradient(135deg, #1976D2, #00BFA5)',
+              background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}

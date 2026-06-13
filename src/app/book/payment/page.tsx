@@ -20,6 +20,9 @@ export default function PaymentPage() {
     try {
       // 1. Create Booking
       const bookingRes = await bookingsApi.create({
+        patientId: state.patientId || '', // Essential!
+        serviceId: state.serviceId || undefined,
+        addressId: state.addressId || undefined,
         doctorId: state.doctorId || undefined,
         scheduledDate: state.scheduledDate || '',
         symptoms: state.symptoms || undefined
@@ -49,11 +52,11 @@ export default function PaymentPage() {
       <Grid container spacing={6} sx={{ mb: 6 }}>
         {/* Left Column: QR Code & Upload */}
         <Grid size={{ xs: 12, md: 7 }}>
-          <Box sx={{ p: 4, borderRadius: 4, border: '1px solid', borderColor: 'divider', bgcolor: 'background.paper', mb: 4, textAlign: 'center' }}>
+          <Box sx={{ p: 4, borderRadius: '24px', border: '1px solid', borderColor: 'divider', bgcolor: 'background.paper', mb: 4, textAlign: 'center' }}>
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 3 }}>
               Scan with any UPI App
             </Typography>
-            <Box sx={{ width: 200, height: 200, mx: 'auto', mb: 3, bgcolor: alpha('#1976D2', 0.05), border: '2px solid', borderColor: 'primary.main', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Box sx={{ width: 200, height: 200, mx: 'auto', mb: 3, bgcolor: alpha('#4F46E5', 0.05), border: '2px solid', borderColor: 'primary.main', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <QrCode2Icon sx={{ fontSize: 100, color: 'primary.main' }} />
             </Box>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>UPI ID</Typography>
@@ -73,7 +76,7 @@ export default function PaymentPage() {
 
         {/* Right Column: Booking Summary */}
         <Grid size={{ xs: 12, md: 5 }}>
-          <Box sx={{ p: 4, borderRadius: 4, border: '1px solid', borderColor: 'primary.main', bgcolor: alpha('#1976D2', 0.02) }}>
+          <Box sx={{ p: 4, borderRadius: '24px', border: '1px solid', borderColor: 'primary.main', bgcolor: alpha('#4F46E5', 0.02) }}>
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 3 }}>Booking Summary</Typography>
             
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -102,7 +105,7 @@ export default function PaymentPage() {
               <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>₹0</Typography>
             </Box>
             
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 2, bgcolor: alpha('#00BFA5', 0.1), borderRadius: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 2, bgcolor: alpha('#0D9488', 0.1), borderRadius: 2 }}>
               <Typography variant="h6" sx={{ fontWeight: 700, color: '#009688' }}>Total Payable</Typography>
               <Typography variant="h6" sx={{ fontWeight: 800, color: '#009688' }}>₹{state.amount}</Typography>
             </Box>
@@ -119,7 +122,7 @@ export default function PaymentPage() {
         <Box
           component="button" type="button" onClick={() => router.back()}
           sx={{
-            py: 1.5, px: 4, borderRadius: 3, border: '1px solid', borderColor: 'divider', cursor: 'pointer',
+            py: 1.5, px: 4, borderRadius: '16px', border: '1px solid', borderColor: 'divider', cursor: 'pointer',
             bgcolor: 'transparent', color: 'text.primary', fontWeight: 600, fontSize: '1rem',
             transition: 'all 0.2s', '&:hover': { bgcolor: 'action.hover' },
           }}
@@ -129,8 +132,8 @@ export default function PaymentPage() {
         <Box
           component="button" type="button" onClick={handleBooking} disabled={isSubmitting}
           sx={{
-            py: 1.5, px: 6, borderRadius: 3, border: 'none', cursor: isSubmitting ? 'not-allowed' : 'pointer',
-            background: isSubmitting ? 'action.disabledBackground' : 'linear-gradient(135deg, #1976D2, #00BFA5)', color: 'white', 
+            py: 1.5, px: 6, borderRadius: '16px', border: 'none', cursor: isSubmitting ? 'not-allowed' : 'pointer',
+            background: isSubmitting ? 'action.disabledBackground' : 'linear-gradient(135deg, #4F46E5, #0D9488)', color: 'white', 
             fontWeight: 700, fontSize: '1rem', boxShadow: isSubmitting ? 'none' : '0 8px 24px rgba(25, 118, 210, 0.3)',
             transition: 'all 0.2s', '&:hover': { transform: isSubmitting ? 'none' : 'translateY(-2px)' },
           }}

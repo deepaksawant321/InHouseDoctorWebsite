@@ -18,6 +18,12 @@ export const authApi = {
 
   verifyOtp: (phoneNumber: string, otpCode: string) =>
     apiClient.post('/auth/verify-otp', { phoneNumber, otpCode }),
+
+  getProfile: () =>
+    apiClient.get('/auth/profile'),
+
+  updateProfile: (data: any) =>
+    apiClient.put('/auth/profile', data),
 };
 
 // ─── Admin Auth ───────────────────────────────────────────────────────────────
@@ -32,6 +38,9 @@ export const adminAuthApi = {
 export const adminApi = {
   getDashboardStats: () =>
     apiClient.get('/admin/dashboard/stats'),
+
+  getDashboardTrends: () =>
+    apiClient.get('/admin/dashboard/trends'),
 
   // Users
   getUsers: () =>
@@ -57,6 +66,32 @@ export const adminApi = {
 
   verifyPayment: (id: string, status: 'Success' | 'Rejected', remarks?: string) =>
     apiClient.patch(`/admin/payments/${id}/verify`, { status, remarks }),
+};
+
+// ─── Services ────────────────────────────────────────────────────────────────
+
+export const servicesApi = {
+  findAllActive: () =>
+    apiClient.get('/services'),
+
+  findAll: () =>
+    apiClient.get('/services/all'),
+
+  create: (data: { serviceName: string; description?: string; basePrice: number; isActive?: boolean }) =>
+    apiClient.post('/services', data),
+
+  toggleStatus: (id: number) =>
+    apiClient.patch(`/services/${id}/toggle-status`),
+};
+
+// ─── Users ───────────────────────────────────────────────────────────────────
+
+export const usersApi = {
+  addAddress: (data: { addressLine1: string; addressLine2?: string; area?: string; city: string; state: string; pincode: string; landmark?: string }) =>
+    apiClient.post('/users/address', data),
+
+  getAddresses: () =>
+    apiClient.get('/users/address'),
 };
 
 // ─── Doctors ─────────────────────────────────────────────────────────────────
@@ -86,7 +121,7 @@ export const doctorsApi = {
 // ─── Bookings ─────────────────────────────────────────────────────────────────
 
 export const bookingsApi = {
-  create: (data: { doctorId?: string; scheduledDate: string; symptoms?: string }) =>
+  create: (data: { patientId: string; doctorId?: string; scheduledDate: string; symptoms?: string; serviceId?: number; addressId?: string }) =>
     apiClient.post('/bookings', data),
 
   getMyBookings: () =>
@@ -144,4 +179,63 @@ export const notificationsApi = {
 
   getByBooking: (bookingId: string) =>
     apiClient.get(`/notifications/booking/${bookingId}`),
+};
+
+// ─── Patients ─────────────────────────────────────────────────────────────────
+
+export const patientsApi = {
+  getAll: () =>
+    apiClient.get('/patients'),
+
+  getById: (id: string) =>
+    apiClient.get(`/patients/${id}`),
+
+  create: (data: any) =>
+    apiClient.post('/patients', data),
+
+  update: (id: string, data: any) =>
+    apiClient.put(`/patients/${id}`, data),
+
+  delete: (id: string) =>
+    apiClient.delete(`/patients/${id}`),
+};
+
+// ─── Records ──────────────────────────────────────────────────────────────────
+
+export const recordsApi = {
+  getAll: () =>
+    apiClient.get('/records'),
+
+  getById: (id: string) =>
+    apiClient.get(`/records/${id}`),
+
+  upload: (data: FormData) =>
+    apiClient.post('/records/upload', data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
+
+  delete: (id: string) =>
+    apiClient.delete(`/records/${id}`),
+};
+
+// ─── Addresses ────────────────────────────────────────────────────────────────
+
+export const addressesApi = {
+  getAll: () =>
+    apiClient.get('/addresses'),
+
+  getById: (id: string) =>
+    apiClient.get(`/addresses/${id}`),
+
+  create: (data: any) =>
+    apiClient.post('/addresses', data),
+
+  update: (id: string, data: any) =>
+    apiClient.put(`/addresses/${id}`, data),
+
+  delete: (id: string) =>
+    apiClient.delete(`/addresses/${id}`),
+
+  setDefault: (id: string) =>
+    apiClient.patch(`/addresses/${id}/default`),
 };

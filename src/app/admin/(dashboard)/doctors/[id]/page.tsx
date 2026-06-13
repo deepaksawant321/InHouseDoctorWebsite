@@ -20,7 +20,7 @@ export default function DoctorProfilePage({ params }: { params: { id: string } }
 
       <Grid container spacing={4}>
         <Grid size={{ xs: 12, md: 4 }}>
-          <Box sx={{ p: 4, borderRadius: 4, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', textAlign: 'center' }}>
+          <Box sx={{ p: 4, borderRadius: '24px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', textAlign: 'center' }}>
             <Box sx={{ width: 100, height: 100, borderRadius: '50%', bgcolor: alpha(theme.palette.primary.main, 0.1), color: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: 800, mx: 'auto', mb: 2 }}>
               SM
             </Box>
@@ -40,17 +40,17 @@ export default function DoctorProfilePage({ params }: { params: { id: string } }
         </Grid>
 
         <Grid size={{ xs: 12, md: 8 }}>
-          <Box sx={{ p: 4, borderRadius: 4, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', mb: 4 }}>
+          <Box sx={{ p: 4, borderRadius: '24px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', mb: 4 }}>
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 3 }}>Coverage & Performance</Typography>
             <Grid container spacing={3}>
               <Grid size={{ xs: 12, sm: 6 }}>
-                <Box sx={{ p: 3, borderRadius: 3, bgcolor: alpha(theme.palette.success.main, 0.05), border: '1px solid', borderColor: alpha(theme.palette.success.main, 0.2) }}>
+                <Box sx={{ p: 3, borderRadius: '16px', bgcolor: alpha(theme.palette.success.main, 0.05), border: '1px solid', borderColor: alpha(theme.palette.success.main, 0.2) }}>
                   <Typography variant="body2" color="text.secondary">Patient Rating</Typography>
                   <Typography variant="h4" sx={{ fontWeight: 800, color: 'success.main' }}>4.8 / 5.0</Typography>
                 </Box>
               </Grid>
               <Grid size={{ xs: 12, sm: 6 }}>
-                <Box sx={{ p: 3, borderRadius: 3, bgcolor: alpha(theme.palette.primary.main, 0.05), border: '1px solid', borderColor: alpha(theme.palette.primary.main, 0.2) }}>
+                <Box sx={{ p: 3, borderRadius: '16px', bgcolor: alpha(theme.palette.primary.main, 0.05), border: '1px solid', borderColor: alpha(theme.palette.primary.main, 0.2) }}>
                   <Typography variant="body2" color="text.secondary">Total Completed Visits</Typography>
                   <Typography variant="h4" sx={{ fontWeight: 800, color: 'primary.main' }}>142</Typography>
                 </Box>

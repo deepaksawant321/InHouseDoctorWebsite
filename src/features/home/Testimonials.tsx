@@ -16,7 +16,7 @@ const testimonials = [
     content: 'InHouse Doctor is truly incredible. When my father had a fever at midnight, they sent a verified doctor within 45 minutes. The doctor was thorough, professional, and incredibly calming. This service is a game-changer.',
     rating: 5,
     initials: 'RS',
-    color: '#1976D2',
+    color: '#4F46E5',
   },
   {
     name: 'Priya Patel',
@@ -24,7 +24,7 @@ const testimonials = [
     content: 'I was sceptical about home visits but InHouse Doctor exceeded my expectations. The doctor spent 40 minutes with me, addressed all my concerns, and followed up the next day. Absolutely remarkable service.',
     rating: 5,
     initials: 'PP',
-    color: '#00BFA5',
+    color: '#0D9488',
   },
   {
     name: 'Amit Kumar',
@@ -40,7 +40,7 @@ const testimonials = [
     content: 'Booked physiotherapy sessions for my post-surgery recovery. The therapist was expert-level and the convenience of home sessions made recovery so much smoother. Cannot thank InHouse Doctor enough.',
     rating: 5,
     initials: 'SM',
-    color: '#1976D2',
+    color: '#4F46E5',
   },
 ];
 
@@ -78,7 +78,7 @@ export const Testimonials = () => {
               </Box>
               <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '2rem', md: '2.75rem' } }}>
                 What Our{' '}
-                <Box component="span" sx={{ background: 'linear-gradient(135deg, #6C63FF, #00BFA5)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                <Box component="span" sx={{ background: 'linear-gradient(135deg, #6C63FF, #0D9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Patients Say
                 </Box>
               </Typography>
@@ -151,7 +151,7 @@ export const Testimonials = () => {
 
               {/* Controls */}
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, mt: 4 }}>
-                <IconButton onClick={handlePrev} aria-label="Previous testimonial" sx={{ bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', '&:hover': { bgcolor: alpha('#1976D2', 0.08) } }}>
+                <IconButton onClick={handlePrev} aria-label="Previous testimonial" sx={{ bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', '&:hover': { bgcolor: alpha('#4F46E5', 0.08) } }}>
                   <ArrowBackIosIcon sx={{ fontSize: 16, ml: 0.5 }} />
                 </IconButton>
 
@@ -171,7 +171,7 @@ export const Testimonials = () => {
                   ))}
                 </Box>
 
-                <IconButton onClick={handleNext} aria-label="Next testimonial" sx={{ bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', '&:hover': { bgcolor: alpha('#1976D2', 0.08) } }}>
+                <IconButton onClick={handleNext} aria-label="Next testimonial" sx={{ bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', '&:hover': { bgcolor: alpha('#4F46E5', 0.08) } }}>
                   <ArrowForwardIosIcon sx={{ fontSize: 16 }} />
                 </IconButton>
               </Box>

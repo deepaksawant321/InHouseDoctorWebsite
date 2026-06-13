@@ -39,9 +39,9 @@ const FaqItem = ({ q, a, index }: { q: string; a: string; index: number }) => {
     <motion.div variants={fadeInUp}>
       <Box
         sx={{
-          borderRadius: 3,
+          borderRadius: '16px',
           border: '1px solid',
-          borderColor: open ? alpha('#1976D2', 0.4) : 'divider',
+          borderColor: open ? alpha('#4F46E5', 0.4) : 'divider',
           overflow: 'hidden',
           transition: 'border-color 0.3s ease',
           mb: 2,
@@ -57,7 +57,7 @@ const FaqItem = ({ q, a, index }: { q: string; a: string; index: number }) => {
           sx={{
             display: 'flex', justifyContent: 'space-between', alignItems: 'center',
             px: 3, py: 2.5, cursor: 'pointer',
-            bgcolor: open ? alpha('#1976D2', isDark ? 0.12 : 0.04) : 'transparent',
+            bgcolor: open ? alpha('#4F46E5', isDark ? 0.12 : 0.04) : 'transparent',
             transition: 'background 0.3s ease',
           }}
         >
@@ -104,12 +104,12 @@ export const FaqSection = () => {
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
           <motion.div variants={fadeInUp}>
             <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
-              <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75, borderRadius: 10, mb: 2, border: '1px solid', borderColor: alpha('#00BFA5', 0.3), bgcolor: alpha('#00BFA5', 0.06) }}>
+              <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75, borderRadius: 10, mb: 2, border: '1px solid', borderColor: alpha('#0D9488', 0.3), bgcolor: alpha('#0D9488', 0.06) }}>
                 <Typography variant="caption" sx={{ fontWeight: 600, color: 'secondary.main' }}>FAQ</Typography>
               </Box>
               <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '2rem', md: '2.75rem' } }}>
                 Frequently Asked{' '}
-                <Box component="span" sx={{ background: 'linear-gradient(135deg, #00BFA5, #1976D2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                <Box component="span" sx={{ background: 'linear-gradient(135deg, #0D9488, #4F46E5)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Questions
                 </Box>
               </Typography>

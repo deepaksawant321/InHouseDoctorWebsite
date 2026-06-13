@@ -33,7 +33,7 @@ export function DataTable<T extends { id: string | number }>({ title, columns, r
   };
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden', borderRadius: 4, boxShadow: theme.palette.mode === 'light' ? '0 4px 24px rgba(0,0,0,0.04)' : '0 4px 24px rgba(0,0,0,0.4)', border: '1px solid', borderColor: 'divider' }}>
+    <Paper sx={{ width: '100%', overflow: 'hidden', borderRadius: '24px', transform: 'translateZ(0)', boxShadow: theme.palette.mode === 'light' ? '0 4px 24px rgba(0,0,0,0.04)' : '0 4px 24px rgba(0,0,0,0.4)', border: '1px solid', borderColor: 'divider' }}>
       {(title || actions) && (
         <Box sx={{ p: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid', borderColor: 'divider' }}>
           {title && <Typography variant="h6" sx={{ fontWeight: 700 }}>{title}</Typography>}
@@ -44,12 +44,19 @@ export function DataTable<T extends { id: string | number }>({ title, columns, r
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
+              {columns.map((column, index) => (
                 <TableCell
                   key={String(column.id)}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
-                  sx={{ bgcolor: alpha(theme.palette.background.default, 0.8), backdropFilter: 'blur(8px)', fontWeight: 700, color: 'text.secondary' }}
+                  sx={{ 
+                    bgcolor: alpha(theme.palette.background.default, 0.8), 
+                    backdropFilter: 'blur(8px)', 
+                    fontWeight: 700, 
+                    color: 'text.secondary',
+                    borderTopLeftRadius: (!title && !actions && index === 0) ? '16px' : 0,
+                    borderTopRightRadius: (!title && !actions && index === columns.length - 1) ? '16px' : 0,
+                  }}
                 >
                   {column.label}
                 </TableCell>

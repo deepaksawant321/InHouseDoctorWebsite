@@ -1,11 +1,26 @@
 'use client';
 
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { ChartCard } from '@/features/admin/ChartCard';
-import { mockRevenueData, mockBookingsTrend } from '@/services/mockAdminData';
+import { useEffect, useState } from 'react';
+import { adminApi } from '@/services/api';
 
 export default function ReportsPage() {
+  const [revenueData, setRevenueData] = useState<any[]>([]);
+  const [bookingsTrend, setBookingsTrend] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    adminApi.getDashboardTrends().then(res => {
+      const { revenueData, bookingsTrend } = res.data.data;
+      setRevenueData(revenueData || []);
+      setBookingsTrend(bookingsTrend || []);
+    }).catch(console.error).finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}><CircularProgress /></Box>;
+
   return (
     <Box>
       <Box sx={{ mb: 4 }}>
@@ -14,16 +29,16 @@ export default function ReportsPage() {
 
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid size={{ xs: 12, md: 6 }}>
-          <ChartCard title="Revenue Trend" data={mockRevenueData} type="line" dataKey="revenue" xAxisKey="name" color="#00BFA5" />
+          <ChartCard title="Revenue Trend (Last 7 Days)" data={revenueData} type="line" dataKey="revenue" xAxisKey="name" color="#0D9488" />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
-          <ChartCard title="Weekly Bookings" data={mockBookingsTrend} type="bar" dataKey="bookings" xAxisKey="name" color="#1976D2" />
+          <ChartCard title="Weekly Bookings" data={bookingsTrend} type="bar" dataKey="bookings" xAxisKey="name" color="#4F46E5" />
         </Grid>
       </Grid>
       
       <Grid container spacing={3}>
         <Grid size={{ xs: 12 }}>
-          <ChartCard title="Doctor Utilization (Mock Data)" data={mockRevenueData} type="bar" dataKey="revenue" xAxisKey="name" color="#6C63FF" />
+          <ChartCard title="Doctor Utilization (Mock Data)" data={revenueData} type="bar" dataKey="revenue" xAxisKey="name" color="#6C63FF" />
         </Grid>
       </Grid>
     </Box>

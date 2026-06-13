@@ -21,7 +21,7 @@ export default function SchedulePage() {
 
   const handleContinue = () => {
     if (selectedDate && selectedTime) {
-      router.push('/book/prescription');
+      router.push('/book/payment');
     }
   };
 
@@ -44,8 +44,8 @@ export default function SchedulePage() {
             <Box
               onClick={() => setSelectedDate(date)}
               sx={{
-                p: 2, borderRadius: 3, textAlign: 'center', cursor: 'pointer',
-                bgcolor: selectedDate === date ? alpha('#1976D2', 0.1) : 'background.paper',
+                p: 2, borderRadius: '16px', textAlign: 'center', cursor: 'pointer',
+                bgcolor: selectedDate === date ? alpha('#4F46E5', 0.1) : 'background.paper',
                 border: '2px solid', borderColor: selectedDate === date ? 'primary.main' : 'divider',
                 fontWeight: selectedDate === date ? 700 : 500,
                 color: selectedDate === date ? 'primary.main' : 'text.primary',
@@ -68,8 +68,8 @@ export default function SchedulePage() {
             <Box
               onClick={() => setSelectedTime(slot.id)}
               sx={{
-                p: 2, borderRadius: 3, textAlign: 'center', cursor: 'pointer',
-                bgcolor: selectedTime === slot.id ? alpha('#1976D2', 0.1) : 'background.paper',
+                p: 2, borderRadius: '16px', textAlign: 'center', cursor: 'pointer',
+                bgcolor: selectedTime === slot.id ? alpha('#4F46E5', 0.1) : 'background.paper',
                 border: '2px solid', borderColor: selectedTime === slot.id ? 'primary.main' : 'divider',
                 transition: 'all 0.2s', '&:hover': { borderColor: 'primary.main' }
               }}
@@ -89,7 +89,7 @@ export default function SchedulePage() {
         <Box
           component="button" type="button" onClick={() => router.back()}
           sx={{
-            py: 1.5, px: 4, borderRadius: 3, border: '1px solid', borderColor: 'divider', cursor: 'pointer',
+            py: 1.5, px: 4, borderRadius: '16px', border: '1px solid', borderColor: 'divider', cursor: 'pointer',
             bgcolor: 'transparent', color: 'text.primary', fontWeight: 600, fontSize: '1rem',
             transition: 'all 0.2s', '&:hover': { bgcolor: 'action.hover' },
           }}
@@ -99,14 +99,14 @@ export default function SchedulePage() {
         <Box
           component="button" type="button" onClick={handleContinue} disabled={!selectedDate || !selectedTime}
           sx={{
-            py: 1.5, px: 6, borderRadius: 3, border: 'none', cursor: (selectedDate && selectedTime) ? 'pointer' : 'not-allowed',
-            background: (selectedDate && selectedTime) ? 'linear-gradient(135deg, #1976D2, #00BFA5)' : 'action.disabledBackground', 
+            py: 1.5, px: 6, borderRadius: '16px', border: 'none', cursor: (selectedDate && selectedTime) ? 'pointer' : 'not-allowed',
+            background: (selectedDate && selectedTime) ? 'linear-gradient(135deg, #4F46E5, #0D9488)' : 'action.disabledBackground', 
             color: (selectedDate && selectedTime) ? 'white' : 'text.disabled', 
             fontWeight: 700, fontSize: '1rem', boxShadow: (selectedDate && selectedTime) ? '0 8px 24px rgba(25, 118, 210, 0.3)' : 'none',
             transition: 'all 0.2s', '&:hover': { transform: (selectedDate && selectedTime) ? 'translateY(-2px)' : 'none' },
           }}
         >
-          Continue to Uploads
+          Continue to Payment
         </Box>
       </Box>
     </Box>

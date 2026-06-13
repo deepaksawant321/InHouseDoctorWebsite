@@ -9,7 +9,7 @@ interface FeatureCardProps {
 
 export const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
   return (
-    <Paper elevation={0} sx={{ p: 4, borderRadius: 4, height: '100%', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider' }}>
+    <Paper elevation={0} sx={{ p: 4, borderRadius: '24px', height: '100%', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider' }}>
       <Box sx={{ color: 'primary.main', mb: 2 }}>
         {icon}
       </Box>

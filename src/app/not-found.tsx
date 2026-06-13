@@ -53,7 +53,7 @@ export default function NotFound() {
               fontWeight: 900,
               fontSize: { xs: '6rem', md: '10rem' },
               lineHeight: 1,
-              background: 'linear-gradient(135deg, #1976D2, #00BFA5)',
+              background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               mb: 2,
@@ -73,8 +73,8 @@ export default function NotFound() {
             href="/"
             sx={{
               display: 'inline-flex', alignItems: 'center', gap: 1,
-              py: 2, px: 4, borderRadius: 3, textDecoration: 'none',
-              background: 'linear-gradient(135deg, #1976D2, #00BFA5)',
+              py: 2, px: 4, borderRadius: '16px', textDecoration: 'none',
+              background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
               color: 'white', fontWeight: 700, fontSize: '1rem',
               boxShadow: '0 8px 24px rgba(25, 118, 210, 0.3)',
               transition: 'transform 0.2s',

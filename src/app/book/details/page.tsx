@@ -131,7 +131,7 @@ export default function PatientDetailsPage() {
         <Box
           component="button" type="button" onClick={() => router.back()}
           sx={{
-            py: 1.5, px: 4, borderRadius: 3, border: '1px solid', borderColor: 'divider', cursor: 'pointer',
+            py: 1.5, px: 4, borderRadius: '16px', border: '1px solid', borderColor: 'divider', cursor: 'pointer',
             bgcolor: 'transparent', color: 'text.primary', fontWeight: 600, fontSize: '1rem',
             transition: 'all 0.2s', '&:hover': { bgcolor: 'action.hover' },
           }}
@@ -141,8 +141,8 @@ export default function PatientDetailsPage() {
         <Box
           component="button" type="submit"
           sx={{
-            py: 1.5, px: 6, borderRadius: 3, border: 'none', cursor: 'pointer',
-            background: 'linear-gradient(135deg, #1976D2, #00BFA5)', color: 'white', 
+            py: 1.5, px: 6, borderRadius: '16px', border: 'none', cursor: 'pointer',
+            background: 'linear-gradient(135deg, #4F46E5, #0D9488)', color: 'white', 
             fontWeight: 700, fontSize: '1rem', boxShadow: '0 8px 24px rgba(25, 118, 210, 0.3)',
             transition: 'all 0.2s', '&:hover': { transform: 'translateY(-2px)' },
           }}

@@ -14,7 +14,7 @@ export default function SettingsPage() {
 
       <Grid container spacing={4}>
         <Grid size={{ xs: 12, md: 6 }}>
-          <Box sx={{ p: 4, borderRadius: 4, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', mb: 4 }}>
+          <Box sx={{ p: 4, borderRadius: '24px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', mb: 4 }}>
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 3 }}>Company Information</Typography>
             <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
               <TextField fullWidth label="Company Name" defaultValue="InHouse Doctor" />
@@ -26,11 +26,11 @@ export default function SettingsPage() {
         </Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
-          <Box sx={{ p: 4, borderRadius: 4, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', mb: 4 }}>
+          <Box sx={{ p: 4, borderRadius: '24px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', mb: 4 }}>
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 3 }}>Payment Configuration</Typography>
             <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
               <TextField fullWidth label="Primary UPI ID" defaultValue="pay.inhousedoctor@upi" />
-              <Box sx={{ p: 3, border: '2px dashed', borderColor: 'primary.main', borderRadius: 3, textAlign: 'center', bgcolor: alpha(theme.palette.primary.main, 0.02) }}>
+              <Box sx={{ p: 3, border: '2px dashed', borderColor: 'primary.main', borderRadius: '16px', textAlign: 'center', bgcolor: alpha(theme.palette.primary.main, 0.02) }}>
                 <Typography variant="body1" sx={{ fontWeight: 600, color: 'primary.main' }}>Upload New QR Code</Typography>
                 <Typography variant="caption" color="text.secondary">PNG, JPG up to 5MB</Typography>
               </Box>

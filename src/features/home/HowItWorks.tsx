@@ -14,14 +14,14 @@ const steps = [
     icon: <AssignmentIcon sx={{ fontSize: 28 }} />,
     title: 'Request Service',
     description: 'Tell us your health concern and preferred time. No waiting rooms, no hassle.',
-    color: '#1976D2',
+    color: '#4F46E5',
   },
   {
     number: '02',
     icon: <ManageAccountsIcon sx={{ fontSize: 28 }} />,
     title: 'Admin Assigns Doctor',
     description: 'Our team carefully matches you with the most suitable verified doctor.',
-    color: '#00BFA5',
+    color: '#0D9488',
   },
   {
     number: '03',
@@ -35,7 +35,7 @@ const steps = [
     icon: <HealthAndSafetyIcon sx={{ fontSize: 28 }} />,
     title: 'Receive Care',
     description: 'Get professional diagnosis, treatment, and a personalised care plan.',
-    color: '#00BFA5',
+    color: '#0D9488',
   },
 ];
 
@@ -59,7 +59,7 @@ export const HowItWorks = () => {
               </Box>
               <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '2rem', md: '2.75rem' } }}>
                 How It{' '}
-                <Box component="span" sx={{ background: 'linear-gradient(135deg, #1976D2, #00BFA5)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                <Box component="span" sx={{ background: 'linear-gradient(135deg, #4F46E5, #0D9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Works
                 </Box>
               </Typography>
@@ -87,7 +87,7 @@ export const HowItWorks = () => {
                 left: '12.5%',
                 right: '12.5%',
                 height: 2,
-                background: `linear-gradient(90deg, #1976D2, #00BFA5, #6C63FF, #00BFA5)`,
+                background: `linear-gradient(90deg, #4F46E5, #0D9488, #6C63FF, #0D9488)`,
                 zIndex: 0,
               }}
             />

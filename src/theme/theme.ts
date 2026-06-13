@@ -16,14 +16,14 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
   palette: {
     mode,
     primary: {
-      main: '#1976D2',
-      light: '#42A5F5',
-      dark: '#1565C0',
+      main: '#4F46E5', // Indigo
+      light: '#818CF8',
+      dark: '#3730A3',
     },
     secondary: {
-      main: '#00BFA5',
-      light: '#33CCBB',
-      dark: '#009688',
+      main: '#0D9488', // Teal
+      light: '#2DD4BF',
+      dark: '#0F766E',
     },
     accent: {
       main: '#6C63FF',
@@ -76,9 +76,10 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
           fontSize: '0.95rem',
           '&:hover': { boxShadow: 'none' },
           '&.MuiButton-containedPrimary': {
-            background: 'linear-gradient(135deg, #1976D2 0%, #00BFA5 100%)',
+            background: 'linear-gradient(135deg, #4F46E5 0%, #0D9488 100%)',
             '&:hover': {
-              background: 'linear-gradient(135deg, #1565C0 0%, #009688 100%)',
+              background: 'linear-gradient(135deg, #3730A3 0%, #0F766E 100%)',
+              boxShadow: '0 6px 20px rgba(79, 70, 229, 0.4)',
             },
           },
         },
@@ -90,8 +91,8 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
           borderRadius: '20px',
           boxShadow:
             mode === 'light'
-              ? '0px 4px 24px rgba(0, 0, 0, 0.06)'
-              : '0px 4px 24px rgba(0, 0, 0, 0.4)',
+              ? '0px 8px 30px rgba(0, 0, 0, 0.04)' // Softer and more dispersed shadow
+              : '0px 8px 30px rgba(0, 0, 0, 0.3)',
         },
       },
     },

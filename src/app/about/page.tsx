@@ -70,12 +70,12 @@ export default function AboutPage() {
               <Grid size={{ xs: 12, sm: 6, md: 3 }} key={v.title}>
                 <Box
                   sx={{
-                    p: 4, height: '100%', borderRadius: 4,
+                    p: 4, height: '100%', borderRadius: '24px',
                     bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider',
                     boxShadow: '0 4px 24px rgba(0,0,0,0.03)',
                   }}
                 >
-                  <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: alpha('#1976D2', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 3, color: 'primary.main' }}>
+                  <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: alpha('#4F46E5', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 3, color: 'primary.main' }}>
                     <v.icon />
                   </Box>
                   <Typography variant="h5" sx={{ fontWeight: 600, mb: 1 }}>{v.title}</Typography>

@@ -36,7 +36,7 @@ export default function BookingSuccessPage() {
               Our team will verify your payment and assign a doctor shortly.
             </Typography>
 
-            <Box sx={{ display: 'inline-block', p: 3, borderRadius: 4, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', boxShadow: '0 8px 32px rgba(0,0,0,0.04)' }}>
+            <Box sx={{ display: 'inline-block', p: 3, borderRadius: '24px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', boxShadow: '0 8px 32px rgba(0,0,0,0.04)' }}>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>Booking ID</Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, color: 'primary.main', letterSpacing: 2, mb: 3 }}>
                 IH20260001
@@ -50,8 +50,8 @@ export default function BookingSuccessPage() {
 
           <Grid container spacing={3} sx={{ mb: 8, maxWidth: 600, mx: 'auto' }}>
             <Grid size={{ xs: 12, sm: 4 }}>
-              <Box sx={{ p: 2, borderRadius: 3, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Box sx={{ bgcolor: alpha('#1976D2', 0.1), color: 'primary.main', p: 1, borderRadius: 2 }}><SmsIcon /></Box>
+              <Box sx={{ p: 2, borderRadius: '16px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box sx={{ bgcolor: alpha('#4F46E5', 0.1), color: 'primary.main', p: 1, borderRadius: 2 }}><SmsIcon /></Box>
                 <Box>
                   <Typography variant="body2" sx={{ fontWeight: 700 }}>SMS</Typography>
                   <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>Scheduled <CheckCircleIcon sx={{ fontSize: 14, color: 'secondary.main' }} /></Typography>
@@ -59,7 +59,7 @@ export default function BookingSuccessPage() {
               </Box>
             </Grid>
             <Grid size={{ xs: 12, sm: 4 }}>
-              <Box sx={{ p: 2, borderRadius: 3, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Box sx={{ p: 2, borderRadius: '16px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 2 }}>
                 <Box sx={{ bgcolor: alpha('#25D366', 0.1), color: '#25D366', p: 1, borderRadius: 2 }}><WhatsAppIcon /></Box>
                 <Box>
                   <Typography variant="body2" sx={{ fontWeight: 700 }}>WhatsApp</Typography>
@@ -68,8 +68,8 @@ export default function BookingSuccessPage() {
               </Box>
             </Grid>
             <Grid size={{ xs: 12, sm: 4 }}>
-              <Box sx={{ p: 2, borderRadius: 3, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Box sx={{ bgcolor: alpha('#1976D2', 0.1), color: 'primary.main', p: 1, borderRadius: 2 }}><EmailIcon /></Box>
+              <Box sx={{ p: 2, borderRadius: '16px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box sx={{ bgcolor: alpha('#4F46E5', 0.1), color: 'primary.main', p: 1, borderRadius: 2 }}><EmailIcon /></Box>
                 <Box>
                   <Typography variant="body2" sx={{ fontWeight: 700 }}>Email</Typography>
                   <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>Scheduled <CheckCircleIcon sx={{ fontSize: 14, color: 'secondary.main' }} /></Typography>
@@ -82,9 +82,9 @@ export default function BookingSuccessPage() {
             <Box
               component="button" onClick={() => router.push('/')}
               sx={{
-                py: 2, px: 6, borderRadius: 3, border: '1px solid', borderColor: 'primary.main', cursor: 'pointer',
+                py: 2, px: 6, borderRadius: '16px', border: '1px solid', borderColor: 'primary.main', cursor: 'pointer',
                 bgcolor: 'transparent', color: 'primary.main', fontWeight: 700, fontSize: '1rem',
-                transition: 'all 0.2s', '&:hover': { bgcolor: alpha('#1976D2', 0.05) },
+                transition: 'all 0.2s', '&:hover': { bgcolor: alpha('#4F46E5', 0.05) },
               }}
             >
               Go to Home
@@ -92,8 +92,8 @@ export default function BookingSuccessPage() {
             <Box
               component="button" onClick={() => router.push('/book/service')}
               sx={{
-                py: 2, px: 6, borderRadius: 3, border: 'none', cursor: 'pointer',
-                background: 'linear-gradient(135deg, #1976D2, #00BFA5)', color: 'white', 
+                py: 2, px: 6, borderRadius: '16px', border: 'none', cursor: 'pointer',
+                background: 'linear-gradient(135deg, #4F46E5, #0D9488)', color: 'white', 
                 fontWeight: 700, fontSize: '1rem', boxShadow: '0 8px 24px rgba(25, 118, 210, 0.3)',
                 transition: 'all 0.2s', '&:hover': { transform: 'translateY(-2px)' },
               }}

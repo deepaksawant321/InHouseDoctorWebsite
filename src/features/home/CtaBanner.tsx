@@ -19,7 +19,7 @@ export const CtaBanner = () => {
       <Box
         sx={{
           position: 'absolute', inset: 0,
-          background: 'linear-gradient(135deg, #0D47A1 0%, #1976D2 25%, #00897B 60%, #6C63FF 100%)',
+          background: 'linear-gradient(135deg, #4F46E5 0%, #0D9488 100%)',
         }}
       />
 
@@ -104,11 +104,11 @@ export const CtaBanner = () => {
               href="/request-doctor"
               sx={{
                 display: 'inline-flex', alignItems: 'center', gap: 1, textDecoration: 'none',
-                py: 2, px: 4, borderRadius: 3, border: 'none', cursor: 'pointer',
-                bgcolor: 'white', color: '#1976D2', fontWeight: 800, fontSize: '1rem',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+                py: 2, px: 4, borderRadius: '16px', border: 'none', cursor: 'pointer',
+                bgcolor: 'white', color: '#4F46E5', fontWeight: 700, fontSize: '1rem',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.1)',
                 transition: 'all 0.3s ease',
-                '&:hover': { transform: 'translateY(-3px)', boxShadow: '0 16px 48px rgba(0,0,0,0.3)' },
+                '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 12px 32px rgba(0, 0, 0, 0.2)', bgcolor: '#f8fafc' },
               }}
             >
               Request Home Visit <ArrowForwardIcon sx={{ fontSize: 18 }} />
@@ -117,7 +117,7 @@ export const CtaBanner = () => {
               component="button"
               sx={{
                 display: 'inline-flex', alignItems: 'center', gap: 1,
-                py: 2, px: 4, borderRadius: 3, cursor: 'pointer',
+                py: 2, px: 4, borderRadius: '16px', cursor: 'pointer',
                 border: `2px solid ${alpha('#ffffff', 0.5)}`,
                 bgcolor: 'transparent', color: 'white', fontWeight: 700, fontSize: '1rem',
                 transition: 'all 0.3s ease',

@@ -52,22 +52,22 @@ export default function AdminDashboardPage() {
 
       {/* KPI Cards */}
       <Grid container spacing={3} sx={{ mb: 6 }}>
-        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4 }}>
           <StatsCard title="Total Bookings" value={String(stats?.totalBookings ?? 0)} icon={<BookOnlineIcon />} trend="up" trendValue="Live" />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4 }}>
           <StatsCard title="Pending Bookings" value={String(stats?.pendingBookings ?? 0)} icon={<AssignmentIndIcon />} trend="down" trendValue="Pending" />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4 }}>
           <StatsCard title="Total Users" value={String(stats?.totalUsers ?? 0)} icon={<PeopleIcon />} trend="up" trendValue="Registered" />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4 }}>
           <StatsCard title="Active Doctors" value={String(stats?.totalDoctors ?? 0)} icon={<LocalHospitalIcon />} trend="up" trendValue="Active" />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4 }}>
           <StatsCard title="Payments Done" value={String(stats?.completedPayments ?? 0)} icon={<PaymentIcon />} trend="up" trendValue="Success" />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4 }}>
           <StatsCard title="Completed Visits" value={String(stats?.completedPayments ?? 0)} icon={<CheckCircleIcon />} trend="up" trendValue="Verified" />
         </Grid>
       </Grid>

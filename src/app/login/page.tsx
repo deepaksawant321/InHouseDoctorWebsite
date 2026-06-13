@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { OTPInput } from '@/features/booking/OTPInput';
-import { BookingStepper } from '@/features/booking/BookingStepper';
+// BookingStepper removed
 import { authApi } from '@/services/api';
 import { parseValidationErrors } from '@/utils/errorParser';
 import { alpha } from '@mui/material';
@@ -51,10 +51,10 @@ export default function LoginPage() {
         localStorage.setItem('token', accessToken);
         localStorage.setItem('user', JSON.stringify(user));
         
-        // Redirect based on role or to booking
+        // Redirect based on role or to dashboard
         if (user.role === 'Admin') router.push('/admin/dashboard');
         else if (user.role === 'Doctor') router.push('/doctor/dashboard');
-        else router.push('/book/service');
+        else router.push('/dashboard');
       } catch (err: any) {
         console.error('Failed to verify OTP:', err);
         const { fieldErrors, generalMessage } = parseValidationErrors(err);
@@ -68,8 +68,6 @@ export default function LoginPage() {
 
   return (
     <>
-      <BookingStepper />
-      
       <Box component="section" sx={{ py: { xs: 8, md: 15 }, bgcolor: 'background.default', minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
         <Container maxWidth="sm">
           <Box
@@ -117,8 +115,8 @@ export default function LoginPage() {
                   onClick={handleSendOTP}
                   disabled={mobile.length < 10 || isLoading}
                   sx={{
-                    width: '100%', py: 2, borderRadius: 3, border: 'none', cursor: mobile.length >= 10 && !isLoading ? 'pointer' : 'not-allowed',
-                    background: mobile.length >= 10 && !isLoading ? 'linear-gradient(135deg, #1976D2, #00BFA5)' : 'action.disabledBackground',
+                    width: '100%', py: 2, borderRadius: '16px', border: 'none', cursor: mobile.length >= 10 && !isLoading ? 'pointer' : 'not-allowed',
+                    background: mobile.length >= 10 && !isLoading ? 'linear-gradient(135deg, #4F46E5, #0D9488)' : 'action.disabledBackground',
                     color: mobile.length >= 10 && !isLoading ? 'white' : 'text.disabled', 
                     fontWeight: 700, fontSize: '1rem',
                     boxShadow: mobile.length >= 10 && !isLoading ? '0 8px 24px rgba(25, 118, 210, 0.3)' : 'none',
@@ -154,8 +152,8 @@ export default function LoginPage() {
                     onClick={handleVerifyOTP}
                     disabled={otp.length !== 4 || isLoading}
                     sx={{
-                      width: '100%', py: 2, borderRadius: 3, border: 'none', cursor: otp.length === 4 && !isLoading ? 'pointer' : 'not-allowed',
-                      background: otp.length === 4 && !isLoading ? 'linear-gradient(135deg, #1976D2, #00BFA5)' : 'action.disabledBackground',
+                      width: '100%', py: 2, borderRadius: '16px', border: 'none', cursor: otp.length === 4 && !isLoading ? 'pointer' : 'not-allowed',
+                      background: otp.length === 4 && !isLoading ? 'linear-gradient(135deg, #4F46E5, #0D9488)' : 'action.disabledBackground',
                       color: otp.length === 4 && !isLoading ? 'white' : 'text.disabled', 
                       fontWeight: 700, fontSize: '1rem',
                       boxShadow: otp.length === 4 && !isLoading ? '0 8px 24px rgba(25, 118, 210, 0.3)' : 'none',

@@ -55,8 +55,8 @@ export default function RequestDoctorPage() {
                 <Box
                   sx={{
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                    py: 2, px: 6, borderRadius: 3, textDecoration: 'none',
-                    background: 'linear-gradient(135deg, #1976D2, #00BFA5)',
+                    py: 2, px: 6, borderRadius: '16px', textDecoration: 'none',
+                    background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
                     color: 'white', fontWeight: 700, fontSize: '1.1rem',
                     boxShadow: '0 8px 24px rgba(25, 118, 210, 0.3)',
                     transition: 'all 0.2s',
@@ -74,13 +74,13 @@ export default function RequestDoctorPage() {
                   <Grid size={{ xs: 12, sm: 6 }} key={index}>
                     <Box
                       sx={{
-                        p: 4, borderRadius: 4, height: '100%',
+                        p: 4, borderRadius: '24px', height: '100%',
                         bgcolor: 'background.default', border: '1px solid', borderColor: 'divider',
                         transition: 'transform 0.2s',
                         '&:hover': { transform: 'translateY(-4px)', borderColor: 'primary.main' }
                       }}
                     >
-                      <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: alpha('#1976D2', 0.1), color: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+                      <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: alpha('#4F46E5', 0.1), color: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
                         <service.icon />
                       </Box>
                       <Typography variant="h6" sx={{ fontWeight: 600 }}>{service.title}</Typography>

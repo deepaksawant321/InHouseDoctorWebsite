@@ -34,7 +34,7 @@ export default function ContactPage() {
 
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                 <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>
-                  <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: alpha('#1976D2', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main', flexShrink: 0 }}>
+                  <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: alpha('#4F46E5', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main', flexShrink: 0 }}>
                     <PhoneIcon />
                   </Box>
                   <Box>
@@ -52,7 +52,7 @@ export default function ContactPage() {
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>
-                  <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: alpha('#1976D2', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main', flexShrink: 0 }}>
+                  <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: alpha('#4F46E5', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main', flexShrink: 0 }}>
                     <EmailIcon />
                   </Box>
                   <Box>
@@ -61,7 +61,7 @@ export default function ContactPage() {
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>
-                  <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: alpha('#1976D2', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main', flexShrink: 0 }}>
+                  <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: alpha('#4F46E5', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main', flexShrink: 0 }}>
                     <LocationOnIcon />
                   </Box>
                   <Box>
@@ -104,8 +104,8 @@ export default function ContactPage() {
                       component="button"
                       type="button"
                       sx={{
-                        width: '100%', py: 2, borderRadius: 3, border: 'none', cursor: 'pointer',
-                        background: 'linear-gradient(135deg, #1976D2, #00BFA5)',
+                        width: '100%', py: 2, borderRadius: '16px', border: 'none', cursor: 'pointer',
+                        background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
                         color: 'white', fontWeight: 700, fontSize: '1rem',
                         boxShadow: '0 8px 24px rgba(25, 118, 210, 0.3)',
                         transition: 'transform 0.2s',

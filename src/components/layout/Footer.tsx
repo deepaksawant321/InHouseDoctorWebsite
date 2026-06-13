@@ -16,6 +16,8 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import Link from 'next/link';
 
+import { usePathname } from 'next/navigation';
+
 const footerLinks = {
   Company: [
     { label: 'About Us', href: '/about' },
@@ -41,6 +43,11 @@ const footerLinks = {
 export const Footer = () => {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
+  const pathname = usePathname();
+
+  if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/admin')) {
+    return null;
+  }
 
   return (
     <Box
@@ -63,7 +70,7 @@ export const Footer = () => {
           left: 0,
           right: 0,
           height: 3,
-          background: 'linear-gradient(90deg, #1976D2, #00BFA5, #6C63FF)',
+          background: 'linear-gradient(90deg, #4F46E5, #0D9488, #6C63FF)',
         }}
       />
 
@@ -76,14 +83,14 @@ export const Footer = () => {
                 sx={{
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   width: 40, height: 40, borderRadius: 2,
-                  background: 'linear-gradient(135deg, #1976D2, #00BFA5)',
+                  background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
                 }}
               >
                 <MedicalServicesIcon sx={{ fontSize: 22, color: 'white' }} />
               </Box>
               <Typography
                 variant="h6"
-                sx={{ fontWeight: 800, background: 'linear-gradient(135deg, #1976D2, #00BFA5)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+                sx={{ fontWeight: 800, background: 'linear-gradient(135deg, #4F46E5, #0D9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
               >
                 InHouse Doctor
               </Typography>
@@ -166,7 +173,7 @@ export const Footer = () => {
                   ),
                 },
               }}
-              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 3 } }}
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: '16px' } }}
             />
           </Grid>
         </Grid>
@@ -199,7 +206,7 @@ export const Footer = () => {
                   transition: 'all 0.2s',
                   '&:hover': {
                     color: 'primary.main',
-                    bgcolor: alpha('#1976D2', 0.08),
+                    bgcolor: alpha('#4F46E5', 0.08),
                     transform: 'translateY(-2px)',
                   },
                 }}

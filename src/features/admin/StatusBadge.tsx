@@ -24,7 +24,7 @@ export const StatusBadge = ({ status }: StatusBadgeProps) => {
   }
 
   return (
-    <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, bgcolor: alpha(color, 0.1), px: 1.5, py: 0.5, borderRadius: 4 }}>
+    <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, bgcolor: alpha(color, 0.1), px: 1.5, py: 0.5, borderRadius: '24px' }}>
       <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: color }} />
       <Typography variant="caption" sx={{ fontWeight: 700, color }}>{status}</Typography>
     </Box>
