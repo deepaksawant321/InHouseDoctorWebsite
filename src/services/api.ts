@@ -77,11 +77,17 @@ export const servicesApi = {
   findAll: () =>
     apiClient.get('/services/all'),
 
-  create: (data: { serviceName: string; description?: string; basePrice: number; isActive?: boolean }) =>
+  create: (data: { serviceName: string; description?: string; basePrice: number; isActive?: boolean; slug?: string; longDescription?: string; imageUrl?: string }) =>
     apiClient.post('/services', data),
+
+  update: (id: number, data: Partial<{ serviceName: string; description: string; basePrice: number; isActive: boolean; slug: string; longDescription: string; imageUrl: string }>) =>
+    apiClient.patch(`/services/${id}`, data),
 
   toggleStatus: (id: number) =>
     apiClient.patch(`/services/${id}/toggle-status`),
+
+  findBySlug: (slug: string) =>
+    apiClient.get(`/services/slug/${slug}`),
 };
 
 // ─── Users ───────────────────────────────────────────────────────────────────
@@ -238,4 +244,22 @@ export const addressesApi = {
 
   setDefault: (id: string) =>
     apiClient.patch(`/addresses/${id}/default`),
+};
+
+// ─── CMS ──────────────────────────────────────────────────────────────────────
+
+export const cmsApi = {
+  // FAQs
+  getFaqs: () => apiClient.get('/cms/faqs'),
+  getAllFaqs: () => apiClient.get('/cms/faqs/all'),
+  createFaq: (data: { question: string; answer: string }) => apiClient.post('/cms/faqs', data),
+  updateFaq: (id: number, data: { question: string; answer: string; isActive?: boolean }) => apiClient.put(`/cms/faqs/${id}`, data),
+  deleteFaq: (id: number) => apiClient.delete(`/cms/faqs/${id}`),
+
+  // Testimonials
+  getTestimonials: () => apiClient.get('/cms/testimonials'),
+  getAllTestimonials: () => apiClient.get('/cms/testimonials/all'),
+  createTestimonial: (data: { name: string; role: string; quote: string; rating?: number }) => apiClient.post('/cms/testimonials', data),
+  updateTestimonial: (id: number, data: { name: string; role: string; quote: string; rating?: number; isActive?: boolean }) => apiClient.put(`/cms/testimonials/${id}`, data),
+  deleteTestimonial: (id: number) => apiClient.delete(`/cms/testimonials/${id}`),
 };

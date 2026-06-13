@@ -7,7 +7,11 @@ import { fadeInUp, staggerContainer } from '@/constants/animations';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-const faqs = [
+import { cmsApi } from '@/services/api';
+import { CircularProgress } from '@mui/material';
+import { useEffect } from 'react';
+
+const FALLBACK_FAQS = [
   {
     q: 'How quickly can a doctor arrive?',
     a: 'In most areas of Mumbai, a doctor can reach your home within 30–60 minutes of your confirmed request. Our intelligent dispatch system ensures the nearest available doctor is assigned to you.',
@@ -19,14 +23,6 @@ const faqs = [
   {
     q: 'How do payments work?',
     a: 'Payment is handled securely after the consultation. We accept all major UPI apps, credit/debit cards, and net banking. A detailed receipt is sent to your email after every visit.',
-  },
-  {
-    q: 'Can I book for a family member?',
-    a: 'Yes, absolutely. You can book for any family member — parents, children, or elderly relatives. Just provide their details at the time of booking and the doctor will visit their location.',
-  },
-  {
-    q: 'What if I need to cancel or reschedule?',
-    a: 'You can cancel or reschedule a booking up to 1 hour before the scheduled time at no charge. Cancellations within 1 hour of the visit may be subject to a nominal convenience fee.',
   },
 ];
 
@@ -98,6 +94,23 @@ const FaqItem = ({ q, a, index }: { q: string; a: string; index: number }) => {
 };
 
 export const FaqSection = () => {
+  const [faqs, setFaqs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    cmsApi.getFaqs().then(res => {
+      const data = res.data.data || [];
+      if (data.length > 0) {
+        setFaqs(data.map((f: any) => ({ q: f.question, a: f.answer })));
+      } else {
+        setFaqs(FALLBACK_FAQS);
+      }
+    }).catch(err => {
+      console.error(err);
+      setFaqs(FALLBACK_FAQS);
+    }).finally(() => setLoading(false));
+  }, []);
+
   return (
     <Box component="section" sx={{ py: { xs: 8, md: 15 }, bgcolor: 'background.default' }}>
       <Container maxWidth="md">
@@ -120,9 +133,13 @@ export const FaqSection = () => {
           </motion.div>
 
           <Box>
-            {faqs.map((faq, i) => (
-              <FaqItem key={i} q={faq.q} a={faq.a} index={i} />
-            ))}
+            {loading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}><CircularProgress /></Box>
+            ) : (
+              faqs.map((faq, i) => (
+                <FaqItem key={i} q={faq.q} a={faq.a} index={i} />
+              ))
+            )}
           </Box>
         </motion.div>
       </Container>

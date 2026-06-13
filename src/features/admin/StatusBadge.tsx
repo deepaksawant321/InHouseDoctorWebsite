@@ -2,7 +2,7 @@
 
 import { Box, Typography, alpha, useTheme } from '@mui/material';
 
-export type StatusType = 'Pending' | 'Verified' | 'Assigned' | 'Unassigned' | 'Completed' | 'Confirmed' | 'Pending Verification' | 'Processing' | 'Delivered' | 'Read' | 'Success' | 'Bounced' | 'Partial' | 'Active' | 'In Visit' | 'On Leave' | 'Unavailable' | 'Available';
+export type StatusType = 'Pending' | 'Verified' | 'Assigned' | 'Unassigned' | 'Completed' | 'Confirmed' | 'Pending Verification' | 'Processing' | 'Delivered' | 'Read' | 'Success' | 'Bounced' | 'Partial' | 'Active' | 'Inactive' | 'In Visit' | 'On Leave' | 'Unavailable' | 'Available';
 
 interface StatusBadgeProps {
   status: StatusType;
@@ -17,7 +17,7 @@ export const StatusBadge = ({ status }: StatusBadgeProps) => {
     color = theme.palette.success.main;
   } else if (['Pending', 'Pending Verification', 'Unassigned', 'Processing', 'On Leave'].includes(status)) {
     color = theme.palette.warning.main;
-  } else if (['Bounced', 'Unavailable', 'Partial'].includes(status)) {
+  } else if (['Bounced', 'Unavailable', 'Partial', 'Inactive'].includes(status)) {
     color = theme.palette.error.main;
   } else if (['Assigned', 'Confirmed', 'In Visit'].includes(status)) {
     color = theme.palette.secondary.main;

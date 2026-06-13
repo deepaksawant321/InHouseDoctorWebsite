@@ -1,6 +1,8 @@
 import { PageHero } from '@/components/ui/PageHero';
-import { FaqSection } from '@/features/home/FaqSection';
 import { CtaBanner } from '@/features/home/CtaBanner';
+import dynamic from 'next/dynamic';
+
+const FaqSection = dynamic(() => import('@/features/home/FaqSection').then(mod => mod.FaqSection));
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {

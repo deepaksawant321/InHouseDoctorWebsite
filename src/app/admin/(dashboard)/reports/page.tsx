@@ -9,13 +9,15 @@ import { adminApi } from '@/services/api';
 export default function ReportsPage() {
   const [revenueData, setRevenueData] = useState<any[]>([]);
   const [bookingsTrend, setBookingsTrend] = useState<any[]>([]);
+  const [doctorUtilization, setDoctorUtilization] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     adminApi.getDashboardTrends().then(res => {
-      const { revenueData, bookingsTrend } = res.data.data;
+      const { revenueData, bookingsTrend, doctorUtilization } = res.data.data;
       setRevenueData(revenueData || []);
       setBookingsTrend(bookingsTrend || []);
+      setDoctorUtilization(doctorUtilization || []);
     }).catch(console.error).finally(() => setLoading(false));
   }, []);
 
@@ -38,7 +40,7 @@ export default function ReportsPage() {
       
       <Grid container spacing={3}>
         <Grid size={{ xs: 12 }}>
-          <ChartCard title="Doctor Utilization (Mock Data)" data={revenueData} type="bar" dataKey="revenue" xAxisKey="name" color="#6C63FF" />
+          <ChartCard title="Top Doctors by Booking Volume" data={doctorUtilization} type="bar" dataKey="utilization" xAxisKey="name" color="#6C63FF" />
         </Grid>
       </Grid>
     </Box>

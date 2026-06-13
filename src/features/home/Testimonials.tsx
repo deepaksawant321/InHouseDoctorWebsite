@@ -9,7 +9,10 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 
-const testimonials = [
+import { cmsApi } from '@/services/api';
+import { CircularProgress } from '@mui/material';
+
+const FALLBACK_TESTIMONIALS = [
   {
     name: 'Rahul Sharma',
     role: 'Patient, Bandra',
@@ -26,29 +29,41 @@ const testimonials = [
     initials: 'PP',
     color: '#0D9488',
   },
-  {
-    name: 'Amit Kumar',
-    role: 'Patient, Powai',
-    content: 'For my elderly mother who cannot travel, InHouse Doctor has been a blessing. Regular visits from the same doctor means continuity of care. She actually looks forward to the visits now. Highly recommended.',
-    rating: 5,
-    initials: 'AK',
-    color: '#6C63FF',
-  },
-  {
-    name: 'Sneha Mehta',
-    role: 'Patient, Juhu',
-    content: 'Booked physiotherapy sessions for my post-surgery recovery. The therapist was expert-level and the convenience of home sessions made recovery so much smoother. Cannot thank InHouse Doctor enough.',
-    rating: 5,
-    initials: 'SM',
-    color: '#4F46E5',
-  },
 ];
+
+const COLORS = ['#4F46E5', '#0D9488', '#6C63FF', '#9333EA', '#0284C7'];
+
+const getInitials = (name: string) => {
+  if (!name) return 'U';
+  return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+};
 
 export const Testimonials = () => {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const [active, setActive] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    cmsApi.getTestimonials().then(res => {
+      const data = res.data.data || [];
+      if (data.length > 0) {
+        setTestimonials(data.map((t: any, i: number) => ({
+          ...t,
+          content: t.quote,
+          initials: getInitials(t.name),
+          color: COLORS[i % COLORS.length]
+        })));
+      } else {
+        setTestimonials(FALLBACK_TESTIMONIALS);
+      }
+    }).catch(err => {
+      console.error(err);
+      setTestimonials(FALLBACK_TESTIMONIALS);
+    }).finally(() => setLoading(false));
+  }, []);
 
   const handleNext = () => {
     setDirection(1);
@@ -60,11 +75,21 @@ export const Testimonials = () => {
   };
 
   useEffect(() => {
+    if (testimonials.length <= 1) return;
     const timer = setInterval(handleNext, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [testimonials.length]);
+
+  if (loading) {
+    return (
+      <Box sx={{ py: 15, display: 'flex', justifyContent: 'center' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   const t = testimonials[active];
+  if (!t) return null;
 
   return (
     <Box component="section" sx={{ py: { xs: 8, md: 15 }, bgcolor: 'background.default', overflow: 'hidden' }}>
