@@ -10,7 +10,7 @@ export const ThemeToggle = () => {
 
   return (
     <Tooltip title={`Switch to ${mode === 'light' ? 'dark' : 'light'} mode`}>
-      <IconButton onClick={toggleTheme} color="inherit">
+      <IconButton onClick={toggleTheme} sx={{ color: 'text.primary' }}>
         {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
       </IconButton>
     </Tooltip>
