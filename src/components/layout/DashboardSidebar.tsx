@@ -96,22 +96,6 @@ export const DashboardSidebar = ({ onClick }: { onClick?: () => void }) => {
 
       <Box sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider' }}>
         <List disablePadding>
-          <ListItem disablePadding sx={{ mb: 0.5 }}>
-            <ListItemButton
-              component={Link}
-              href="/support"
-              onClick={onClick}
-              sx={{ borderRadius: 2, py: 1 }}
-            >
-              <ListItemIcon sx={{ minWidth: 40, color: 'text.secondary' }}>
-                <InfoIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText
-                primary="Support"
-                slotProps={{ primary: { sx: { fontSize: '0.9rem', color: 'text.secondary' } } }}
-              />
-            </ListItemButton>
-          </ListItem>
           <ListItem disablePadding>
             <ListItemButton
               component={Link}
