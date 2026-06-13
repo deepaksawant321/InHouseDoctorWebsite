@@ -9,16 +9,28 @@ import { adminApi } from '@/services/api';
 export default function PaymentsManagementPage() {
   const [payments, setPayments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState('All');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
   const [verifyDialog, setVerifyDialog] = useState<{ open: boolean; paymentId: string | null }>({ open: false, paymentId: null });
   const [verifyStatus, setVerifyStatus] = useState<'Success' | 'Rejected'>('Success');
   const [verifyRemarks, setVerifyRemarks] = useState('');
 
-  useEffect(() => {
-    adminApi.getPayments().then(res => {
+  const fetchPayments = () => {
+    setLoading(true);
+    adminApi.getPayments({
+      status: statusFilter === 'All' ? undefined : statusFilter,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
+    }).then(res => {
       setPayments(res.data.data || []);
     }).catch(console.error).finally(() => setLoading(false));
-  }, []);
+  };
+
+  useEffect(() => {
+    fetchPayments();
+  }, [statusFilter]);
 
   const openVerify = (id: string) => {
     setVerifyDialog({ open: true, paymentId: id });
@@ -65,8 +77,36 @@ export default function PaymentsManagementPage() {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
         <Typography variant="h4" sx={{ fontWeight: 800 }}>Payment Verification</Typography>
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
+          <TextField
+            type="date"
+            size="small"
+            label="Start Date"
+            slotProps={{ inputLabel: { shrink: true } }}
+            value={startDate}
+            onChange={e => setStartDate(e.target.value)}
+          />
+          <TextField
+            type="date"
+            size="small"
+            label="End Date"
+            slotProps={{ inputLabel: { shrink: true } }}
+            value={endDate}
+            onChange={e => setEndDate(e.target.value)}
+          />
+          <Button variant="contained" onClick={fetchPayments} sx={{ borderRadius: 2 }}>
+            Apply Filter
+          </Button>
+
+          <TextField select size="small" label="Status" value={statusFilter} onChange={e => setStatusFilter(e.target.value)} sx={{ width: 160 }}>
+            <MenuItem value="All">All Statuses</MenuItem>
+            <MenuItem value="Pending">Pending</MenuItem>
+            <MenuItem value="Success">Success</MenuItem>
+            <MenuItem value="Rejected">Rejected</MenuItem>
+          </TextField>
+        </Box>
       </Box>
 
       <DataTable columns={columns} rows={payments} />

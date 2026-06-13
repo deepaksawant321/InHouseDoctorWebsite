@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Box, Container, IconButton, Drawer, useTheme, useMediaQuery, alpha } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { DashboardSidebar } from '@/components/layout/DashboardSidebar';
@@ -8,11 +9,26 @@ import { DashboardSidebar } from '@/components/layout/DashboardSidebar';
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
+  const router = useRouter();
   const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.replace('/login');
+    } else {
+      setIsAuthenticated(true);
+    }
+  }, [router]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   const SIDEBAR_WIDTH = 280;
 

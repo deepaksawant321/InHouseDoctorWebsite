@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Box, Typography, Button, CircularProgress, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
+import { Box, Typography, Button, CircularProgress, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem } from '@mui/material';
 import { DataTable } from '@/features/admin/DataTable';
 import { StatusBadge, StatusType } from '@/features/admin/StatusBadge';
 import AddIcon from '@mui/icons-material/Add';
@@ -11,16 +11,23 @@ import { parseValidationErrors } from '@/utils/errorParser';
 export default function DoctorsManagementPage() {
   const [doctors, setDoctors] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState('All');
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
   const [addDialog, setAddDialog] = useState(false);
   const [newDoctor, setNewDoctor] = useState({ name: '', phoneNumber: '', email: '', qualification: '', specialization: '', experienceYears: '', consultationFee: '', coverageArea: '' });
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
+  const fetchDoctors = () => {
+    setLoading(true);
+    adminApi.getDoctors({ status: statusFilter === 'All' ? undefined : statusFilter })
+      .then(res => {
+        setDoctors(res.data.data || []);
+      }).catch(console.error).finally(() => setLoading(false));
+  };
+
   useEffect(() => {
-    adminApi.getDoctors().then(res => {
-      setDoctors(res.data.data || []);
-    }).catch(console.error).finally(() => setLoading(false));
-  }, []);
+    fetchDoctors();
+  }, [statusFilter]);
 
   const handleToggleStatus = async (id: string) => {
     try {
@@ -45,8 +52,7 @@ export default function DoctorsManagementPage() {
       setAddDialog(false);
       setNewDoctor({ name: '', phoneNumber: '', email: '', qualification: '', specialization: '', experienceYears: '', consultationFee: '', coverageArea: '' });
       // Refresh list
-      const res = await adminApi.getDoctors();
-      setDoctors(res.data.data || []);
+      fetchDoctors();
     } catch (err: any) {
       const { fieldErrors, generalMessage } = parseValidationErrors(err);
       setFieldErrors(fieldErrors);
@@ -76,9 +82,16 @@ export default function DoctorsManagementPage() {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
         <Typography variant="h4" sx={{ fontWeight: 800 }}>Doctor Management</Typography>
-        <Button variant="contained" startIcon={<AddIcon />} onClick={() => setAddDialog(true)}>Add Doctor</Button>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <TextField select size="small" label="Status" value={statusFilter} onChange={e => setStatusFilter(e.target.value)} sx={{ width: 140 }}>
+            <MenuItem value="All">All Statuses</MenuItem>
+            <MenuItem value="Active">Active</MenuItem>
+            <MenuItem value="Inactive">Inactive</MenuItem>
+          </TextField>
+          <Button variant="contained" startIcon={<AddIcon />} onClick={() => setAddDialog(true)}>Add Doctor</Button>
+        </Box>
       </Box>
 
       <DataTable columns={columns} rows={doctors} />

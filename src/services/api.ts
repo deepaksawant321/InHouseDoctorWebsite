@@ -47,22 +47,22 @@ export const adminApi = {
     apiClient.get('/admin/users'),
 
   // Doctors
-  getDoctors: () =>
-    apiClient.get('/admin/doctors'),
+  getDoctors: (params?: { status?: string }) =>
+    apiClient.get('/admin/doctors', { params }),
 
   toggleDoctorStatus: (id: string) =>
     apiClient.patch(`/admin/doctors/${id}/toggle-status`),
 
   // Bookings
-  getBookings: () =>
-    apiClient.get('/admin/bookings'),
+  getBookings: (params?: { status?: string; startDate?: string; endDate?: string }) =>
+    apiClient.get('/admin/bookings', { params }),
 
   updateBookingStatus: (id: string, status: string, remarks?: string) =>
     apiClient.patch(`/admin/bookings/${id}/status`, { status, remarks }),
 
   // Payments
-  getPayments: () =>
-    apiClient.get('/admin/payments'),
+  getPayments: (params?: { status?: string; startDate?: string; endDate?: string }) =>
+    apiClient.get('/admin/payments', { params }),
 
   verifyPayment: (id: string, status: 'Success' | 'Rejected', remarks?: string) =>
     apiClient.patch(`/admin/payments/${id}/verify`, { status, remarks }),

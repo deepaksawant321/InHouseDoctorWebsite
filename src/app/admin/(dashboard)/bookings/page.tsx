@@ -8,22 +8,26 @@ import { adminApi } from '@/services/api';
 
 export default function BookingsManagementPage() {
   const [bookings, setBookings] = useState<any[]>([]);
-  const [filtered, setFiltered] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('All');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
 
-  useEffect(() => {
-    adminApi.getBookings().then(res => {
-      const data = res.data.data || [];
-      setBookings(data);
-      setFiltered(data);
+  const fetchBookings = () => {
+    setLoading(true);
+    adminApi.getBookings({
+      status: statusFilter === 'All' ? undefined : statusFilter,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
+    }).then(res => {
+      setBookings(res.data.data || []);
     }).catch(console.error).finally(() => setLoading(false));
-  }, []);
+  };
 
   useEffect(() => {
-    setFiltered(statusFilter === 'All' ? bookings : bookings.filter(b => b.status === statusFilter));
-  }, [statusFilter, bookings]);
+    fetchBookings();
+  }, [statusFilter]); // Fetch on mount and when status changes
 
   const handleUpdateStatus = async (id: string, status: string) => {
     try {
@@ -73,7 +77,27 @@ export default function BookingsManagementPage() {
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
         <Typography variant="h4" sx={{ fontWeight: 800 }}>Bookings Management</Typography>
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={2} sx={{ alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+          <TextField
+            type="date"
+            size="small"
+            label="Start Date"
+            slotProps={{ inputLabel: { shrink: true } }}
+            value={startDate}
+            onChange={e => setStartDate(e.target.value)}
+          />
+          <TextField
+            type="date"
+            size="small"
+            label="End Date"
+            slotProps={{ inputLabel: { shrink: true } }}
+            value={endDate}
+            onChange={e => setEndDate(e.target.value)}
+          />
+          <Button variant="contained" onClick={fetchBookings} sx={{ borderRadius: 2 }}>
+            Apply Filter
+          </Button>
+
           <TextField select size="small" label="Status" value={statusFilter} onChange={e => setStatusFilter(e.target.value)} sx={{ width: 160 }}>
             <MenuItem value="All">All Statuses</MenuItem>
             <MenuItem value="Pending">Pending</MenuItem>
@@ -84,7 +108,7 @@ export default function BookingsManagementPage() {
         </Stack>
       </Box>
 
-      <DataTable columns={columns} rows={filtered} />
+      <DataTable columns={columns} rows={bookings} />
 
       <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar(s => ({ ...s, open: false }))}>
         <Alert severity={snackbar.severity} onClose={() => setSnackbar(s => ({ ...s, open: false }))}>{snackbar.message}</Alert>
