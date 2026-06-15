@@ -66,6 +66,13 @@ export const adminApi = {
 
   verifyPayment: (id: string, status: 'Success' | 'Rejected', remarks?: string) =>
     apiClient.patch(`/admin/payments/${id}/verify`, { status, remarks }),
+
+  // Settings
+  getSettings: () =>
+    apiClient.get('/admin/settings'),
+
+  updateSettings: (data: any) =>
+    apiClient.put('/admin/settings', data),
 };
 
 // ─── Services ────────────────────────────────────────────────────────────────
