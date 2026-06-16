@@ -29,7 +29,7 @@ export default function DashboardHome() {
       title: 'Book Service',
       desc: 'Schedule a new home visit for a patient',
       icon: <AddCircleIcon sx={{ fontSize: 40 }} />,
-      href: '/book/patient',
+      href: '/book/service',
       color: '#0D9488',
     },
     {

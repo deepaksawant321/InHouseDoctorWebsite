@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import { bookingsApi } from '@/services/api';
 import { useRouter } from 'next/navigation';
+import EmptyState from '@/components/EmptyState';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -32,7 +33,7 @@ export default function MyBookings() {
     bookingsApi.getMyBookings().then(res => {
       // Map backend booking format to the UI format
       const mapped = (res.data.data || []).map((b: any) => ({
-        id: b.bookingNo || `#${b.id.slice(0,6)}`,
+        id: b.bookingNo || `#${b.id.slice(0, 6)}`,
         service: b.symptoms || 'General Consultation',
         patient: b.patient?.fullName || 'Self',
         date: new Date(b.scheduledDate).toLocaleDateString() + (b.preferredTime ? `, ${b.preferredTime}` : ''),
@@ -59,15 +60,22 @@ export default function MyBookings() {
       </Box>
 
       {[0, 1, 2].map((tabIndex) => {
-        const statuses = [['Pending', 'Confirmed'], ['Completed'], ['Cancelled']];
+        const statuses = [
+          ['Created', 'Pending', 'Confirmed', 'DoctorAssigned', 'PaymentPending', 'PaymentVerified', 'DoctorConfirmed', 'VisitStarted'], 
+          ['Completed', 'VisitCompleted'], 
+          ['Cancelled']
+        ];
         const filtered = bookings.filter((b) => statuses[tabIndex].includes(b.status));
 
         return (
           <CustomTabPanel value={tab} index={tabIndex} key={tabIndex}>
             {filtered.length === 0 ? (
-              <Box sx={{ py: 8, textAlign: 'center' }}>
-                <Typography color="text.secondary">No bookings found in this category.</Typography>
-              </Box>
+              <EmptyState
+                title="No Bookings Found"
+                description={`You don't have any ${statuses[tabIndex].join(' or ').toLowerCase()} bookings.`}
+                actionText={tabIndex === 0 ? "Book a Service" : undefined}
+                actionHref={tabIndex === 0 ? "/book/service" : undefined}
+              />
             ) : (
               <Stack spacing={2}>
                 {filtered.map((booking) => (
@@ -76,10 +84,10 @@ export default function MyBookings() {
                       <Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                           <Typography variant="h6" sx={{ fontWeight: 700 }}>{booking.service}</Typography>
-                          <Chip 
-                            label={booking.status} 
-                            size="small" 
-                            color={booking.status === 'Upcoming' ? 'primary' : booking.status === 'Completed' ? 'success' : 'error'} 
+                          <Chip
+                            label={booking.status}
+                            size="small"
+                            color={booking.status === 'Upcoming' ? 'primary' : booking.status === 'Completed' ? 'success' : 'error'}
                             sx={{ fontWeight: 600 }}
                           />
                         </Box>
@@ -100,7 +108,7 @@ export default function MyBookings() {
                           </Button>
                         )}
                         {booking.status === 'Cancelled' && (
-                          <Button onClick={() => router.push('/book/patient')} variant="contained" size="small" sx={{ borderRadius: 2, textTransform: 'none' }}>
+                          <Button onClick={() => router.push('/book/service')} variant="contained" size="small" sx={{ borderRadius: 2, textTransform: 'none' }}>
                             Rebook
                           </Button>
                         )}

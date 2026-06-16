@@ -14,8 +14,21 @@ export default function PaymentPage() {
   const router = useRouter();
   const { state } = useBooking();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [upiRef, setUpiRef] = useState('');
+  const [paymentFile, setPaymentFile] = useState<File | null>(null);
 
   const handleBooking = async () => {
+    const finalAmount = Number(state.amount);
+    if (isNaN(finalAmount) || finalAmount <= 0) {
+      alert('Invalid payment amount. Please go back and re-select the service.');
+      return;
+    }
+
+    if ((upiRef && !paymentFile) || (!upiRef && paymentFile)) {
+      alert('Please provide both a UPI Reference Number and a Screenshot, or leave both empty to simulate payment.');
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       // 1. Create Booking
@@ -23,14 +36,17 @@ export default function PaymentPage() {
         patientId: state.patientId || '', // Essential!
         serviceId: state.serviceId || undefined,
         addressId: state.addressId || undefined,
-        doctorId: state.doctorId || undefined,
         scheduledDate: state.scheduledDate || '',
         symptoms: state.symptoms || undefined
       });
       const bookingId = bookingRes.data.data.id;
 
-      // 2. Initiate Payment
-      await paymentsApi.initiate(bookingId, state.amount);
+      // 2. Upload Payment or Initiate Simulated Payment
+      if (paymentFile && upiRef) {
+        await paymentsApi.uploadPaymentProof(bookingId, finalAmount, upiRef, paymentFile);
+      } else {
+        await paymentsApi.initiate(bookingId, finalAmount);
+      }
 
       router.push('/booking-success');
     } catch (error) {
@@ -66,12 +82,15 @@ export default function PaymentPage() {
           <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>Payment Details</Typography>
           <Grid container spacing={3} sx={{ mb: 4 }}>
             <Grid size={{ xs: 12 }}>
-              <TextField fullWidth label="UPI Reference Number (12 digits)" variant="outlined" />
+              <TextField 
+                fullWidth label="UPI Reference Number (12 digits)" variant="outlined" 
+                value={upiRef} onChange={(e) => setUpiRef(e.target.value)}
+              />
             </Grid>
           </Grid>
           
           <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>Upload Payment Screenshot</Typography>
-          <UploadZone />
+          <UploadZone onFileChange={setPaymentFile} />
         </Grid>
 
         {/* Right Column: Booking Summary */}
@@ -81,8 +100,8 @@ export default function PaymentPage() {
             
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="body2" color="text.secondary">Doctor</Typography>
-                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>{state.doctorName || 'Dr. Unknown'}</Typography>
+                <Typography variant="body2" color="text.secondary">Service</Typography>
+                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>{state.serviceName || 'General Consultation'}</Typography>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="body2" color="text.secondary">Date & Time</Typography>

@@ -29,8 +29,12 @@ export default function Profile() {
     e.preventDefault();
     setSaving(true);
     try {
-      await authApi.updateProfile(formData);
-      setProfile({ ...profile, ...formData });
+      const payload = {
+        fullName: `${formData.firstName} ${formData.lastName}`.trim(),
+        email: formData.email,
+      };
+      await authApi.updateProfile(payload);
+      setProfile({ ...profile, fullName: payload.fullName, email: payload.email });
       setSnackbar({ open: true, message: 'Profile updated successfully', severity: 'success' });
     } catch (err) {
       setSnackbar({ open: true, message: 'Failed to update profile', severity: 'error' });
@@ -78,7 +82,7 @@ export default function Profile() {
               <Grid size={{ xs: 12, md: 6 }}>
                 <TextField fullWidth label="Mobile Number" value={profile?.phoneNumber || ''} disabled />
               </Grid>
-              
+
               <Grid size={{ xs: 12 }}>
                 <Divider sx={{ my: 2 }} />
               </Grid>
@@ -92,7 +96,7 @@ export default function Profile() {
           </form>
         </CardContent>
       </Card>
-      
+
       <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar(s => ({ ...s, open: false }))}>
         <Alert severity={snackbar.severity} onClose={() => setSnackbar(s => ({ ...s, open: false }))}>{snackbar.message}</Alert>
       </Snackbar>

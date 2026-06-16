@@ -129,6 +129,32 @@ export const doctorsApi = {
 
   updateAvailability: (id: string, isAvailable: boolean) =>
     apiClient.patch(`/doctors/${id}/availability`, { isAvailable }),
+
+  update: (id: string, data: any) =>
+    apiClient.patch(`/doctors/${id}`, data),
+};
+
+// ─── Doctor Availability ──────────────────────────────────────────────────────
+
+export const doctorAvailabilityApi = {
+  create: (data: { doctorId: string; dayOfWeek: number; startTime: string; endTime: string; isAvailable?: boolean }) =>
+    apiClient.post('/doctor-availability', data),
+
+  getAllByDoctor: (doctorId: string) =>
+    apiClient.get(`/doctor-availability/doctor/${doctorId}`),
+
+  delete: (id: string) =>
+    apiClient.delete(`/doctor-availability/${id}`),
+};
+
+// ─── Settings ─────────────────────────────────────────────────────────────────
+
+export const settingsApi = {
+  get: () =>
+    apiClient.get('/settings'),
+
+  update: (data: any) =>
+    apiClient.put('/settings', data),
 };
 
 // ─── Bookings ─────────────────────────────────────────────────────────────────
@@ -166,22 +192,33 @@ export const paymentsApi = {
 
   getStatus: (transactionId: string) =>
     apiClient.get(`/payments/status/${transactionId}`),
+
+  uploadPaymentProof: (bookingId: string, amount: number, transactionId: string, file: File) => {
+    const form = new FormData();
+    form.append('file', file);
+    form.append('bookingId', bookingId);
+    form.append('amount', String(amount));
+    form.append('transactionId', transactionId);
+    return apiClient.post('/payments/upload', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
 };
 
 // ─── Assignments ──────────────────────────────────────────────────────────────
 
 export const assignmentsApi = {
   assign: (bookingId: string, doctorId: string) =>
-    apiClient.post('/assignments', { bookingId, doctorId }),
+    apiClient.post('/admin/assignments', { bookingId, doctorId }),
 
   getAll: () =>
-    apiClient.get('/assignments'),
+    apiClient.get('/admin/assignments'),
 
   getByBooking: (bookingId: string) =>
-    apiClient.get(`/assignments/booking/${bookingId}`),
+    apiClient.get(`/admin/assignments/booking/${bookingId}`),
 
   revoke: (id: string) =>
-    apiClient.patch(`/assignments/${id}/revoke`),
+    apiClient.patch(`/admin/assignments/${id}/revoke`),
 };
 
 // ─── Notifications ────────────────────────────────────────────────────────────
@@ -217,18 +254,18 @@ export const patientsApi = {
 
 export const recordsApi = {
   getAll: () =>
-    apiClient.get('/records'),
+    apiClient.get('/medical-records'),
 
   getById: (id: string) =>
-    apiClient.get(`/records/${id}`),
+    apiClient.get(`/medical-records/${id}`),
 
   upload: (data: FormData) =>
-    apiClient.post('/records/upload', data, {
+    apiClient.post('/medical-records/upload', data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     }),
 
   delete: (id: string) =>
-    apiClient.delete(`/records/${id}`),
+    apiClient.delete(`/medical-records/${id}`),
 };
 
 // ─── Addresses ────────────────────────────────────────────────────────────────
@@ -269,4 +306,18 @@ export const cmsApi = {
   createTestimonial: (data: { name: string; role: string; quote: string; rating?: number }) => apiClient.post('/cms/testimonials', data),
   updateTestimonial: (id: number, data: { name: string; role: string; quote: string; rating?: number; isActive?: boolean }) => apiClient.put(`/cms/testimonials/${id}`, data),
   deleteTestimonial: (id: number) => apiClient.delete(`/cms/testimonials/${id}`),
+};
+
+export const cmsBlocksApi = {
+  getAll: () => apiClient.get('/cms/blocks/all'),
+  create: (data: any) => apiClient.post('/cms/blocks', data),
+  update: (id: number, data: any) => apiClient.put(`/cms/blocks/${id}`, data),
+  delete: (id: number) => apiClient.delete(`/cms/blocks/${id}`),
+};
+
+export const staticPagesApi = {
+  getAll: () => apiClient.get('/cms/pages/all'),
+  create: (data: any) => apiClient.post('/cms/pages', data),
+  update: (id: number, data: any) => apiClient.put(`/cms/pages/${id}`, data),
+  delete: (id: number) => apiClient.delete(`/cms/pages/${id}`),
 };

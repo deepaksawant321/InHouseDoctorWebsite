@@ -5,7 +5,11 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import { useState } from 'react';
 
-export const UploadZone = () => {
+interface UploadZoneProps {
+  onFileChange?: (file: File | null) => void;
+}
+
+export const UploadZone = ({ onFileChange }: UploadZoneProps = {}) => {
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
 
@@ -21,13 +25,17 @@ export const UploadZone = () => {
     e.stopPropagation();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setFile(e.dataTransfer.files[0]);
+      const newFile = e.dataTransfer.files[0];
+      setFile(newFile);
+      onFileChange?.(newFile);
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+      const newFile = e.target.files[0];
+      setFile(newFile);
+      onFileChange?.(newFile);
     }
   };
 

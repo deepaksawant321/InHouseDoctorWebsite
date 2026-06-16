@@ -54,6 +54,7 @@ export default function PaymentsManagementPage() {
   const columns = [
     { id: 'id' as const, label: 'Payment ID', minWidth: 100, format: (v: string) => `#${String(v).slice(0, 8)}` },
     { id: 'booking' as const, label: 'Booking Ref', minWidth: 120, format: (_: any, row: any) => row.booking?.id ? `#${String(row.booking.id).slice(0, 8)}` : '—' },
+    { id: 'patient' as const, label: 'Patient', minWidth: 150, format: (_: any, row: any) => row.booking?.patient?.fullName || '—' },
     { id: 'amount' as const, label: 'Amount', minWidth: 100, format: (value: number) => `₹${value ?? 0}` },
     { id: 'transactionId' as const, label: 'UPI Ref', minWidth: 150, format: (v: string) => v || '—' },
     { id: 'status' as const, label: 'Status', minWidth: 120, format: (value: StatusType) => <StatusBadge status={value} /> },

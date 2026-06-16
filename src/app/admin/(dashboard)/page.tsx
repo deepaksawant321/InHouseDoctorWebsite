@@ -21,7 +21,8 @@ export default function AdminDashboardPage() {
   const [recentBookings, setRecentBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchDashboardData = (showLoading = true) => {
+    if (showLoading) setLoading(true);
     Promise.all([
       adminApi.getDashboardStats(),
       adminApi.getBookings(),
@@ -29,7 +30,16 @@ export default function AdminDashboardPage() {
       setStats(statsRes.data.data);
       // Show only the 5 most recent
       setRecentBookings((bookingsRes.data.data || []).slice(0, 5));
-    }).catch(console.error).finally(() => setLoading(false));
+    }).catch(console.error).finally(() => { if (showLoading) setLoading(false); });
+  };
+
+  useEffect(() => {
+    fetchDashboardData(true);
+    // Poll for new bookings/stats every 10 seconds silently
+    const interval = setInterval(() => {
+      fetchDashboardData(false);
+    }, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   const columns = [

@@ -20,6 +20,15 @@ export default function SettingsPage() {
     whatsappNumber: '',
     primaryUpiId: '',
     qrCodeImage: '',
+    logoUrl: '',
+    faviconUrl: '',
+    socialFacebook: '',
+    socialInstagram: '',
+    socialTwitter: '',
+    googleMapsLink: '',
+    bookingPrefix: '',
+    smsTemplates: '',
+    emailTemplates: '',
   });
 
   useEffect(() => {
@@ -38,6 +47,15 @@ export default function SettingsPage() {
           whatsappNumber: res.data.data.whatsappNumber || '',
           primaryUpiId: res.data.data.primaryUpiId || '',
           qrCodeImage: res.data.data.qrCodeImage || '',
+          logoUrl: res.data.data.logoUrl || '',
+          faviconUrl: res.data.data.faviconUrl || '',
+          socialFacebook: res.data.data.socialFacebook || '',
+          socialInstagram: res.data.data.socialInstagram || '',
+          socialTwitter: res.data.data.socialTwitter || '',
+          googleMapsLink: res.data.data.googleMapsLink || '',
+          bookingPrefix: res.data.data.bookingPrefix || '',
+          smsTemplates: res.data.data.smsTemplates || '',
+          emailTemplates: res.data.data.emailTemplates || '',
         });
       }
     } catch (err: any) {
@@ -151,6 +169,33 @@ export default function SettingsPage() {
                 <Typography variant="body1" sx={{ fontWeight: 600, color: 'primary.main' }}>Upload New QR Code (Coming soon)</Typography>
                 <Typography variant="caption" color="text.secondary">Use the QR Code URL field for now</Typography>
               </Box>
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+      
+      <Grid container spacing={4} sx={{ mt: 0 }}>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Box sx={{ p: 4, borderRadius: '24px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', mb: 4 }}>
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: 3 }}>Branding & Links</Typography>
+            <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+              <TextField fullWidth label="Logo URL" name="logoUrl" value={formData.logoUrl} onChange={handleChange} />
+              <TextField fullWidth label="FavIcon URL" name="faviconUrl" value={formData.faviconUrl} onChange={handleChange} />
+              <TextField fullWidth label="Facebook Link" name="socialFacebook" value={formData.socialFacebook} onChange={handleChange} />
+              <TextField fullWidth label="Instagram Link" name="socialInstagram" value={formData.socialInstagram} onChange={handleChange} />
+              <TextField fullWidth label="Twitter Link" name="socialTwitter" value={formData.socialTwitter} onChange={handleChange} />
+              <TextField fullWidth label="Google Maps Link" name="googleMapsLink" value={formData.googleMapsLink} onChange={handleChange} />
+            </Box>
+          </Box>
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Box sx={{ p: 4, borderRadius: '24px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', mb: 4 }}>
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: 3 }}>System Config</Typography>
+            <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+              <TextField fullWidth label="Booking Prefix (e.g. BKG-)" name="bookingPrefix" value={formData.bookingPrefix} onChange={handleChange} />
+              <TextField fullWidth label="SMS Templates (JSON)" name="smsTemplates" value={formData.smsTemplates} onChange={handleChange} multiline rows={4} />
+              <TextField fullWidth label="Email Templates (JSON)" name="emailTemplates" value={formData.emailTemplates} onChange={handleChange} multiline rows={4} />
             </Box>
           </Box>
         </Grid>

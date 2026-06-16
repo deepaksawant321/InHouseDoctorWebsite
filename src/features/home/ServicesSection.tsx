@@ -120,7 +120,7 @@ export const ServicesSection = () => {
                 const ui = SERVICE_UI_MAP[service.serviceName] || DEFAULT_UI;
                 return (
                   <Grid size={{ xs: 12, sm: 6 }} key={service.id || index}>
-                    <motion.div variants={fadeInUp} style={{ height: '100%' }}>
+                    <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} style={{ height: '100%' }}>
                         <Box
                           onClick={() => {
                             if (service.slug) {

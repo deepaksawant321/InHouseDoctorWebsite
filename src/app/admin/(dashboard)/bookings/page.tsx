@@ -14,20 +14,25 @@ export default function BookingsManagementPage() {
   const [endDate, setEndDate] = useState('');
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
 
-  const fetchBookings = () => {
-    setLoading(true);
+  const fetchBookings = (showLoading = true) => {
+    if (showLoading) setLoading(true);
     adminApi.getBookings({
       status: statusFilter === 'All' ? undefined : statusFilter,
       startDate: startDate || undefined,
       endDate: endDate || undefined,
     }).then(res => {
       setBookings(res.data.data || []);
-    }).catch(console.error).finally(() => setLoading(false));
+    }).catch(console.error).finally(() => { if (showLoading) setLoading(false); });
   };
 
   useEffect(() => {
-    fetchBookings();
-  }, [statusFilter]); // Fetch on mount and when status changes
+    fetchBookings(true);
+    // Poll for new bookings every 10 seconds silently
+    const interval = setInterval(() => {
+      fetchBookings(false);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [statusFilter, startDate, endDate]);
 
   const handleUpdateStatus = async (id: string, status: string) => {
     try {
@@ -41,29 +46,51 @@ export default function BookingsManagementPage() {
 
   const columns = [
     { id: 'id' as const, label: 'Booking ID', minWidth: 100, format: (v: string) => `#${String(v).slice(0, 8)}` },
-    { id: 'patient' as const, label: 'Patient', minWidth: 150, format: (_: any, row: any) => row.patient?.fullName || '—' },
+    { id: 'patient' as const, label: 'Patient', minWidth: 180, format: (_: any, row: any) => (
+      <Box>
+        <Typography variant="body2">{row.patient?.fullName || '—'}</Typography>
+        {row.patient?.mobileNo && (
+          <Typography variant="caption" color="text.secondary">📞 {row.patient.mobileNo}</Typography>
+        )}
+      </Box>
+    )},
     { id: 'doctor' as const, label: 'Doctor', minWidth: 150, format: (_: any, row: any) => row.doctor ? `Dr. ${row.doctor.name}` : 'Unassigned' },
     { id: 'symptoms' as const, label: 'Symptoms', minWidth: 150, format: (v: string) => v || '—' },
     { id: 'scheduledDate' as const, label: 'Date', minWidth: 120, format: (v: string) => v ? new Date(v).toLocaleDateString() : '—' },
     { id: 'paymentStatus' as const, label: 'Payment', minWidth: 120, format: (value: StatusType) => <StatusBadge status={value} /> },
     { id: 'status' as const, label: 'Status', minWidth: 120, format: (value: StatusType) => <StatusBadge status={value} /> },
     {
-      id: 'actions' as const, label: 'Actions', minWidth: 200, align: 'center' as const,
+      id: 'actions' as const, label: 'Actions', minWidth: 350, align: 'center' as const,
       format: (_: any, row: any) => (
-        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-          {row.status === 'Pending' && (
-            <Button variant="contained" size="small" sx={{ borderRadius: 2 }} onClick={() => handleUpdateStatus(row.id, 'Confirmed')}>
+        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', minWidth: 'max-content' }}>
+          {(row.status === 'Pending' || row.status === 'Created') && (
+            <Button variant="contained" size="small" sx={{ borderRadius: 2, whiteSpace: 'nowrap' }} onClick={() => handleUpdateStatus(row.id, 'Confirmed')}>
               Confirm
             </Button>
           )}
-          {row.status !== 'Cancelled' && row.status !== 'Completed' && (
-            <Button variant="outlined" color="error" size="small" sx={{ borderRadius: 2 }} onClick={() => handleUpdateStatus(row.id, 'Cancelled')}>
-              Cancel
+          {row.status === 'Confirmed' && (
+            <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 2, whiteSpace: 'nowrap' }} onClick={() => handleUpdateStatus(row.id, 'DoctorAssigned')}>
+              Assign Dr
             </Button>
           )}
-          {row.status === 'Confirmed' && (
-            <Button variant="outlined" color="success" size="small" sx={{ borderRadius: 2 }} onClick={() => handleUpdateStatus(row.id, 'Completed')}>
+          {row.status === 'DoctorAssigned' && (
+            <Button variant="contained" color="info" size="small" sx={{ borderRadius: 2, whiteSpace: 'nowrap' }} onClick={() => handleUpdateStatus(row.id, 'VisitStarted')}>
+              Start Visit
+            </Button>
+          )}
+          {row.status === 'VisitStarted' && (
+            <Button variant="contained" color="warning" size="small" sx={{ borderRadius: 2, whiteSpace: 'nowrap' }} onClick={() => handleUpdateStatus(row.id, 'VisitCompleted')}>
+              End Visit
+            </Button>
+          )}
+          {(row.status === 'VisitCompleted' || row.status === 'Confirmed' || row.status === 'DoctorAssigned') && (
+            <Button variant="outlined" color="success" size="small" sx={{ borderRadius: 2, whiteSpace: 'nowrap' }} onClick={() => handleUpdateStatus(row.id, 'Completed')}>
               Complete
+            </Button>
+          )}
+          {row.status !== 'Cancelled' && row.status !== 'Completed' && (
+            <Button variant="outlined" color="error" size="small" sx={{ borderRadius: 2, whiteSpace: 'nowrap' }} onClick={() => handleUpdateStatus(row.id, 'Cancelled')}>
+              Cancel
             </Button>
           )}
         </Box>

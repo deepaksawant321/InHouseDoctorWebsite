@@ -3,9 +3,9 @@
 import { Box, Typography, Button, TextField, Grid, Card, CardContent, MenuItem, CircularProgress } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { patientsApi } from '@/services/api';
 
 interface PatientForm {
@@ -19,10 +19,14 @@ interface PatientForm {
   medicalNotes: string;
 }
 
-export default function AddPatient() {
+export default function EditPatient() {
   const router = useRouter();
+  const params = useParams();
+  const patientId = params.id as string;
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { control, handleSubmit, formState: { errors } } = useForm<PatientForm>({
+  const [loading, setLoading] = useState(true);
+
+  const { control, handleSubmit, formState: { errors }, reset } = useForm<PatientForm>({
     defaultValues: {
       fullName: '',
       relationship: 'Self',
@@ -35,10 +39,33 @@ export default function AddPatient() {
     }
   });
 
+  useEffect(() => {
+    if (patientId) {
+      patientsApi.getById(patientId).then(res => {
+        const data = res.data;
+        if (data) {
+          reset({
+            fullName: data.fullName || '',
+            relationship: data.relationship || 'Self',
+            age: data.age || 30,
+            gender: data.gender || 'Male',
+            bloodGroup: data.bloodGroup || 'O+',
+            mobileNo: data.mobileNo || '',
+            emergencyContact: data.emergencyContact || '',
+            medicalNotes: data.medicalNotes || '',
+          });
+        }
+      }).catch(err => {
+        console.error(err);
+        alert('Failed to load patient');
+      }).finally(() => setLoading(false));
+    }
+  }, [patientId, reset]);
+
   const onSubmit = async (data: PatientForm) => {
     setIsSubmitting(true);
     try {
-      await patientsApi.create({
+      await patientsApi.update(patientId, {
         fullName: data.fullName,
         relationship: data.relationship,
         age: Number(data.age),
@@ -51,10 +78,12 @@ export default function AddPatient() {
       router.push('/dashboard/patients');
     } catch (err) {
       console.error(err);
-      alert('Failed to add patient. Please try again.');
+      alert('Failed to update patient. Please try again.');
       setIsSubmitting(false);
     }
   };
+
+  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}><CircularProgress /></Box>;
 
   return (
     <Box sx={{ maxWidth: 800 }}>
@@ -68,7 +97,7 @@ export default function AddPatient() {
       </Button>
 
       <Typography variant="h4" sx={{ fontWeight: 800, mb: 4 }}>
-        Add New Patient
+        Edit Patient
       </Typography>
 
       <Card elevation={0} sx={{ borderRadius: '24px', border: '1px solid', borderColor: 'divider' }}>
@@ -134,9 +163,9 @@ export default function AddPatient() {
                   <TextField {...field} fullWidth label="Medical Notes (Allergies, chronic conditions, etc.)" multiline rows={4} />
                 )} />
               </Grid>
-              <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
-                <Button type="submit" variant="contained" size="large" disabled={isSubmitting} sx={{ borderRadius: 2, px: 4, py: 1.5, textTransform: 'none', fontWeight: 600 }}>
-                  {isSubmitting ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Save Patient'}
+              <Grid size={{ xs: 12 }}>
+                <Button type="submit" variant="contained" size="large" disabled={isSubmitting} sx={{ mt: 2, borderRadius: 2, px: 4, py: 1.5, textTransform: 'none', fontWeight: 600 }}>
+                  {isSubmitting ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Save Changes'}
                 </Button>
               </Grid>
             </Grid>

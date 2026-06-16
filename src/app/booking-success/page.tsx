@@ -17,7 +17,7 @@ export default function BookingSuccessPage() {
   return (
     <>
       <BookingStepper />
-      
+
       <Box component="section" sx={{ py: { xs: 8, md: 15 }, bgcolor: 'background.default', minHeight: '80vh' }}>
         <Container maxWidth="md">
           <Box sx={{ textAlign: 'center', mb: 6 }}>
@@ -28,7 +28,7 @@ export default function BookingSuccessPage() {
             >
               <CheckCircleOutlinedIcon sx={{ fontSize: 120, color: '#25D366', mb: 3 }} />
             </motion.div>
-            
+
             <Typography variant="h2" sx={{ fontWeight: 800, mb: 2 }}>
               Booking Created Successfully!
             </Typography>
@@ -41,7 +41,7 @@ export default function BookingSuccessPage() {
               <Typography variant="h4" sx={{ fontWeight: 800, color: 'primary.main', letterSpacing: 2, mb: 3 }}>
                 IH20260001
               </Typography>
-              
+
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'center', bgcolor: alpha('#FFA000', 0.1), color: '#F57C00', py: 1, px: 3, borderRadius: 6 }}>
                 <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Status: Pending Verification</Typography>
               </Box>
@@ -80,20 +80,20 @@ export default function BookingSuccessPage() {
 
           <Box sx={{ display: 'flex', gap: 3, justifyContent: 'center' }}>
             <Box
-              component="button" onClick={() => router.push('/')}
+              component="button" onClick={() => router.push('/dashboard')}
               sx={{
                 py: 2, px: 6, borderRadius: '16px', border: '1px solid', borderColor: 'primary.main', cursor: 'pointer',
                 bgcolor: 'transparent', color: 'primary.main', fontWeight: 700, fontSize: '1rem',
                 transition: 'all 0.2s', '&:hover': { bgcolor: alpha('#4F46E5', 0.05) },
               }}
             >
-              Go to Home
+              Go to Dashboard
             </Box>
             <Box
               component="button" onClick={() => router.push('/book/service')}
               sx={{
                 py: 2, px: 6, borderRadius: '16px', border: 'none', cursor: 'pointer',
-                background: 'linear-gradient(135deg, #4F46E5, #0D9488)', color: 'white', 
+                background: 'linear-gradient(135deg, #4F46E5, #0D9488)', color: 'white',
                 fontWeight: 700, fontSize: '1rem', boxShadow: '0 8px 24px rgba(25, 118, 210, 0.3)',
                 transition: 'all 0.2s', '&:hover': { transform: 'translateY(-2px)' },
               }}

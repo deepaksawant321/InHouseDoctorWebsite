@@ -26,7 +26,7 @@ export default function SelectServicePage() {
 
   const handleContinue = () => {
     if (state.serviceId) {
-      router.push('/book/address');
+      router.push('/book/patient');
     }
   };
 
@@ -94,7 +94,7 @@ export default function SelectServicePage() {
             transition: 'all 0.3s ease', '&:hover': { transform: state.serviceId ? 'translateY(-2px)' : 'none', boxShadow: state.serviceId ? '0 12px 32px rgba(79, 70, 229, 0.4)' : 'none' },
           }}
         >
-          Continue to Address Selection
+          Continue to Patient Selection
         </Box>
       </Box>
     </Box>

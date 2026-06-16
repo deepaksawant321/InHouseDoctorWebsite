@@ -25,7 +25,7 @@ export const ChartCard = ({ title, data, type, dataKey, xAxisKey, color, actions
         {actions && <Box>{actions}</Box>}
       </Box>
       <Box sx={{ flexGrow: 1, width: '100%', minHeight: 0 }}>
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
           {type === 'line' ? (
             <LineChart data={data} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" stroke={theme.palette.divider} vertical={false} />

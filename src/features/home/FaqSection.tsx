@@ -32,7 +32,7 @@ const FaqItem = ({ q, a, index }: { q: string; a: string; index: number }) => {
   const isDark = theme.palette.mode === 'dark';
 
   return (
-    <motion.div variants={fadeInUp}>
+    <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
       <Box
         sx={{
           borderRadius: '16px',

@@ -16,16 +16,20 @@ import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import RateReviewIcon from '@mui/icons-material/RateReview';
+import ViewModuleIcon from '@mui/icons-material/ViewModule';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 const menuItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin' },
   { text: 'Bookings', icon: <BookOnlineIcon />, path: '/admin/bookings' },
   { text: 'Payments', icon: <PaymentIcon />, path: '/admin/payments' },
-  { text: 'Doctors', icon: <LocalHospitalIcon />, path: '/admin/doctors' },
+  { text: 'Staff & Doctors', icon: <LocalHospitalIcon />, path: '/admin/doctors' },
   { text: 'Assignments', icon: <AssignmentIndIcon />, path: '/admin/assignments' },
   { text: 'Services', icon: <MedicalServicesIcon />, path: '/admin/services' },
   { text: 'FAQs (CMS)', icon: <QuestionAnswerIcon />, path: '/admin/cms/faqs' },
   { text: 'Testimonials', icon: <RateReviewIcon />, path: '/admin/cms/testimonials' },
+  { text: 'Blocks (CMS)', icon: <ViewModuleIcon />, path: '/admin/cms/blocks' },
+  { text: 'Pages (CMS)', icon: <DescriptionIcon />, path: '/admin/cms/pages' },
   { text: 'Notifications', icon: <NotificationsIcon />, path: '/admin/notifications' },
   { text: 'Reports', icon: <BarChartIcon />, path: '/admin/reports' },
   { text: 'Settings', icon: <SettingsIcon />, path: '/admin/settings' },

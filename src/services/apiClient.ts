@@ -10,11 +10,8 @@ export const apiClient = axios.create({
 // Attach JWT token from localStorage (patient token or admin token)
 apiClient.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
-    // Admin routes use adminToken, patient routes use token
-    const isAdminRoute = config.url?.startsWith('/admin');
-    const token = isAdminRoute
-      ? localStorage.getItem('adminToken') || localStorage.getItem('token')
-      : localStorage.getItem('token');
+    const isAdminPage = window.location.pathname.startsWith('/admin');
+    const token = isAdminPage ? localStorage.getItem('adminToken') : localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

@@ -5,7 +5,10 @@ import { useState, useEffect } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Link from 'next/link';
 import { addressesApi } from '@/services/api';
+import EmptyState from '@/components/EmptyState';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 export default function AddressBook() {
   const [addresses, setAddresses] = useState<any[]>([]);
@@ -18,7 +21,7 @@ export default function AddressBook() {
   const fetchAddresses = () => {
     setLoading(true);
     addressesApi.getAll().then(res => {
-      const data = res.data.data || [];
+      const data = res.data.data || res.data || [];
       const mapped = data.map((a: any) => ({
         id: a.id,
         title: a.title || 'Address',
@@ -50,6 +53,8 @@ export default function AddressBook() {
           Address Book
         </Typography>
         <Button
+          component={Link}
+          href="/dashboard/addresses/add"
           variant="contained"
           startIcon={<AddIcon />}
           sx={{ borderRadius: 2, px: 3, py: 1, textTransform: 'none', fontWeight: 600 }}
@@ -59,42 +64,52 @@ export default function AddressBook() {
       </Box>
 
       <Grid container spacing={3}>
-        {addresses.map((addr) => (
-          <Grid size={{ xs: 12, md: 6 }} key={addr.id}>
-            <Card elevation={0} sx={{ borderRadius: '16px', border: '1px solid', borderColor: addr.isDefault ? 'primary.main' : 'divider', position: 'relative' }}>
-              <CardContent>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                  <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                    {addr.title}
+        {addresses.length === 0 ? (
+          <EmptyState 
+            title="No Addresses Found" 
+            description="You haven't added any addresses to your address book yet." 
+            actionText="Add Address"
+            actionHref="/dashboard/addresses/add"
+            icon={<LocationOnIcon />}
+          />
+        ) : (
+          addresses.map((addr) => (
+            <Grid size={{ xs: 12, md: 6 }} key={addr.id}>
+              <Card elevation={0} sx={{ borderRadius: '16px', border: '1px solid', borderColor: addr.isDefault ? 'primary.main' : 'divider', position: 'relative' }}>
+                <CardContent>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                      {addr.title}
+                    </Typography>
+                    {addr.isDefault && (
+                      <Chip label="Default" size="small" color="primary" sx={{ fontWeight: 600 }} />
+                    )}
+                  </Box>
+                  <Typography variant="body1" sx={{ mb: 0.5 }}>
+                    {addr.line1}
                   </Typography>
-                  {addr.isDefault && (
-                    <Chip label="Default" size="small" color="primary" sx={{ fontWeight: 600 }} />
-                  )}
-                </Box>
-                <Typography variant="body1" sx={{ mb: 0.5 }}>
-                  {addr.line1}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                  {addr.area}, {addr.city} - {addr.pincode}
-                </Typography>
-                
-                <Box sx={{ display: 'flex', gap: 1, pt: 2, borderTop: '1px solid', borderColor: 'divider' }}>
-                  {!addr.isDefault && (
-                    <Button variant="text" size="small" onClick={() => handleSetDefault(addr.id)} sx={{ borderRadius: 2, textTransform: 'none', mr: 'auto' }}>
-                      Set as Default
-                    </Button>
-                  )}
-                  <IconButton size="small" color="primary" sx={{ ml: addr.isDefault ? 'auto' : 0 }}>
-                    <EditIcon fontSize="small" />
-                  </IconButton>
-                  <IconButton size="small" color="error">
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                    {addr.area}, {addr.city} - {addr.pincode}
+                  </Typography>
+                  
+                  <Box sx={{ display: 'flex', gap: 1, pt: 2, borderTop: '1px solid', borderColor: 'divider' }}>
+                    {!addr.isDefault && (
+                      <Button variant="text" size="small" onClick={() => handleSetDefault(addr.id)} sx={{ borderRadius: 2, textTransform: 'none', mr: 'auto' }}>
+                        Set as Default
+                      </Button>
+                    )}
+                    <IconButton size="small" color="primary" sx={{ ml: addr.isDefault ? 'auto' : 0 }}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton size="small" color="error">
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+        )}
       </Grid>
     </Box>
   );

@@ -21,7 +21,7 @@ export default function SchedulePage() {
 
   const handleContinue = () => {
     if (selectedDate && selectedTime) {
-      router.push('/book/payment');
+      router.push('/book/prescription');
     }
   };
 
@@ -106,7 +106,7 @@ export default function SchedulePage() {
             transition: 'all 0.2s', '&:hover': { transform: (selectedDate && selectedTime) ? 'translateY(-2px)' : 'none' },
           }}
         >
-          Continue to Payment
+          Continue to Prescription
         </Box>
       </Box>
     </Box>

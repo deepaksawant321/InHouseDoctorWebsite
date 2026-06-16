@@ -7,8 +7,6 @@ interface BookingState {
   serviceId: number | null;
   serviceName: string;
   addressId: string | null;
-  doctorId: string | null;
-  doctorName: string;
   symptoms: string;
   scheduledDate: string | null;
   amount: number;
@@ -19,7 +17,6 @@ interface BookingContextType {
   setPatient: (id: string, name: string) => void;
   setService: (id: number, name: string, basePrice: number) => void;
   setAddress: (id: string) => void;
-  setDoctor: (id: string, name: string, fee: number) => void;
   setSymptoms: (symptoms: string) => void;
   setScheduledDate: (date: string) => void;
 }
@@ -33,8 +30,6 @@ export function BookingProvider({ children }: { children: ReactNode }) {
     serviceId: null,
     serviceName: '',
     addressId: null,
-    doctorId: null,
-    doctorName: '',
     symptoms: '',
     scheduledDate: new Date(Date.now() + 86400000).toISOString(), // Default Tomorrow
     amount: 0,
@@ -43,12 +38,11 @@ export function BookingProvider({ children }: { children: ReactNode }) {
   const setPatient = (id: string, name: string) => setState(s => ({ ...s, patientId: id, patientName: name }));
   const setService = (id: number, name: string, basePrice: number) => setState(s => ({ ...s, serviceId: id, serviceName: name, amount: basePrice }));
   const setAddress = (id: string) => setState(s => ({ ...s, addressId: id }));
-  const setDoctor = (id: string, name: string, fee: number) => setState(s => ({ ...s, doctorId: id, doctorName: name, amount: s.amount + fee }));
   const setSymptoms = (symptoms: string) => setState(s => ({ ...s, symptoms }));
   const setScheduledDate = (date: string) => setState(s => ({ ...s, scheduledDate: date }));
 
   return (
-    <BookingContext.Provider value={{ state, setPatient, setService, setAddress, setDoctor, setSymptoms, setScheduledDate }}>
+    <BookingContext.Provider value={{ state, setPatient, setService, setAddress, setSymptoms, setScheduledDate }}>
       {children}
     </BookingContext.Provider>
   );

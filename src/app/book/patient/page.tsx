@@ -17,14 +17,14 @@ export default function SelectPatient() {
 
   useEffect(() => {
     patientsApi.getAll()
-      .then(res => setPatients(res.data.data || []))
+      .then(res => setPatients(Array.isArray(res.data) ? res.data : (res.data?.data || [])))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
 
   const handleSelectPatient = (id: string, name: string) => {
     setPatient(id, name);
-    router.push('/book/service');
+    router.push('/book/address');
   };
 
   return (
