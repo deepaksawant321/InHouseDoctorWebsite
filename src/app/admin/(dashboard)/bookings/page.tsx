@@ -46,14 +46,16 @@ export default function BookingsManagementPage() {
 
   const columns = [
     { id: 'id' as const, label: 'Booking ID', minWidth: 100, format: (v: string) => `#${String(v).slice(0, 8)}` },
-    { id: 'patient' as const, label: 'Patient', minWidth: 180, format: (_: any, row: any) => (
-      <Box>
-        <Typography variant="body2">{row.patient?.fullName || '—'}</Typography>
-        {row.patient?.mobileNo && (
-          <Typography variant="caption" color="text.secondary">📞 {row.patient.mobileNo}</Typography>
-        )}
-      </Box>
-    )},
+    {
+      id: 'patient' as const, label: 'Patient', minWidth: 180, format: (_: any, row: any) => (
+        <Box>
+          <Typography variant="body2">{row.patient?.fullName || '—'}</Typography>
+          {row.patient?.mobileNo && (
+            <Typography variant="caption" color="text.secondary">📞 {row.patient.mobileNo}</Typography>
+          )}
+        </Box>
+      )
+    },
     { id: 'doctor' as const, label: 'Doctor', minWidth: 150, format: (_: any, row: any) => row.doctor ? `Dr. ${row.doctor.name}` : 'Unassigned' },
     { id: 'symptoms' as const, label: 'Symptoms', minWidth: 150, format: (v: string) => v || '—' },
     { id: 'scheduledDate' as const, label: 'Date', minWidth: 120, format: (v: string) => v ? new Date(v).toLocaleDateString() : '—' },
@@ -121,7 +123,7 @@ export default function BookingsManagementPage() {
             value={endDate}
             onChange={e => setEndDate(e.target.value)}
           />
-          <Button variant="contained" onClick={fetchBookings} sx={{ borderRadius: 2 }}>
+          <Button variant="contained" onClick={() => fetchBookings()} sx={{ borderRadius: 2 }}>
             Apply Filter
           </Button>
 
