@@ -35,7 +35,7 @@ export default function MedicalRecords() {
         });
         return acc;
       }, {});
-      
+
       const mapped = Object.keys(grouped).map(patient => ({
         patient,
         items: grouped[patient]
@@ -117,7 +117,7 @@ export default function MedicalRecords() {
                         primary={<Typography variant="subtitle2" sx={{ fontWeight: 600 }}>{item.title}</Typography>}
                         secondary={item.date} 
                       />
-                      <Button size="small" variant="outlined" startIcon={<DownloadIcon />} sx={{ borderRadius: 2, textTransform: 'none' }} href={`http://localhost:3001${item.fileUrl}`} target="_blank">
+                      <Button size="small" variant="outlined" startIcon={<DownloadIcon />} sx={{ borderRadius: 2, textTransform: 'none' }} href={`${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace('/api', '') : 'http://localhost:3001'}${item.fileUrl}`} target="_blank">
                         Download
                       </Button>
                     </ListItem>
@@ -163,6 +163,6 @@ export default function MedicalRecords() {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </Box >
   );
 }

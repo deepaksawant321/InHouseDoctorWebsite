@@ -1,6 +1,6 @@
 /**
  * Centralized API service layer — all backend calls in one place.
- * Backend base: http://localhost:3001/api (configured in apiClient.ts)
+ * Backend base: http://https://api.doctordoorstep.com/api (configured in apiClient.ts)
  */
 import { apiClient } from './apiClient';
 
