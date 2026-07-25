@@ -28,7 +28,7 @@ export default function ContactPage() {
                 Get in Touch
               </Typography>
               <Typography variant="body1" color="text.secondary" sx={{ mb: 6 }}>
-                Have a question about our services or need immediate medical assistance? 
+                Have a question about our services or need immediate medical assistance?
                 Our support team is available 24/7.
               </Typography>
 
@@ -39,7 +39,7 @@ export default function ContactPage() {
                   </Box>
                   <Box>
                     <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>Phone</Typography>
-                    <Typography variant="body1" color="text.secondary">1800-123-4567</Typography>
+                    <Typography variant="body1" color="text.secondary">9029190955</Typography>
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>
@@ -48,7 +48,7 @@ export default function ContactPage() {
                   </Box>
                   <Box>
                     <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>WhatsApp</Typography>
-                    <Typography variant="body1" color="text.secondary">+91 98765 43210</Typography>
+                    <Typography variant="body1" color="text.secondary">+91 9029190955</Typography>
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>
@@ -57,7 +57,7 @@ export default function ContactPage() {
                   </Box>
                   <Box>
                     <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>Email</Typography>
-                    <Typography variant="body1" color="text.secondary">support@inhousedoctor.com</Typography>
+                    <Typography variant="body1" color="text.secondary">admindoctordoorstep@gmail.com</Typography>
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>
@@ -66,7 +66,7 @@ export default function ContactPage() {
                   </Box>
                   <Box>
                     <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>Headquarters</Typography>
-                    <Typography variant="body1" color="text.secondary">Andheri West, Mumbai, Maharashtra 400053, India</Typography>
+                    <Typography variant="body1" color="text.secondary">Shop No.3, Sai Sarovar, C-wing, S.V. Road, R.N.P., RNP Park, Jesal Park, Bhayandar East, Mumbai, Maharashtra 401105, India</Typography>
                   </Box>
                 </Box>
               </Box>
@@ -124,7 +124,16 @@ export default function ContactPage() {
 
       {/* Static Map Placeholder */}
       <Box sx={{ width: '100%', height: 400, bgcolor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Typography variant="h6" color="text.secondary">Google Maps Integration Placeholder</Typography>
+        <iframe
+          title="Priya Clinic Location"
+          src="https://www.google.com/maps?q=Priya+Clinic,+Bhayandar+East,+Mumbai&output=embed"
+          width="100%"
+          height="100%"
+          style={{ border: 0 }}
+          loading="lazy"
+          allowFullScreen
+          referrerPolicy="no-referrer-when-downgrade"
+        />
       </Box>
     </>
   );

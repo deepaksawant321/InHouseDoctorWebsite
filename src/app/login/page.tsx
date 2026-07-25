@@ -1,181 +1,239 @@
 'use client';
 
-import { Box, Container, Typography, TextField, InputAdornment } from '@mui/material';
-import Grid from '@mui/material/Grid';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { OTPInput } from '@/features/booking/OTPInput';
-// BookingStepper removed
-import { authApi } from '@/services/api';
-import { parseValidationErrors } from '@/utils/errorParser';
-import { alpha } from '@mui/material';
 
 export default function LoginPage() {
-  const router = useRouter();
-  const [step, setStep] = useState<'mobile' | 'otp'>('mobile');
-  const [mobile, setMobile] = useState('');
+  const [loginId, setLoginId] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [generalError, setGeneralError] = useState('');
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [timer, setTimer] = useState(30);
+  const router = useRouter();
 
-  const handleSendOTP = async () => {
-    setGeneralError('');
-    setFieldErrors({});
-    if (mobile.length >= 10) {
-      setIsLoading(true);
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (otpSent && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [otpSent, timer]);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSendOtp = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setError('');
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginId);
+    const isMobile = /^\d{10}$/.test(loginId);
+
+    if (isEmail || isMobile) {
+      setLoading(true);
       try {
-        const res = await authApi.sendOtp(`+91${mobile}`);
-        // Dev Note: For ease of testing, logging the OTP generated
-        console.log('OTP Dev Hint:', res.data.data.devOtpHint);
-        setStep('otp');
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/auth/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            identifier: loginId,
+            channel: isEmail ? 'EMAIL' : 'SMS',
+            purpose: 'LOGIN'
+          })
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.message || 'Failed to send OTP');
+        }
+
+        setOtpSent(true);
+        setTimer(30);
       } catch (err: any) {
-        console.error('Failed to send OTP:', err);
-        const { fieldErrors, generalMessage } = parseValidationErrors(err);
-        setFieldErrors(fieldErrors);
-        setGeneralError(generalMessage);
+        setError(err.message || 'Something went wrong');
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
+    } else {
+      setError("Please enter a valid 10-digit mobile number or a valid email ID.");
     }
   };
 
-  const handleVerifyOTP = async () => {
-    if (otp.length === 4) {
-      setGeneralError('');
-      setFieldErrors({});
-      setIsLoading(true);
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    if (otp.length > 3) {
+      setLoading(true);
       try {
-        const res = await authApi.loginWithOtp(`+91${mobile}`, otp);
-        const { accessToken, user } = res.data.data;
-        localStorage.setItem('token', accessToken);
-        localStorage.setItem('user', JSON.stringify(user));
-        
-        // Redirect based on role or to dashboard
-        if (user.role === 'Admin') router.push('/admin/dashboard');
-        else if (user.role === 'Doctor') router.push('/doctor/dashboard');
-        else router.push('/dashboard');
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/auth/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            identifier: loginId,
+            otp: otp,
+            purpose: 'LOGIN'
+          })
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.message || 'Invalid OTP');
+        }
+
+        const data = await response.json();
+        alert("OTP Verified Successfully! Token: " + (data.token ? "Received" : "N/A"));
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
+        router.push('/dashboard');
+        // Handle successful login (e.g. save token, redirect to dashboard)
       } catch (err: any) {
-        console.error('Failed to verify OTP:', err);
-        const { fieldErrors, generalMessage } = parseValidationErrors(err);
-        setFieldErrors(fieldErrors);
-        setGeneralError(generalMessage || 'Invalid OTP');
+        setError(err.message || 'Failed to verify OTP');
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
+    } else {
+      setError("Please enter a valid OTP.");
     }
   };
 
   return (
-    <>
-      <Box component="section" sx={{ py: { xs: 8, md: 15 }, bgcolor: 'background.default', minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
-        <Container maxWidth="sm">
-          <Box
-            sx={{
-              p: { xs: 4, md: 6 }, borderRadius: 6,
-              bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.04)',
-              textAlign: 'center'
-            }}
-          >
-            {step === 'mobile' ? (
-              <>
-                <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
-                  Login or Sign up
-                </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ mb: 6 }}>
-                  Enter your mobile number to proceed. We will send an OTP for verification.
-                </Typography>
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+      fontFamily: '"Inter", "Roboto", sans-serif'
+    }}>
+      <div style={{
+        background: 'rgba(255, 255, 255, 0.9)',
+        backdropFilter: 'blur(10px)',
+        padding: '40px',
+        borderRadius: '20px',
+        boxShadow: '0 15px 35px rgba(0,0,0,0.1)',
+        maxWidth: '400px',
+        width: '100%',
+        textAlign: 'center',
+        transition: 'all 0.3s ease'
+      }}>
 
-                {generalError && (
-                  <Box sx={{ mb: 3, p: 2, borderRadius: 2, bgcolor: alpha('#f44336', 0.1), color: 'error.main', fontWeight: 600, fontSize: '0.9rem' }}>
-                    {generalError}
-                  </Box>
-                )}
+        {/* Header Section */}
+        <h1 style={{ margin: '0 0 10px 0', color: '#333', fontSize: '28px', fontWeight: '700' }}>
+          Login or Sign up
+        </h1>
+        <p style={{ color: '#666', fontSize: '14px', marginBottom: '30px', lineHeight: '1.5' }}>
+          Enter your mobile number or email ID to proceed. We will send an OTP for verification.
+        </p>
 
-                <TextField
-                  fullWidth
-                  placeholder="Mobile Number"
-                  variant="outlined"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                  slotProps={{
-                    input: {
-                      startAdornment: <InputAdornment position="start">+91</InputAdornment>,
-                      sx: { fontSize: '1.1rem', py: 0.5 }
-                    }
-                  }}
-                  sx={{ mb: 4 }}
-                  error={!!fieldErrors.phoneNumber}
-                  helperText={fieldErrors.phoneNumber}
-                />
+        {/* Form Section */}
+        {error && (
+          <div style={{ color: '#d32f2f', background: '#fdecea', padding: '10px', borderRadius: '5px', marginBottom: '20px', fontSize: '14px', fontWeight: 'bold' }}>
+            {error}
+          </div>
+        )}
 
-                <Box
-                  component="button"
-                  onClick={handleSendOTP}
-                  disabled={mobile.length < 10 || isLoading}
-                  sx={{
-                    width: '100%', py: 2, borderRadius: '16px', border: 'none', cursor: mobile.length >= 10 && !isLoading ? 'pointer' : 'not-allowed',
-                    background: mobile.length >= 10 && !isLoading ? 'linear-gradient(135deg, #4F46E5, #0D9488)' : 'action.disabledBackground',
-                    color: mobile.length >= 10 && !isLoading ? 'white' : 'text.disabled', 
-                    fontWeight: 700, fontSize: '1rem',
-                    boxShadow: mobile.length >= 10 && !isLoading ? '0 8px 24px rgba(25, 118, 210, 0.3)' : 'none',
-                    transition: 'all 0.2s',
-                    '&:hover': { transform: mobile.length >= 10 && !isLoading ? 'translateY(-2px)' : 'none' },
-                  }}
-                >
-                  {isLoading ? 'Sending...' : 'Send OTP'}
-                </Box>
-              </>
-            ) : (
-              <>
-                <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
-                  Verify Mobile
-                </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ mb: 6 }}>
-                  Enter the 4-digit code sent to +91 {mobile}
-                </Typography>
+        {!otpSent ? (
+          <form onSubmit={handleSendOtp} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #ddd', borderRadius: '10px', overflow: 'hidden', background: '#fff' }}>
+              {(loginId === '' || /^\d+$/.test(loginId)) && (
+                <div style={{ padding: '15px', background: '#f5f5f5', borderRight: '1px solid #ddd', color: '#555', fontWeight: 'bold' }}>
+                  +91
+                </div>
+              )}
+              <input
+                type="text"
+                placeholder="Mobile Number or Email ID"
+                value={loginId}
+                onChange={(e) => setLoginId(e.target.value)}
+                style={{
+                  flex: 1,
+                  padding: '15px',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '16px',
+                  background: 'transparent'
+                }}
+              />
+            </div>
 
-                {generalError && (
-                  <Box sx={{ mb: 3, p: 2, borderRadius: 2, bgcolor: alpha('#f44336', 0.1), color: 'error.main', fontWeight: 600, fontSize: '0.9rem' }}>
-                    {generalError}
-                  </Box>
-                )}
+            <button type="submit" disabled={loading} style={{
+              background: loading ? '#ccc' : 'linear-gradient(to right, #4facfe 0%, #00f2fe 100%)',
+              color: 'white',
+              border: 'none',
+              padding: '15px',
+              borderRadius: '10px',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              boxShadow: loading ? 'none' : '0 4px 15px rgba(0,242,254,0.3)',
+              transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+            }}>
+              {loading ? 'Sending...' : 'Send OTP'}
+            </button>
+          </form>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f5f5f5', padding: '10px 15px', borderRadius: '10px' }}>
+              <span style={{ color: '#555', fontSize: '14px', fontWeight: 'bold', wordBreak: 'break-all', textAlign: 'left' }}>{loginId}</span>
+              <button 
+                type="button" 
+                onClick={() => { setOtpSent(false); setTimer(30); setOtp(''); }}
+                style={{ background: 'none', border: 'none', color: '#4facfe', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px' }}>
+                Edit
+              </button>
+            </div>
+            
+            <form onSubmit={handleVerifyOtp} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <input
+                type="text"
+                placeholder="Enter OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                style={{
+                  padding: '15px',
+                  border: '1px solid #ddd',
+                  borderRadius: '10px',
+                  fontSize: '16px',
+                  outline: 'none',
+                  textAlign: 'center',
+                  letterSpacing: '5px',
+                  fontWeight: 'bold'
+                }}
+              />
+              <button type="submit" disabled={loading} style={{
+                background: loading ? '#ccc' : 'linear-gradient(to right, #43e97b 0%, #38f9d7 100%)',
+                color: 'white',
+                border: 'none',
+                padding: '15px',
+                borderRadius: '10px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                boxShadow: loading ? 'none' : '0 4px 15px rgba(67,233,123,0.3)',
+                transition: 'transform 0.2s ease'
+              }}>
+                {loading ? 'Verifying...' : 'Verify OTP'}
+              </button>
+            </form>
 
-                <Box sx={{ mb: 4 }}>
-                  <OTPInput value={otp} onChange={setOtp} />
-                </Box>
+            <div style={{ textAlign: 'center', fontSize: '14px', color: '#666' }}>
+              {timer > 0 ? (
+                <span>Resend OTP in <strong style={{ color: '#333' }}>{timer}s</strong></span>
+              ) : (
+                <button 
+                  type="button" 
+                  onClick={() => handleSendOtp()}
+                  disabled={loading}
+                  style={{ background: 'none', border: 'none', color: '#4facfe', cursor: loading ? 'not-allowed' : 'pointer', fontWeight: 'bold', fontSize: '14px' }}>
+                  Resend OTP
+                </button>
+              )}
+            </div>
+          </div>
+        )}
 
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  <Box
-                    component="button"
-                    onClick={handleVerifyOTP}
-                    disabled={otp.length !== 4 || isLoading}
-                    sx={{
-                      width: '100%', py: 2, borderRadius: '16px', border: 'none', cursor: otp.length === 4 && !isLoading ? 'pointer' : 'not-allowed',
-                      background: otp.length === 4 && !isLoading ? 'linear-gradient(135deg, #4F46E5, #0D9488)' : 'action.disabledBackground',
-                      color: otp.length === 4 && !isLoading ? 'white' : 'text.disabled', 
-                      fontWeight: 700, fontSize: '1rem',
-                      boxShadow: otp.length === 4 && !isLoading ? '0 8px 24px rgba(25, 118, 210, 0.3)' : 'none',
-                      transition: 'all 0.2s',
-                      '&:hover': { transform: otp.length === 4 && !isLoading ? 'translateY(-2px)' : 'none' },
-                    }}
-                  >
-                    {isLoading ? 'Verifying...' : 'Verify & Continue'}
-                  </Box>
-                  <Typography 
-                    variant="body2" 
-                    sx={{ color: 'primary.main', fontWeight: 600, cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
-                    onClick={() => setStep('mobile')}
-                  >
-                    Edit mobile number
-                  </Typography>
-                </Box>
-              </>
-            )}
-          </Box>
-        </Container>
-      </Box>
-    </>
+      </div>
+    </div>
   );
 }

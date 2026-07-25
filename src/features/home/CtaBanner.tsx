@@ -124,7 +124,7 @@ export const CtaBanner = () => {
                 '&:hover': { bgcolor: alpha('#ffffff', 0.1), borderColor: 'white' },
               }}
             >
-              <PhoneIcon sx={{ fontSize: 18 }} /> Call 1800-123-4567
+              <PhoneIcon sx={{ fontSize: 18 }} /> Call 9029190955
             </Box>
           </Box>
         </motion.div>

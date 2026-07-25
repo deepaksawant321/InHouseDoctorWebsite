@@ -25,11 +25,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'InHouse Doctor | Premium Healthcare at Your Doorstep',
     description: 'Getting a doctor at home should be as easy as ordering a cab. Premium healthcare, delivered to your doorstep.',
-    url: 'https://inhousedoctor.com',
+    url: 'https://doctordoorstep.com',
     siteName: 'InHouse Doctor',
     images: [
       {
-        url: 'https://inhousedoctor.com/og-image.jpg', // Placeholder for actual OG image
+        url: 'https://doctordoorstep.com/og-image.jpg', // Placeholder for actual OG image
         width: 1200,
         height: 630,
         alt: 'InHouse Doctor - Premium Healthcare at Home',
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'InHouse Doctor | Premium Healthcare at Your Doorstep',
     description: 'Book verified, premium healthcare professionals for home visits in minutes.',
-    images: ['https://inhousedoctor.com/twitter-image.jpg'], // Placeholder
+    images: ['https://doctordoorstep.com/twitter-image.jpg'], // Placeholder
     creator: '@InHouseDoctor',
   },
   robots: {
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://inhousedoctor.com',
+    canonical: 'https://doctordoorstep.com',
   },
 };
 
