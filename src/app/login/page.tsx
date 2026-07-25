@@ -65,7 +65,7 @@ export default function LoginPage() {
     if (otp.length > 3) {
       setLoading(true);
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/auth/verify-otp', {
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/auth/login-with-otp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -80,12 +80,15 @@ export default function LoginPage() {
           throw new Error(errData.message || 'Invalid OTP');
         }
 
-        const data = await response.json();
-        alert("OTP Verified Successfully! Token: " + (data.token ? "Received" : "N/A"));
-        if (data.token) {
-          localStorage.setItem('token', data.token);
+        const responseData = await response.json();
+        const token = responseData.data?.accessToken;
+        
+        if (token) {
+          localStorage.setItem('token', token);
+          router.push('/dashboard');
+        } else {
+          throw new Error('No token received from server');
         }
-        router.push('/dashboard');
         // Handle successful login (e.g. save token, redirect to dashboard)
       } catch (err: any) {
         setError(err.message || 'Failed to verify OTP');
