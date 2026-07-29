@@ -156,22 +156,22 @@ export const Header = () => {
         <Container maxWidth="xl">
           <Toolbar sx={{ py: scrolled ? 0.5 : 1.5, transition: 'all 0.3s ease', minHeight: 'unset !important' }}>
             {/* Logo */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexGrow: 1 }}>
-              <Box component={Link} href="/" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 2, background: 'linear-gradient(135deg, #4F46E5, #0D9488)' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
+              <Box component={Link} href="/" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 2, background: 'linear-gradient(135deg, #4F46E5, #0D9488)', flexShrink: 0 }}>
                 <MedicalServicesIcon sx={{ fontSize: 20, color: 'white' }} />
               </Box>
               <Typography
                 component={Link}
                 href="/"
                 variant="h6"
-                sx={{ textDecoration: 'none', fontWeight: 800, background: 'linear-gradient(135deg, #4F46E5, #0D9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.02em' }}
+                sx={{ textDecoration: 'none', fontWeight: 800, background: 'linear-gradient(135deg, #4F46E5, #0D9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}
               >
                 InHouse Doctor
               </Typography>
             </Box>
 
             {/* Desktop Nav */}
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 0.5 }}>
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', justifyContent: 'center', flexGrow: 1, gap: { md: 0.25, lg: 0.5 } }}>
               {navItems.map((item) => (
                 <Box
                   key={item.label}
@@ -190,7 +190,7 @@ export const Header = () => {
             </Box>
 
             {/* Right Actions */}
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1.5, ml: 2 }}>
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: { md: 1, lg: 1.5 }, flexShrink: 0 }}>
               <ThemeToggle />
               
               {!token ? (
@@ -199,7 +199,7 @@ export const Header = () => {
                     component="a"
                     href="tel:18001234567"
                     sx={{
-                      display: 'inline-flex', alignItems: 'center', gap: 0.75,
+                      display: { xs: 'none', lg: 'inline-flex' }, alignItems: 'center', gap: 0.75,
                       py: 1, px: 2, borderRadius: '16px', textDecoration: 'none',
                       border: '1px solid', borderColor: 'divider',
                       color: 'text.primary', fontWeight: 600, fontSize: '0.875rem',
