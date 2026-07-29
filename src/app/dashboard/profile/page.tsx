@@ -8,19 +8,32 @@ export default function Profile() {
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '' });
+  const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', phoneNumber: '' });
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
+  const [primaryLogin, setPrimaryLogin] = useState<'email' | 'phone'>('email');
 
   useEffect(() => {
     authApi.getProfile().then(res => {
-      const data = res.data.data;
+      const data = res.data.data || res.data;
       setProfile(data);
       if (data) {
+        const nameParts = (data.fullName || '').split(' ');
         setFormData({
-          firstName: data.firstName || '',
-          lastName: data.lastName || '',
+          firstName: nameParts[0] || '',
+          lastName: nameParts.slice(1).join(' ') || '',
           email: data.email || '',
+          phoneNumber: data.phoneNumber || '',
         });
+
+        // Try to determine how they logged in
+        const storedLoginId = localStorage.getItem('loginId');
+        if (storedLoginId) {
+          setPrimaryLogin(storedLoginId.includes('@') ? 'email' : 'phone');
+        } else {
+          // Fallback guess: if they have phone but no email, they probably logged in with phone
+          if (data.phoneNumber && !data.email) setPrimaryLogin('phone');
+          else setPrimaryLogin('email');
+        }
       }
     }).catch(console.error).finally(() => setLoading(false));
   }, []);
@@ -29,12 +42,15 @@ export default function Profile() {
     e.preventDefault();
     setSaving(true);
     try {
+      const fullName = `${formData.firstName} ${formData.lastName}`.trim();
       const payload = {
-        fullName: `${formData.firstName} ${formData.lastName}`.trim(),
+        firstName: formData.firstName,
+        lastName: formData.lastName,
         email: formData.email,
+        phoneNumber: formData.phoneNumber,
       };
       await authApi.updateProfile(payload);
-      setProfile({ ...profile, fullName: payload.fullName, email: payload.email });
+      setProfile({ ...profile, fullName, email: payload.email, phoneNumber: payload.phoneNumber });
       setSnackbar({ open: true, message: 'Profile updated successfully', severity: 'success' });
     } catch (err) {
       setSnackbar({ open: true, message: 'Failed to update profile', severity: 'error' });
@@ -77,10 +93,23 @@ export default function Profile() {
                 <TextField fullWidth label="Last Name" value={formData.lastName} onChange={e => setFormData({ ...formData, lastName: e.target.value })} required />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <TextField fullWidth label="Email Address" type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} required />
+                <TextField
+                  fullWidth
+                  label="Email Address"
+                  type="email"
+                  value={formData.email}
+                  onChange={e => setFormData({ ...formData, email: e.target.value })}
+                  disabled={primaryLogin === 'email'}
+                />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <TextField fullWidth label="Mobile Number" value={profile?.phoneNumber || ''} disabled />
+                <TextField
+                  fullWidth
+                  label="Mobile Number"
+                  value={formData.phoneNumber}
+                  onChange={e => setFormData({ ...formData, phoneNumber: e.target.value })}
+                  disabled={primaryLogin === 'phone'}
+                />
               </Grid>
 
               <Grid size={{ xs: 12 }}>

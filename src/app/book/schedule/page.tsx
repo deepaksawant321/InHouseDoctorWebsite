@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import { useBooking } from '@/providers/BookingProvider';
 
 const dates = ['Today', 'Tomorrow', 'Choose Date'];
 const timeSlots = [
@@ -16,11 +17,19 @@ const timeSlots = [
 
 export default function SchedulePage() {
   const router = useRouter();
+  const { setScheduledDate } = useBooking();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [customDate, setCustomDate] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
   const handleContinue = () => {
     if (selectedDate && selectedTime) {
+      let finalDate = new Date();
+      if (selectedDate === 'Tomorrow') finalDate.setDate(finalDate.getDate() + 1);
+      else if (selectedDate === 'Choose Date' && customDate) finalDate = new Date(customDate);
+      
+      // Keep it simple, just store the ISO string of the date
+      setScheduledDate(finalDate.toISOString());
       router.push('/book/prescription');
     }
   };
@@ -56,6 +65,23 @@ export default function SchedulePage() {
             </Box>
           </Grid>
         ))}
+        {selectedDate === 'Choose Date' && (
+          <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+            <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: '16px', border: '1px solid', borderColor: 'divider' }}>
+              <Typography variant="body2" sx={{ mb: 1, fontWeight: 600 }}>Select Custom Date</Typography>
+              <input 
+                type="date" 
+                value={customDate}
+                onChange={(e) => setCustomDate(e.target.value)}
+                min={new Date().toISOString().split('T')[0]}
+                style={{
+                  width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #e0e0e0',
+                  fontSize: '1rem', fontFamily: 'inherit'
+                }}
+              />
+            </Box>
+          </Grid>
+        )}
       </Grid>
 
       <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -97,11 +123,13 @@ export default function SchedulePage() {
           Back
         </Box>
         <Box
-          component="button" type="button" onClick={handleContinue} disabled={!selectedDate || !selectedTime}
+          component="button" type="button" onClick={handleContinue} 
+          disabled={!selectedDate || !selectedTime || (selectedDate === 'Choose Date' && !customDate)}
           sx={{
-            py: 1.5, px: 6, borderRadius: '16px', border: 'none', cursor: (selectedDate && selectedTime) ? 'pointer' : 'not-allowed',
-            background: (selectedDate && selectedTime) ? 'linear-gradient(135deg, #4F46E5, #0D9488)' : 'action.disabledBackground', 
-            color: (selectedDate && selectedTime) ? 'white' : 'text.disabled', 
+            py: 1.5, px: 6, borderRadius: '16px', border: 'none', 
+            cursor: (selectedDate && selectedTime && (selectedDate !== 'Choose Date' || customDate)) ? 'pointer' : 'not-allowed',
+            background: (selectedDate && selectedTime && (selectedDate !== 'Choose Date' || customDate)) ? 'linear-gradient(135deg, #4F46E5, #0D9488)' : 'action.disabledBackground', 
+            color: (selectedDate && selectedTime && (selectedDate !== 'Choose Date' || customDate)) ? 'white' : 'text.disabled',  
             fontWeight: 700, fontSize: '1rem', boxShadow: (selectedDate && selectedTime) ? '0 8px 24px rgba(25, 118, 210, 0.3)' : 'none',
             transition: 'all 0.2s', '&:hover': { transform: (selectedDate && selectedTime) ? 'translateY(-2px)' : 'none' },
           }}

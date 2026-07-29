@@ -24,13 +24,17 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401 && typeof window !== 'undefined') {
-      const isAdminRoute = error.config?.url?.startsWith('/api/admin');
-      if (isAdminRoute) {
-        localStorage.removeItem('adminToken');
-        window.location.href = '/admin/login';
-      } else {
-        localStorage.removeItem('token');
-        window.location.href = '/login';
+      const isAdminRoute = error.config?.url?.startsWith('/admin');
+      
+      // Do not redirect if already on the login page, so the component can show the error
+      if (window.location.pathname !== '/login' && window.location.pathname !== '/admin/login') {
+        if (isAdminRoute) {
+          localStorage.removeItem('adminToken');
+          window.location.href = '/admin/login';
+        } else {
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        }
       }
     }
     return Promise.reject(error);

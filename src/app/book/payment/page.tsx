@@ -49,9 +49,13 @@ export default function PaymentPage() {
       }
 
       router.push('/booking-success');
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert('Failed to complete booking. Ensure you are logged in.');
+      if (error.response?.status === 409) {
+        alert('You already have a booking scheduled for this exact time and patient.');
+      } else {
+        alert('Failed to complete booking. Ensure you are logged in.');
+      }
       setIsSubmitting(false);
     }
   };

@@ -1,15 +1,18 @@
 'use client';
 
 import {
-  AppBar, Toolbar, Typography, Box, IconButton,
+  AppBar, Toolbar, Typography, Box, IconButton, Button,
   Drawer, List, ListItem, ListItemButton, ListItemText,
-  useTheme, Container, alpha,
+  useTheme, Container, alpha, Avatar, Menu, MenuItem, Badge, Divider, Tooltip, CircularProgress
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import PersonIcon from '@mui/icons-material/Person';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import PhoneIcon from '@mui/icons-material/Phone';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { useScrolled } from '@/hooks/useScrolled';
@@ -32,14 +35,44 @@ const mobileLegalItems = [
 
 export const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [anchorElNotif, setAnchorElNotif] = useState<null | HTMLElement>(null);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const scrolled = useScrolled(60);
   const theme = useTheme();
   const pathname = usePathname();
+  const router = useRouter();
   const isDark = theme.palette.mode === 'dark';
 
-  const handleDrawerToggle = () => setMobileOpen((prev) => !prev);
+  useEffect(() => {
+    const t = localStorage.getItem('token');
+    if (t) {
+      setToken(t);
+      // Fetch notifications
+      import('@/services/api').then(({ notificationsApi }) => {
+        notificationsApi.getAll().then(res => {
+          setNotifications(Array.isArray(res.data) ? res.data : (res.data?.data || []));
+        }).catch(console.error);
+      });
+    }
+  }, [pathname]);
 
-  if (pathname?.startsWith('/admin')) {
+  const handleDrawerToggle = () => setMobileOpen((prev) => !prev);
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => setAnchorElUser(event.currentTarget);
+  const handleCloseUserMenu = () => setAnchorElUser(null);
+  const handleOpenNotifMenu = (event: React.MouseEvent<HTMLElement>) => setAnchorElNotif(event.currentTarget);
+  const handleCloseNotifMenu = () => setAnchorElNotif(null);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setToken(null);
+    handleCloseUserMenu();
+    router.push('/login');
+  };
+
+  if (pathname?.startsWith('/admin') || pathname?.startsWith('/login')) {
     return null;
   }
 
@@ -159,36 +192,109 @@ export const Header = () => {
             {/* Right Actions */}
             <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1.5, ml: 2 }}>
               <ThemeToggle />
-              <Box
-                component="a"
-                href="tel:18001234567"
-                sx={{
-                  display: 'inline-flex', alignItems: 'center', gap: 0.75,
-                  py: 1, px: 2, borderRadius: '16px', textDecoration: 'none',
-                  border: '1px solid', borderColor: 'divider',
-                  color: 'text.primary', fontWeight: 600, fontSize: '0.875rem',
-                  transition: 'all 0.2s',
-                  '&:hover': { bgcolor: alpha('#4F46E5', 0.08), borderColor: 'primary.main', color: 'primary.main' },
-                }}
-              >
-                <PhoneIcon sx={{ fontSize: 16 }} /> 9029190955
-              </Box>
-              <Box
-                component={Link}
-                href="/request-doctor"
-                aria-label="Request Doctor Home Visit"
-                sx={{
-                  display: 'inline-flex', alignItems: 'center', textDecoration: 'none',
-                  py: 1, px: 2.5, borderRadius: '16px', border: 'none', cursor: 'pointer',
-                  background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
-                  color: 'white', fontWeight: 700, fontSize: '0.875rem',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  boxShadow: '0 4px 15px rgba(79, 70, 229, 0.4)',
-                  '&:hover': { transform: 'translateY(-1px)', boxShadow: '0 6px 20px rgba(79, 70, 229, 0.5)' },
-                }}
-              >
-                Request Doctor
-              </Box>
+              
+              {!token ? (
+                <>
+                  <Box
+                    component="a"
+                    href="tel:18001234567"
+                    sx={{
+                      display: 'inline-flex', alignItems: 'center', gap: 0.75,
+                      py: 1, px: 2, borderRadius: '16px', textDecoration: 'none',
+                      border: '1px solid', borderColor: 'divider',
+                      color: 'text.primary', fontWeight: 600, fontSize: '0.875rem',
+                      transition: 'all 0.2s',
+                      '&:hover': { bgcolor: alpha('#4F46E5', 0.08), borderColor: 'primary.main', color: 'primary.main' },
+                    }}
+                  >
+                    <PhoneIcon sx={{ fontSize: 16 }} /> 9029190955
+                  </Box>
+                  <Box
+                    component={Link}
+                    href="/login"
+                    sx={{
+                      display: 'inline-flex', alignItems: 'center', textDecoration: 'none',
+                      py: 1, px: 2.5, borderRadius: '16px', border: '1px solid', borderColor: 'primary.main',
+                      color: 'primary.main', fontWeight: 700, fontSize: '0.875rem',
+                      transition: 'all 0.2s',
+                      '&:hover': { bgcolor: alpha('#4F46E5', 0.05) },
+                    }}
+                  >
+                    Login
+                  </Box>
+                  <Box
+                    component={Link}
+                    href="/request-doctor"
+                    aria-label="Request Doctor Home Visit"
+                    sx={{
+                      display: 'inline-flex', alignItems: 'center', textDecoration: 'none',
+                      py: 1, px: 2.5, borderRadius: '16px', border: 'none', cursor: 'pointer',
+                      background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
+                      color: 'white', fontWeight: 700, fontSize: '0.875rem',
+                      transition: 'transform 0.2s, box-shadow 0.2s',
+                      boxShadow: '0 4px 15px rgba(79, 70, 229, 0.4)',
+                      '&:hover': { transform: 'translateY(-1px)', boxShadow: '0 6px 20px rgba(79, 70, 229, 0.5)' },
+                    }}
+                  >
+                    Request Doctor
+                  </Box>
+                </>
+              ) : (
+                <>
+                  <Tooltip title="Notifications">
+                    <IconButton onClick={handleOpenNotifMenu} sx={{ ml: 1 }}>
+                      <Badge badgeContent={notifications.filter(n => !n.isRead).length} color="error">
+                        <NotificationsIcon />
+                      </Badge>
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    anchorEl={anchorElNotif}
+                    open={Boolean(anchorElNotif)}
+                    onClose={handleCloseNotifMenu}
+                    slotProps={{ paper: { sx: { width: 320, maxHeight: 400, mt: 1.5 } } }}
+                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                  >
+                    <Box sx={{ px: 2, py: 1.5, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Notifications</Typography>
+                      {notifications.length > 0 && <Button size="small" component={Link} href="/dashboard/notifications" onClick={handleCloseNotifMenu}>View All</Button>}
+                    </Box>
+                    <Divider />
+                    {notifications.length === 0 ? (
+                      <MenuItem disabled sx={{ py: 3, justifyContent: 'center' }}>No new notifications</MenuItem>
+                    ) : (
+                      notifications.slice(0, 5).map(n => (
+                        <MenuItem key={n.id} onClick={handleCloseNotifMenu} component={Link} href="/dashboard/notifications" sx={{ py: 1.5, whiteSpace: 'normal' }}>
+                          <Typography variant="body2" sx={{ fontWeight: n.isRead ? 400 : 600 }}>{n.message}</Typography>
+                        </MenuItem>
+                      ))
+                    )}
+                  </Menu>
+
+                  <Tooltip title="Account settings">
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, ml: 1, border: '2px solid', borderColor: 'divider' }}>
+                      <Avatar sx={{ bgcolor: 'primary.main', width: 36, height: 36 }}>
+                        <PersonIcon />
+                      </Avatar>
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    anchorEl={anchorElUser}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                    slotProps={{ paper: { sx: { width: 220, mt: 1.5 } } }}
+                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                  >
+                    <MenuItem component={Link} href="/dashboard" onClick={handleCloseUserMenu}>Dashboard</MenuItem>
+                    <MenuItem component={Link} href="/dashboard/bookings" onClick={handleCloseUserMenu}>My Bookings</MenuItem>
+                    <MenuItem component={Link} href="/dashboard/profile" onClick={handleCloseUserMenu}>Profile Settings</MenuItem>
+                    <Divider />
+                    <MenuItem onClick={handleLogout} sx={{ color: 'error.main' }}>Logout</MenuItem>
+                  </Menu>
+                </>
+              )}
             </Box>
 
             {/* Mobile */}

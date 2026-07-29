@@ -85,6 +85,7 @@ export default function LoginPage() {
         
         if (token) {
           localStorage.setItem('token', token);
+          localStorage.setItem('loginId', loginId); // Save login identifier
           router.push('/dashboard');
         } else {
           throw new Error('No token received from server');

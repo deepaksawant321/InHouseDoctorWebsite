@@ -1,18 +1,25 @@
 'use client';
 
-import { Box, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Divider, alpha, useTheme } from '@mui/material';
+import { Box, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Divider, alpha, useTheme, CircularProgress } from '@mui/material';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import PaymentIcon from '@mui/icons-material/Payment';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { useState, useEffect } from 'react';
+import { notificationsApi } from '@/services/api';
 
 export default function Notifications() {
   const theme = useTheme();
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const notifications = [
-    { id: 1, title: 'Booking Confirmed', desc: 'Your booking BKG-101 has been confirmed. A doctor will be assigned shortly.', time: '2 hours ago', icon: <CheckCircleIcon />, color: theme.palette.success.main, unread: true },
-    { id: 2, title: 'Payment Successful', desc: 'Payment of ₹1,499 was successful for booking BKG-101.', time: '2 hours ago', icon: <PaymentIcon />, color: theme.palette.primary.main, unread: true },
-    { id: 3, title: 'Visit Reminder', desc: 'Dr. Sharma is arriving today at 10:00 AM for patient Ramesh.', time: '1 day ago', icon: <NotificationsActiveIcon />, color: theme.palette.warning.main, unread: false },
-  ];
+  useEffect(() => {
+    notificationsApi.getAll()
+      .then(res => {
+        setNotifications(Array.isArray(res.data) ? res.data : (res.data?.data || []));
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <Box sx={{ maxWidth: 800 }}>
@@ -21,45 +28,68 @@ export default function Notifications() {
       </Typography>
 
       <Box sx={{ border: '1px solid', borderColor: 'divider', borderRadius: '24px', overflow: 'hidden', bgcolor: 'background.paper' }}>
-        <List disablePadding>
-          {notifications.map((notif, index) => (
-            <Box key={notif.id}>
-              <ListItem 
-                alignItems="flex-start" 
-                sx={{ 
-                  p: 3, 
-                  bgcolor: notif.unread ? alpha(theme.palette.primary.main, 0.04) : 'transparent',
-                  transition: 'background-color 0.2s',
-                  '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.08) }
-                }}
-              >
-                <ListItemAvatar sx={{ mt: 0.5 }}>
-                  <Avatar sx={{ bgcolor: alpha(notif.color, 0.1), color: notif.color }}>
-                    {notif.icon}
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                      <Typography variant="subtitle1" sx={{ fontWeight: notif.unread ? 700 : 500 }}>
-                        {notif.title}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary" sx={{ whiteSpace: 'nowrap', ml: 2 }}>
-                        {notif.time}
-                      </Typography>
-                    </Box>
-                  }
-                  secondary={
-                    <Typography variant="body2" color={notif.unread ? 'text.primary' : 'text.secondary'}>
-                      {notif.desc}
-                    </Typography>
-                  }
-                />
-              </ListItem>
-              {index < notifications.length - 1 && <Divider component="li" />}
-            </Box>
-          ))}
-        </List>
+        {loading ? (
+          <Box sx={{ p: 4, display: 'flex', justifyContent: 'center' }}>
+            <CircularProgress />
+          </Box>
+        ) : notifications.length === 0 ? (
+          <Box sx={{ p: 4, textAlign: 'center' }}>
+            <Typography variant="body1" color="text.secondary">No notifications found.</Typography>
+          </Box>
+        ) : (
+          <List disablePadding>
+            {notifications.map((notif, index) => {
+              // Determine icon/color based on message content for visual variety
+              let icon = <NotificationsActiveIcon />;
+              let color = theme.palette.primary.main;
+              if (notif.message.toLowerCase().includes('confirm')) {
+                icon = <CheckCircleIcon />;
+                color = theme.palette.success.main;
+              } else if (notif.message.toLowerCase().includes('payment')) {
+                icon = <PaymentIcon />;
+                color = theme.palette.info.main;
+              }
+              
+              return (
+                <Box key={notif.id}>
+                  <ListItem 
+                    alignItems="flex-start" 
+                    sx={{ 
+                      p: 3, 
+                      bgcolor: !notif.isRead ? alpha(theme.palette.primary.main, 0.04) : 'transparent',
+                      transition: 'background-color 0.2s',
+                      '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.08) }
+                    }}
+                  >
+                    <ListItemAvatar sx={{ mt: 0.5 }}>
+                      <Avatar sx={{ bgcolor: alpha(color, 0.1), color: color }}>
+                        {icon}
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                          <Typography variant="subtitle1" sx={{ fontWeight: !notif.isRead ? 700 : 500 }}>
+                            {notif.message.split('.')[0] || 'Notification'}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary" sx={{ whiteSpace: 'nowrap', ml: 2 }}>
+                            {notif.sentDate ? new Date(notif.sentDate).toLocaleDateString() : ''}
+                          </Typography>
+                        </Box>
+                      }
+                      secondary={
+                        <Typography variant="body2" color={!notif.isRead ? 'text.primary' : 'text.secondary'}>
+                          {notif.message}
+                        </Typography>
+                      }
+                    />
+                  </ListItem>
+                  {index < notifications.length - 1 && <Divider component="li" />}
+                </Box>
+              );
+            })}
+          </List>
+        )}
       </Box>
     </Box>
   );

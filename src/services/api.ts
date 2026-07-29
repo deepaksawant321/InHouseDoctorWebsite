@@ -73,6 +73,14 @@ export const adminApi = {
 
   updateSettings: (data: any) =>
     apiClient.put('/admin/settings', data),
+
+  uploadQrCode: (file: File) => {
+    const form = new FormData();
+    form.append('file', file);
+    return apiClient.post('/admin/settings/upload-qr', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
 };
 
 // ─── Services ────────────────────────────────────────────────────────────────

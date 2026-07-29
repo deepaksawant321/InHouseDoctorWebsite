@@ -166,8 +166,29 @@ export default function SettingsPage() {
                 placeholder="https://example.com/qr-code.png"
               />
               <Box sx={{ p: 3, border: '2px dashed', borderColor: 'primary.main', borderRadius: '16px', textAlign: 'center', bgcolor: alpha(theme.palette.primary.main, 0.02) }}>
-                <Typography variant="body1" sx={{ fontWeight: 600, color: 'primary.main' }}>Upload New QR Code (Coming soon)</Typography>
-                <Typography variant="caption" color="text.secondary">Use the QR Code URL field for now</Typography>
+                <Button component="label" variant="outlined">
+                  Upload New QR Code
+                  <input type="file" hidden accept="image/*" onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    try {
+                      setSaving(true);
+                      const res = await adminApi.uploadQrCode(file);
+                      if (res.data?.success) {
+                        const fileUrl = res.data.data.fileUrl;
+                        const fullUrl = process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace('/api', fileUrl) : `http://localhost:5000${fileUrl}`;
+                        setFormData(prev => ({ ...prev, qrCodeImage: fullUrl }));
+                        setSuccessMessage('QR Code uploaded successfully!');
+                      }
+                    } catch (err) {
+                      console.error('Upload failed', err);
+                      setError('Failed to upload QR Code');
+                    } finally {
+                      setSaving(false);
+                    }
+                  }} />
+                </Button>
+                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>Or use the QR Code URL field</Typography>
               </Box>
             </Box>
           </Box>

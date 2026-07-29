@@ -1,7 +1,9 @@
 'use client';
 
-import { Box, Container, Typography, TextField, alpha, useTheme, CircularProgress } from '@mui/material';
+import { Box, Container, Typography, TextField, alpha, useTheme, CircularProgress, IconButton, InputAdornment } from '@mui/material';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { adminAuthApi } from '@/services/api';
@@ -15,6 +17,7 @@ export default function AdminLoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [generalError, setGeneralError] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +47,7 @@ export default function AdminLoginPage() {
     <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default', py: 12 }}>
       <Container maxWidth="sm">
         <Box sx={{ p: { xs: 4, md: 6 }, borderRadius: '24px', bgcolor: 'background.paper', boxShadow: theme.palette.mode === 'light' ? '0 12px 48px rgba(0,0,0,0.06)' : '0 12px 48px rgba(0,0,0,0.5)', border: '1px solid', borderColor: 'divider', textAlign: 'center' }}>
-          
+
           <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
             <Box sx={{ width: 48, height: 48, borderRadius: 2, background: 'linear-gradient(135deg, #4F46E5, #0D9488)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
               <MedicalServicesIcon sx={{ fontSize: 28 }} />
@@ -64,22 +67,37 @@ export default function AdminLoginPage() {
           )}
 
           <Box component="form" onSubmit={handleLogin} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-            <TextField 
+            <TextField
               fullWidth label="Admin Email" variant="outlined" type="email" required
               value={email} onChange={(e) => setEmail(e.target.value)}
               error={!!fieldErrors.email} helperText={fieldErrors.email}
             />
-            <TextField 
-              fullWidth label="Password" variant="outlined" type="password" required
+            <TextField
+              fullWidth label="Password" variant="outlined" type={showPassword ? "text" : "password"} required
               value={password} onChange={(e) => setPassword(e.target.value)}
               error={!!fieldErrors.password} helperText={fieldErrors.password}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowPassword((show) => !show)}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
-            
+
             <Box
               component="button" type="submit" disabled={isLoading}
               sx={{
                 width: '100%', py: 1.75, borderRadius: '16px', border: 'none', cursor: isLoading ? 'not-allowed' : 'pointer',
-                background: isLoading ? 'action.disabledBackground' : 'linear-gradient(135deg, #4F46E5, #0D9488)', color: 'white', 
+                background: isLoading ? 'action.disabledBackground' : 'linear-gradient(135deg, #4F46E5, #0D9488)', color: 'white',
                 fontWeight: 700, fontSize: '1.1rem', boxShadow: isLoading ? 'none' : '0 8px 24px rgba(25, 118, 210, 0.3)',
                 transition: 'all 0.2s', '&:hover': { transform: isLoading ? 'none' : 'translateY(-2px)' },
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1,

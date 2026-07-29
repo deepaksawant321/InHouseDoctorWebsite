@@ -65,10 +65,42 @@ export default function AddressDetailsPage() {
     }
   };
 
+  const [gettingLocation, setGettingLocation] = useState(false);
+
   const handleCurrentLocation = () => {
-    setValue('addressLine1', '123 Main Street');
-    setValue('area', 'Andheri West');
-    setValue('pincode', '400053');
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser');
+      return;
+    }
+    
+    setGettingLocation(true);
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      try {
+        const { latitude, longitude } = position.coords;
+        // Basic reverse geocoding using OpenStreetMap Nominatim API (Free)
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+        const data = await response.json();
+        
+        if (data && data.address) {
+          setValue('area', data.address.suburb || data.address.neighbourhood || data.address.residential || '');
+          setValue('city', data.address.city || data.address.town || data.address.county || 'Mumbai');
+          setValue('state', data.address.state || 'Maharashtra');
+          setValue('pincode', data.address.postcode || '');
+          if (data.address.road) {
+            setValue('addressLine1', data.address.road);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch address from coordinates:', err);
+        alert('Could not determine exact address from your location. Please fill it manually.');
+      } finally {
+        setGettingLocation(false);
+      }
+    }, (error) => {
+      console.error(error);
+      alert('Failed to get your location. Please check your browser permissions.');
+      setGettingLocation(false);
+    });
   };
 
   return (
@@ -116,8 +148,9 @@ export default function AddressDetailsPage() {
           {selectedAddressId === 'new' && (
             <Box>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-                <Box component="button" type="button" onClick={handleCurrentLocation} sx={{ display: 'flex', alignItems: 'center', gap: 1, py: 1, px: 2, borderRadius: 2, border: '1px solid', borderColor: 'primary.main', bgcolor: alpha('#4F46E5', 0.05), color: 'primary.main', cursor: 'pointer', fontWeight: 600, transition: 'all 0.2s', '&:hover': { bgcolor: alpha('#4F46E5', 0.1) } }}>
-                  <MyLocationIcon fontSize="small" /> Use Current Location
+                <Box component="button" type="button" onClick={handleCurrentLocation} disabled={gettingLocation} sx={{ display: 'flex', alignItems: 'center', gap: 1, py: 1, px: 2, borderRadius: 2, border: '1px solid', borderColor: 'primary.main', bgcolor: alpha('#4F46E5', 0.05), color: 'primary.main', cursor: gettingLocation ? 'wait' : 'pointer', fontWeight: 600, transition: 'all 0.2s', '&:hover': { bgcolor: alpha('#4F46E5', 0.1) }, opacity: gettingLocation ? 0.7 : 1 }}>
+                  {gettingLocation ? <CircularProgress size={16} color="primary" /> : <MyLocationIcon fontSize="small" />} 
+                  {gettingLocation ? 'Locating...' : 'Use Current Location'}
                 </Box>
               </Box>
               <Grid container spacing={3}>
