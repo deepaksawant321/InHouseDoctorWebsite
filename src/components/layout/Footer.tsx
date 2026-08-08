@@ -45,7 +45,7 @@ export const Footer = () => {
   const isDark = theme.palette.mode === 'dark';
   const pathname = usePathname();
 
-  if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/admin')) {
+  if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/admin') || pathname?.startsWith('/login')) {
     return null;
   }
 

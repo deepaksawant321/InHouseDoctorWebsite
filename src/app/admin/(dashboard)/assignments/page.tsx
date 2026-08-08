@@ -77,7 +77,7 @@ export default function AssignmentsPage() {
     return doctors.filter(d => !['Elder Care', 'Nursing Care', 'Physiotherapy'].includes(d.specialization));
   };
 
-  const pendingBookings = bookings.filter(b => b.status === 'Created' || b.status === 'PaymentVerified' || b.status === 'PaymentPending');
+  const pendingBookings = bookings.filter(b => b.status === 'Pending' || b.status === 'Created' || b.status === 'PaymentVerified' || b.status === 'PaymentPending');
   const assignedBookings = bookings.filter(b => b.status === 'DoctorAssigned' || b.status === 'DoctorConfirmed' || b.status === 'VisitStarted' || b.status === 'VisitCompleted');
 
   const handleRevoke = async (id: string) => {

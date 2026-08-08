@@ -72,7 +72,7 @@ export const Header = () => {
     router.push('/login');
   };
 
-  if (pathname?.startsWith('/admin') || pathname?.startsWith('/login')) {
+  if (pathname?.startsWith('/admin')) {
     return null;
   }
 

@@ -2,7 +2,7 @@
 
 import { Box, Toolbar } from '@mui/material';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { AdminSidebar, drawerWidth } from '@/features/admin/AdminSidebar';
 import { AdminHeader } from '@/features/admin/AdminHeader';
 
@@ -23,6 +23,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  // Fix: MUI Dialogs add overflow:hidden to <body> when open.
+  // If user navigates away before closing, the scroll lock persists.
+  // Reset it on every route change.
+  const pathname = usePathname();
+  useEffect(() => {
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+  }, [pathname]);
 
   if (!isAuthenticated) {
     return null; // Or a loading spinner
