@@ -21,9 +21,7 @@ import { usePathname } from 'next/navigation';
 const footerLinks = {
   Company: [
     { label: 'About Us', href: '/about' },
-    { label: 'Careers', href: '/about' }, // Placeholder for now
-    { label: 'Press', href: '/about' }, // Placeholder for now
-    { label: 'Blog', href: '/about' }, // Placeholder for now
+    { label: 'Blog', href: '/blog' },
   ],
   Services: [
     { label: 'General Physician', href: '/services/general-physician' },
@@ -101,13 +99,19 @@ export const Footer = () => {
             {/* Contact Info */}
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
               {[
-                { icon: <PhoneIcon fontSize="small" />, text: '9029190955' },
-                { icon: <EmailIcon fontSize="small" />, text: 'admindoctordoorstep@gmail.com' },
-                { icon: <LocationOnIcon fontSize="small" />, text: 'Mumbai, Maharashtra, India' },
+                { icon: <PhoneIcon fontSize="small" />, text: '+91 90291 90955', link: 'tel:+919029190955' },
+                { icon: <EmailIcon fontSize="small" />, text: 'admindoctordoorstep@gmail.com', link: 'mailto:admindoctordoorstep@gmail.com' },
+                { icon: <LocationOnIcon fontSize="small" />, text: 'Mumbai, Maharashtra, India', link: null },
               ].map((item) => (
                 <Box key={item.text} sx={{ display: 'flex', gap: 1.5, alignItems: 'center', color: 'text.secondary' }}>
                   <Box sx={{ color: 'primary.main' }}>{item.icon}</Box>
-                  <Typography variant="body2">{item.text}</Typography>
+                  {item.link ? (
+                    <Typography variant="body2" component="a" href={item.link} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'primary.main' } }}>
+                      {item.text}
+                    </Typography>
+                  ) : (
+                    <Typography variant="body2">{item.text}</Typography>
+                  )}
                 </Box>
               ))}
             </Box>

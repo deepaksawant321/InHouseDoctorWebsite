@@ -8,12 +8,12 @@ import { Footer } from '@/components/layout/Footer';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.doctordoorstep.com'),
   title: {
-    default: 'InHouse Doctor | Premium Healthcare at Your Doorstep',
-    template: '%s | InHouse Doctor',
+    default: 'Doctor at Home in Mumbai | Doctor Doorstep',
+    template: '%s | Doctor Doorstep',
   },
-  description: 'Book verified, premium healthcare professionals for home visits in minutes. General physicians, nursing care, physiotherapy, and elder care delivered to your doorstep.',
-  keywords: ['Home Doctor', 'Doctor Home Visit', 'Nursing Care at Home', 'Physiotherapy at Home', 'Elder Care', 'Premium Healthcare', 'Mumbai Doctors'],
+  description: 'Book verified doctors for convenient home visits across Mumbai. Doctor Doorstep provides trusted home doctor consultations with easy booking and 24×7 support.',
   authors: [{ name: 'InHouse Doctor' }],
   creator: 'InHouse Doctor',
   publisher: 'InHouse Doctor',
@@ -23,13 +23,13 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: 'InHouse Doctor | Premium Healthcare at Your Doorstep',
-    description: 'Getting a doctor at home should be as easy as ordering a cab. Premium healthcare, delivered to your doorstep.',
-    url: 'https://doctordoorstep.com',
-    siteName: 'InHouse Doctor',
+    title: 'Doctor at Home in Mumbai | Doctor Doorstep',
+    description: 'Book verified doctors for convenient home visits across Mumbai. Doctor Doorstep provides trusted home doctor consultations with easy booking and 24×7 support.',
+    url: 'https://www.doctordoorstep.com',
+    siteName: 'Doctor Doorstep',
     images: [
       {
-        url: 'https://doctordoorstep.com/og-image.jpg', // Placeholder for actual OG image
+        url: 'https://www.doctordoorstep.com/og-image.jpg', // Placeholder for actual OG image
         width: 1200,
         height: 630,
         alt: 'InHouse Doctor - Premium Healthcare at Home',
@@ -40,9 +40,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'InHouse Doctor | Premium Healthcare at Your Doorstep',
-    description: 'Book verified, premium healthcare professionals for home visits in minutes.',
-    images: ['https://doctordoorstep.com/twitter-image.jpg'], // Placeholder
+    title: 'Doctor at Home in Mumbai | Doctor Doorstep',
+    description: 'Book verified doctors for convenient home visits across Mumbai. Doctor Doorstep provides trusted home doctor consultations with easy booking and 24×7 support.',
+    images: ['https://www.doctordoorstep.com/twitter-image.jpg'], // Placeholder
     creator: '@InHouseDoctor',
   },
   robots: {
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://doctordoorstep.com',
+    canonical: 'https://www.doctordoorstep.com',
   },
 };
 

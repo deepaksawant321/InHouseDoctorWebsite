@@ -21,11 +21,12 @@ const items = [
   { icon: <MedicalServicesIcon sx={{ fontSize: 18 }} />, label: 'Expert Care' },
 ];
 
-const TrustItem = ({ icon, label }: { icon: React.ReactNode; label: string }) => {
+const TrustItem = ({ icon, label, isHidden }: { icon: React.ReactNode; label: string; isHidden?: boolean }) => {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   return (
     <Box
+      aria-hidden={isHidden}
       sx={{
         display: 'inline-flex', alignItems: 'center', gap: 1.5,
         px: 3, py: 1.25, borderRadius: 10, flexShrink: 0,
@@ -73,7 +74,7 @@ export const TrustBar = () => {
         }}
       >
         {doubledItems.map((item, i) => (
-          <TrustItem key={i} {...item} />
+          <TrustItem key={i} {...item} isHidden={i >= items.length} />
         ))}
       </Box>
     </Box>

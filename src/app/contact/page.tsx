@@ -7,8 +7,17 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
 export const metadata: Metadata = {
-  title: 'Contact Us',
-  description: 'Get in touch with InHouse Doctor for any queries or to book a home visit.',
+  title: 'Contact Doctor Doorstep | Book Home Doctor in Mumbai',
+  description: 'Get in touch with Doctor Doorstep for any queries or to book a home doctor visit in Mumbai. 24x7 support available.',
+  alternates: {
+    canonical: 'https://www.doctordoorstep.com/contact',
+  },
+  openGraph: {
+    title: 'Contact Doctor Doorstep | Book Home Doctor in Mumbai',
+    description: 'Get in touch with Doctor Doorstep for any queries or to book a home doctor visit in Mumbai. 24x7 support available.',
+    url: 'https://www.doctordoorstep.com/contact',
+    type: 'website',
+  },
 };
 
 export default function ContactPage() {
@@ -39,7 +48,9 @@ export default function ContactPage() {
                   </Box>
                   <Box>
                     <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>Phone</Typography>
-                    <Typography variant="body1" color="text.secondary">9029190955</Typography>
+                    <Typography variant="body1" color="text.secondary">
+                      <a href="tel:+919029190955" style={{ color: 'inherit', textDecoration: 'none' }}>+91 90291 90955</a>
+                    </Typography>
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>
@@ -48,7 +59,9 @@ export default function ContactPage() {
                   </Box>
                   <Box>
                     <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>WhatsApp</Typography>
-                    <Typography variant="body1" color="text.secondary">+91 9029190955</Typography>
+                    <Typography variant="body1" color="text.secondary">
+                      <a href="https://wa.me/919029190955" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>+91 90291 90955</a>
+                    </Typography>
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>

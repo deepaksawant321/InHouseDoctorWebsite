@@ -6,8 +6,17 @@ const FaqSection = dynamic(() => import('@/features/home/FaqSection').then(mod =
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Frequently Asked Questions',
-  description: 'Have questions? We have answers. Learn more about our home visit doctors and services.',
+  title: 'Doctor Doorstep FAQs | Home Doctor Visits in Mumbai',
+  description: 'Find answers about doctor home visits, booking, pricing, availability, service areas and healthcare services provided by Doctor Doorstep.',
+  alternates: {
+    canonical: 'https://www.doctordoorstep.com/faq',
+  },
+  openGraph: {
+    title: 'Doctor Doorstep FAQs | Home Doctor Visits in Mumbai',
+    description: 'Find answers about doctor home visits, booking, pricing, availability, service areas and healthcare services provided by Doctor Doorstep.',
+    url: 'https://www.doctordoorstep.com/faq',
+    type: 'website',
+  },
 };
 
 export default function FaqPage() {

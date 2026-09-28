@@ -90,6 +90,29 @@ export const ServicesSection = () => {
         bgcolor: isDark ? alpha('#111827', 0.5) : alpha('#F1F5F9', 0.7),
       }}
     >
+      {services.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(
+              services.map(service => ({
+                "@context": "https://schema.org",
+                "@type": "Service",
+                name: service.serviceName,
+                description: service.description || "Professional home healthcare service.",
+                provider: {
+                  "@type": "Organization",
+                  name: "Doctor Doorstep"
+                },
+                areaServed: {
+                  "@type": "City",
+                  name: "Mumbai"
+                }
+              }))
+            )
+          }}
+        />
+      )}
       <Container maxWidth="lg">
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
           {/* Section Header */}
@@ -173,9 +196,18 @@ export const ServicesSection = () => {
                         <Typography variant="h5" sx={{ fontWeight: 700, mb: 1.5 }}>
                           {service.serviceName}
                         </Typography>
-                        <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.75, mb: 3 }}>
+                        <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.75, mb: 2 }}>
                           {service.description || 'Professional home healthcare service tailored to your needs.'}
                         </Typography>
+
+                        <Box sx={{ mb: 3 }}>
+                          <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary', mb: 0.5 }}>
+                            Availability: <Typography component="span" variant="body2" color="text.secondary">24/7 across Mumbai</Typography>
+                          </Typography>
+                          <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary' }}>
+                            Pricing: <Typography component="span" variant="body2" color="text.secondary">Varies based on location and service type.</Typography>
+                          </Typography>
+                        </Box>
 
                         <Box
                           className="service-arrow"

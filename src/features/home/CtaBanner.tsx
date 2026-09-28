@@ -114,9 +114,10 @@ export const CtaBanner = () => {
               Request Home Visit <ArrowForwardIcon sx={{ fontSize: 18 }} />
             </Box>
             <Box
-              component="button"
+              component="a"
+              href="tel:+919029190955"
               sx={{
-                display: 'inline-flex', alignItems: 'center', gap: 1,
+                display: 'inline-flex', alignItems: 'center', gap: 1, textDecoration: 'none',
                 py: 2, px: 4, borderRadius: '16px', cursor: 'pointer',
                 border: `2px solid ${alpha('#ffffff', 0.5)}`,
                 bgcolor: 'transparent', color: 'white', fontWeight: 700, fontSize: '1rem',
@@ -124,7 +125,7 @@ export const CtaBanner = () => {
                 '&:hover': { bgcolor: alpha('#ffffff', 0.1), borderColor: 'white' },
               }}
             >
-              <PhoneIcon sx={{ fontSize: 18 }} /> Call 9029190955
+              <PhoneIcon sx={{ fontSize: 18 }} /> Call +91 90291 90955
             </Box>
           </Box>
         </motion.div>

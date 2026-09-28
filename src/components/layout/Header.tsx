@@ -197,7 +197,7 @@ export const Header = () => {
                 <>
                   <Box
                     component="a"
-                    href="tel:18001234567"
+                    href="tel:+919029190955"
                     sx={{
                       display: { xs: 'none', lg: 'inline-flex' }, alignItems: 'center', gap: 0.75,
                       py: 1, px: 2, borderRadius: '16px', textDecoration: 'none',
@@ -207,7 +207,7 @@ export const Header = () => {
                       '&:hover': { bgcolor: alpha('#4F46E5', 0.08), borderColor: 'primary.main', color: 'primary.main' },
                     }}
                   >
-                    <PhoneIcon sx={{ fontSize: 16 }} /> 9029190955
+                    <PhoneIcon sx={{ fontSize: 16 }} /> +91 90291 90955
                   </Box>
                   <Box
                     component={Link}

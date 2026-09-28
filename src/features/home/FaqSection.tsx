@@ -113,6 +113,25 @@ export const FaqSection = () => {
 
   return (
     <Box component="section" sx={{ py: { xs: 8, md: 15 }, bgcolor: 'background.default' }}>
+      {faqs.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: faqs.map(faq => ({
+                "@type": "Question",
+                name: faq.q,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: faq.a
+                }
+              }))
+            })
+          }}
+        />
+      )}
       <Container maxWidth="md">
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
           <motion.div variants={fadeInUp}>
