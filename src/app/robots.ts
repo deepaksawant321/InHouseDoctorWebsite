@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/admin/', '/dashboard/', '/login'],
+      disallow: ['/admin/', '/dashboard/', '/login', '/book/', '/booking-success'],
     },
     sitemap: 'https://www.doctordoorstep.com/sitemap.xml',
   };

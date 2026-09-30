@@ -1,7 +1,9 @@
 'use client';
 
+import { jsonLdString } from '@/utils/jsonLd';
 import { Box, Container, Typography, Grid, useTheme, alpha } from '@mui/material';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
+import Link from 'next/link';
 import { staggerContainer, fadeInUp } from '@/constants/animations';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import MasksIcon from '@mui/icons-material/Masks';
@@ -94,7 +96,7 @@ export const ServicesSection = () => {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(
+            __html: jsonLdString(
               services.map(service => ({
                 "@context": "https://schema.org",
                 "@type": "Service",
@@ -119,7 +121,7 @@ export const ServicesSection = () => {
           <motion.div variants={fadeInUp}>
             <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 10 } }}>
               <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75, borderRadius: 10, mb: 2, border: '1px solid', borderColor: alpha('#0D9488', 0.3), bgcolor: alpha('#0D9488', 0.06) }}>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: 'secondary.main' }}>What We Offer</Typography>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: 'secondary.dark' }}>What We Offer</Typography>
               </Box>
               <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '2rem', md: '2.75rem' } }}>
                 Our{' '}
@@ -145,12 +147,11 @@ export const ServicesSection = () => {
                   <Grid size={{ xs: 12, sm: 6 }} key={service.id || index}>
                     <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} style={{ height: '100%' }}>
                         <Box
-                          onClick={() => {
-                            if (service.slug) {
-                              window.location.href = `/services/${service.slug}`;
-                            }
-                          }}
+                          {...(service.slug ? { component: Link, href: `/services/${service.slug}` } : {})}
                           sx={{
+                            display: 'block',
+                            color: 'inherit',
+                            textDecoration: 'none',
                             height: '100%',
                             p: 4,
                             borderRadius: '32px', // Was 4 which evaluated to 64px!

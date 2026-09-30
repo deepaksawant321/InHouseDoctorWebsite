@@ -13,7 +13,7 @@ import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import PhoneIcon from '@mui/icons-material/Phone';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { m as motion, useScroll, useTransform } from 'framer-motion';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { useScrolled } from '@/hooks/useScrolled';
 import { usePathname } from 'next/navigation';
@@ -49,7 +49,8 @@ export const Header = () => {
     const t = localStorage.getItem('token');
     if (t) {
       setToken(t);
-      // Fetch notifications
+      // Patient notifications are not shown on admin routes
+      if (pathname?.startsWith('/admin')) return;
       import('@/services/api').then(({ notificationsApi }) => {
         notificationsApi.getAll().then(res => {
           setNotifications(Array.isArray(res.data) ? res.data : (res.data?.data || []));
@@ -157,7 +158,7 @@ export const Header = () => {
           <Toolbar sx={{ py: scrolled ? 0.5 : 1.5, transition: 'all 0.3s ease', minHeight: 'unset !important' }}>
             {/* Logo */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
-              <Box component={Link} href="/" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 2, background: 'linear-gradient(135deg, #4F46E5, #0D9488)', flexShrink: 0 }}>
+              <Box component={Link} href="/" aria-hidden="true" tabIndex={-1} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 2, background: 'linear-gradient(135deg, #4F46E5, #0D9488)', flexShrink: 0 }}>
                 <MedicalServicesIcon sx={{ fontSize: 20, color: 'white' }} />
               </Box>
               <Typography

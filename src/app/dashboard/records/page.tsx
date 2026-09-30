@@ -8,6 +8,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import { recordsApi } from '@/services/api';
 import EmptyState from '@/components/EmptyState';
+import { openPrivateFile } from '@/utils/files';
 
 export default function MedicalRecords() {
   const [recordsGroups, setRecordsGroups] = useState<any[]>([]);
@@ -117,7 +118,7 @@ export default function MedicalRecords() {
                         primary={<Typography variant="subtitle2" sx={{ fontWeight: 600 }}>{item.title}</Typography>}
                         secondary={item.date} 
                       />
-                      <Button size="small" variant="outlined" startIcon={<DownloadIcon />} sx={{ borderRadius: 2, textTransform: 'none' }} href={`${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace('/api', '') : 'http://localhost:3001'}${item.fileUrl}`} target="_blank">
+                      <Button size="small" variant="outlined" startIcon={<DownloadIcon />} sx={{ borderRadius: 2, textTransform: 'none' }} onClick={() => openPrivateFile(item.fileUrl)}>
                         Download
                       </Button>
                     </ListItem>

@@ -3,36 +3,23 @@ import { CtaBanner } from '@/features/home/CtaBanner';
 import { Box, Container, Typography, Grid } from '@mui/material';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { BLOGS } from '@/constants/blogs';
 
 export const metadata: Metadata = {
-  title: 'Healthcare Blog | Doctor Doorstep',
+  robots: { index: false, follow: true }, // placeholder content until real posts exist
+  title: 'Healthcare Blog',
   description: 'Read the latest healthcare articles, medical advice, and news from verified doctors at Doctor Doorstep.',
   alternates: {
     canonical: 'https://www.doctordoorstep.com/blog',
   },
   openGraph: {
-    title: 'Healthcare Blog | Doctor Doorstep',
+    title: 'Healthcare Blog',
     description: 'Read the latest healthcare articles, medical advice, and news from verified doctors at Doctor Doorstep.',
     url: 'https://www.doctordoorstep.com/blog',
     type: 'website',
   },
 };
 
-// Placeholder blogs
-const BLOGS = [
-  {
-    slug: 'when-to-call-doctor-home-visit',
-    title: 'When Should You Book a Home Doctor?',
-    excerpt: 'Understanding the situations where a home doctor visit is more beneficial than visiting a clinic or hospital.',
-    date: 'August 10, 2026',
-  },
-  {
-    slug: 'benefits-of-home-healthcare-seniors',
-    title: 'Benefits of Home Healthcare Services for Senior Citizens',
-    excerpt: 'Why elderly patients thrive with home healthcare and how it improves their quality of life.',
-    date: 'August 5, 2026',
-  }
-];
 
 export default function BlogPage() {
   return (

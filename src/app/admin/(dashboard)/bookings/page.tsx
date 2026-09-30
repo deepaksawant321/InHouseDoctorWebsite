@@ -1,14 +1,19 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { formatDoctorName } from '@/utils/doctorName';
 import { Box, Typography, Button, TextField, MenuItem, Stack, CircularProgress, Snackbar, Alert } from '@mui/material';
 import { DataTable } from '@/features/admin/DataTable';
 import { StatusBadge, StatusType } from '@/features/admin/StatusBadge';
 import { adminApi } from '@/services/api';
+import Link from 'next/link';
 
 export default function BookingsManagementPage() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [total, setTotal] = useState(0);
   const [statusFilter, setStatusFilter] = useState('All');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -20,19 +25,22 @@ export default function BookingsManagementPage() {
       status: statusFilter === 'All' ? undefined : statusFilter,
       startDate: startDate || undefined,
       endDate: endDate || undefined,
+      page: page + 1,
+      pageSize: rowsPerPage,
     }).then(res => {
       setBookings(res.data.data || []);
+      setTotal(res.data.total ?? 0);
     }).catch(console.error).finally(() => { if (showLoading) setLoading(false); });
   };
 
   useEffect(() => {
     fetchBookings(true);
-    // Poll for new bookings every 10 seconds silently
+    // Refresh every 30 seconds while the tab is visible
     const interval = setInterval(() => {
-      fetchBookings(false);
-    }, 10000);
+      if (document.visibilityState === 'visible') fetchBookings(false);
+    }, 30000);
     return () => clearInterval(interval);
-  }, [statusFilter, startDate, endDate]);
+  }, [statusFilter, startDate, endDate, page, rowsPerPage]);
 
   const handleUpdateStatus = async (id: string, status: string) => {
     try {
@@ -56,7 +64,7 @@ export default function BookingsManagementPage() {
         </Box>
       )
     },
-    { id: 'doctor' as const, label: 'Doctor', minWidth: 150, format: (_: any, row: any) => row.doctor ? `Dr. ${row.doctor.name}` : 'Unassigned' },
+    { id: 'doctor' as const, label: 'Doctor', minWidth: 150, format: (_: any, row: any) => row.doctor ? formatDoctorName(row.doctor.name) : 'Unassigned' },
     { id: 'symptoms' as const, label: 'Symptoms', minWidth: 150, format: (v: string) => v || '—' },
     { id: 'scheduledDate' as const, label: 'Date', minWidth: 120, format: (v: string) => v ? new Date(v).toLocaleDateString() : '—' },
     { id: 'paymentStatus' as const, label: 'Payment', minWidth: 120, format: (value: StatusType) => <StatusBadge status={value} /> },
@@ -71,7 +79,7 @@ export default function BookingsManagementPage() {
             </Button>
           )}
           {row.status === 'Confirmed' && (
-            <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 2, whiteSpace: 'nowrap' }} onClick={() => handleUpdateStatus(row.id, 'DoctorAssigned')}>
+            <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 2, whiteSpace: 'nowrap' }} component={Link} href="/admin/assignments">
               Assign Dr
             </Button>
           )}
@@ -113,7 +121,7 @@ export default function BookingsManagementPage() {
             label="Start Date"
             slotProps={{ inputLabel: { shrink: true } }}
             value={startDate}
-            onChange={e => setStartDate(e.target.value)}
+            onChange={e => { setStartDate(e.target.value); setPage(0); }}
           />
           <TextField
             type="date"
@@ -121,13 +129,13 @@ export default function BookingsManagementPage() {
             label="End Date"
             slotProps={{ inputLabel: { shrink: true } }}
             value={endDate}
-            onChange={e => setEndDate(e.target.value)}
+            onChange={e => { setEndDate(e.target.value); setPage(0); }}
           />
           <Button variant="contained" onClick={() => fetchBookings()} sx={{ borderRadius: 2 }}>
             Apply Filter
           </Button>
 
-          <TextField select size="small" label="Status" value={statusFilter} onChange={e => setStatusFilter(e.target.value)} sx={{ width: 160 }}>
+          <TextField select size="small" label="Status" value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(0); }} sx={{ width: 160 }}>
             <MenuItem value="All">All Statuses</MenuItem>
             <MenuItem value="Pending">Pending</MenuItem>
             <MenuItem value="Confirmed">Confirmed</MenuItem>
@@ -137,7 +145,11 @@ export default function BookingsManagementPage() {
         </Stack>
       </Box>
 
-      <DataTable columns={columns} rows={bookings} />
+      <DataTable
+        columns={columns}
+        rows={bookings}
+        serverPagination={{ total, page, rowsPerPage, onPageChange: setPage, onRowsPerPageChange: (n) => { setRowsPerPage(n); setPage(0); } }}
+      />
 
       <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar(s => ({ ...s, open: false }))}>
         <Alert severity={snackbar.severity} onClose={() => setSnackbar(s => ({ ...s, open: false }))}>{snackbar.message}</Alert>

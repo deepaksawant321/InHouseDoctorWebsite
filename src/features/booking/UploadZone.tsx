@@ -9,9 +9,28 @@ interface UploadZoneProps {
   onFileChange?: (file: File | null) => void;
 }
 
+const ALLOWED_EXTENSIONS = ['.pdf', '.png', '.jpg', '.jpeg'];
+const MAX_BYTES = 5 * 1024 * 1024;
+
+function validateFile(file: File): string | null {
+  const name = file.name.toLowerCase();
+  if (!ALLOWED_EXTENSIONS.some((ext) => name.endsWith(ext))) return 'Only PDF, PNG or JPG files are allowed.';
+  if (file.size > MAX_BYTES) return 'File is too large. Maximum size is 5MB.';
+  return null;
+}
+
 export const UploadZone = ({ onFileChange }: UploadZoneProps = {}) => {
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const accept = (newFile: File) => {
+    const problem = validateFile(newFile);
+    setError(problem);
+    if (problem) return;
+    setFile(newFile);
+    onFileChange?.(newFile);
+  };
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -25,17 +44,14 @@ export const UploadZone = ({ onFileChange }: UploadZoneProps = {}) => {
     e.stopPropagation();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const newFile = e.dataTransfer.files[0];
-      setFile(newFile);
-      onFileChange?.(newFile);
+      accept(e.dataTransfer.files[0]);
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const newFile = e.target.files[0];
-      setFile(newFile);
-      onFileChange?.(newFile);
+      accept(e.target.files[0]);
+      e.target.value = '';
     }
   };
 
@@ -57,6 +73,7 @@ export const UploadZone = ({ onFileChange }: UploadZoneProps = {}) => {
     >
       <input
         type="file"
+        aria-label="Upload a file (PDF, PNG or JPG, max 5MB)"
         onChange={handleChange}
         accept=".pdf,.png,.jpg,.jpeg"
         style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }}
@@ -85,13 +102,18 @@ export const UploadZone = ({ onFileChange }: UploadZoneProps = {}) => {
               Click or drag file to this area to upload
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Support for a single or bulk upload. Strictly prohibited from uploading company data or other banned files.
+              Upload a single PDF, PNG or JPG file.
             </Typography>
             <Typography variant="caption" sx={{ display: 'block', mt: 2, color: 'text.disabled' }}>
               Supported formats: PDF, PNG, JPG (Max 5MB)
             </Typography>
           </Box>
         </Box>
+      )}
+      {error && (
+        <Typography role="alert" variant="body2" color="error" sx={{ mt: 2, position: 'relative' }}>
+          {error}
+        </Typography>
       )}
     </Box>
   );

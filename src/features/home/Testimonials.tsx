@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Container, Typography, useTheme, alpha, IconButton } from '@mui/material';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { fadeInUp, staggerContainer } from '@/constants/animations';
 import StarIcon from '@mui/icons-material/Star';
@@ -99,7 +99,7 @@ export const Testimonials = () => {
           <motion.div variants={fadeInUp}>
             <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 10 } }}>
               <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75, borderRadius: 10, mb: 2, border: '1px solid', borderColor: alpha('#6C63FF', 0.3), bgcolor: alpha('#6C63FF', 0.06) }}>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: '#6C63FF' }}>Patient Stories</Typography>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: '#5A52E0' }}>Patient Stories</Typography>
               </Box>
               <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '2rem', md: '2.75rem' } }}>
                 What Our{' '}
@@ -185,7 +185,18 @@ export const Testimonials = () => {
                   {testimonials.map((_, i) => (
                     <Box
                       key={i}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Show testimonial ${i + 1}`}
+                      aria-current={i === active}
                       onClick={() => { setDirection(i > active ? 1 : -1); setActive(i); }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setDirection(i > active ? 1 : -1);
+                          setActive(i);
+                        }
+                      }}
                       sx={{
                         width: i === active ? 24 : 8,
                         height: 8, borderRadius: 10, cursor: 'pointer',

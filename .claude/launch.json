@@ -1,0 +1,28 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "qa-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 3300,
+      "autoPort": true,
+      "env": {
+        "NEXT_PUBLIC_API_URL": "http://localhost:5100/api",
+        "NEXT_DIST_DIR": ".next-qa-dev"
+      }
+    }
+  ]
+}

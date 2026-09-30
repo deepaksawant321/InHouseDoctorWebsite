@@ -21,7 +21,7 @@ export default function AssignmentsPage() {
 
   useEffect(() => {
     Promise.all([
-      adminApi.getBookings(),
+      adminApi.getBookings({ page: 1, pageSize: 100 }),
       adminApi.getDoctors(),
       servicesApi.findAllActive(),
     ]).then(([bRes, dRes, sRes]) => {

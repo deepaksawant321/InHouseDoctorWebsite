@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Container, Typography, useTheme, alpha } from '@mui/material';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '@/constants/animations';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
@@ -55,7 +55,7 @@ export const HowItWorks = () => {
           <motion.div variants={fadeInUp}>
             <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 10 } }}>
               <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75, borderRadius: 10, mb: 2, border: '1px solid', borderColor: alpha('#6C63FF', 0.3), bgcolor: alpha('#6C63FF', 0.06) }}>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: '#6C63FF' }}>Simple Process</Typography>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: '#5A52E0' }}>Simple Process</Typography>
               </Box>
               <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '2rem', md: '2.75rem' } }}>
                 How It{' '}

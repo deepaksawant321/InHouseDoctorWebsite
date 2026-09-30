@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Container, Typography, Grid, useTheme, alpha, Card, CardContent, Chip } from '@mui/material';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { staggerContainer, fadeInUp } from '@/constants/animations';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';

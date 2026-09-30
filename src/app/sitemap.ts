@@ -1,13 +1,30 @@
 import { MetadataRoute } from 'next';
+import { LOCATION_SLUGS } from '@/constants/locations';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const revalidate = 3600;
+
+async function getServiceSlugs(): Promise<string[]> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.doctordoorstep.com/api'}/services`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const json = await res.json();
+    return (json?.data ?? []).map((s: { slug?: string }) => s.slug).filter(Boolean);
+  } catch {
+    return []; // API unavailable: omit service pages rather than fail the whole sitemap
+  }
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.doctordoorstep.com';
-
-  const locations = [
-    'andheri', 'bandra', 'powai', 'borivali', 'malad', 'thane', 'kandivali', 'goregaon'
-  ];
-
-  const locationUrls = locations.map(loc => ({
+  const serviceUrls = (await getServiceSlugs()).map((slug) => ({
+    url: `${baseUrl}/services/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }));
+  const locationUrls = LOCATION_SLUGS.map(loc => ({
     url: `${baseUrl}/locations/${loc}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
@@ -46,17 +63,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/blog`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
       url: `${baseUrl}/locations`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.9,
     },
+    ...serviceUrls,
     ...locationUrls,
   ];
 }

@@ -4,9 +4,10 @@ import { Box, Container, Typography, Grid } from '@mui/material';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { LOCATIONS } from '@/constants/locations';
 
 export const metadata: Metadata = {
-  title: 'Service Areas | Doctor Doorstep Locations in Mumbai',
+  title: 'Service Areas | Home Doctor Across Mumbai',
   description: 'Find Doctor Doorstep home healthcare services and doctors in your local area across Mumbai, including Andheri, Bandra, Powai, and more.',
   alternates: {
     canonical: 'https://www.doctordoorstep.com/locations',
@@ -19,9 +20,6 @@ export const metadata: Metadata = {
   },
 };
 
-const LOCATIONS = [
-  'Andheri', 'Bandra', 'Powai', 'Borivali', 'Malad', 'Thane', 'Kandivali', 'Goregaon'
-];
 
 export default function LocationsPage() {
   return (

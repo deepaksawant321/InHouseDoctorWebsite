@@ -13,7 +13,7 @@ export default function HowItWorksPage() {
     <>
       <PageHero
         title="How InHouse Doctor Works"
-        subtitle="Getting professional medical care at home is as easy as ordering a cab. See our simple 5-step process."
+        subtitle="Getting professional medical care at home is as easy as ordering a cab. See our simple 4-step process."
       />
       <HowItWorks />
       <CtaBanner />

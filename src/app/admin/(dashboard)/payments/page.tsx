@@ -9,6 +9,9 @@ import { adminApi } from '@/services/api';
 export default function PaymentsManagementPage() {
   const [payments, setPayments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [total, setTotal] = useState(0);
   const [statusFilter, setStatusFilter] = useState('All');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -23,14 +26,17 @@ export default function PaymentsManagementPage() {
       status: statusFilter === 'All' ? undefined : statusFilter,
       startDate: startDate || undefined,
       endDate: endDate || undefined,
+      page: page + 1,
+      pageSize: rowsPerPage,
     }).then(res => {
       setPayments(res.data.data || []);
+      setTotal(res.data.total ?? 0);
     }).catch(console.error).finally(() => setLoading(false));
   };
 
   useEffect(() => {
     fetchPayments();
-  }, [statusFilter]);
+  }, [statusFilter, page, rowsPerPage]);
 
   const openVerify = (id: string) => {
     setVerifyDialog({ open: true, paymentId: id });

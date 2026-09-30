@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Container, Typography, useTheme, alpha } from '@mui/material';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { fadeInUp, staggerContainer } from '@/constants/animations';
 import PersonIcon from '@mui/icons-material/Person';

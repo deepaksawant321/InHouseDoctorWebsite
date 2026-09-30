@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { formatDoctorName } from '@/utils/doctorName';
 import { Box, Typography, Button, CircularProgress, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem } from '@mui/material';
 import { DataTable } from '@/features/admin/DataTable';
 import { StatusBadge, StatusType } from '@/features/admin/StatusBadge';
@@ -100,7 +101,7 @@ export default function DoctorsManagementPage() {
 
   const columns = [
     { id: 'id' as const, label: 'Doctor ID', minWidth: 80, format: (v: string) => `#${String(v).slice(0, 6)}` },
-    { id: 'name' as const, label: 'Name', minWidth: 180, format: (v: string) => `Dr. ${v}` },
+    { id: 'name' as const, label: 'Name', minWidth: 180, format: (v: string) => formatDoctorName(v) },
     { id: 'specialization' as const, label: 'Specialization', minWidth: 150 },
     { id: 'experienceYears' as const, label: 'Experience', minWidth: 100, format: (v: number) => `${v} yrs` },
     { id: 'consultationFee' as const, label: 'Fee', minWidth: 80, format: (v: number) => `₹${v}` },
@@ -127,7 +128,7 @@ export default function DoctorsManagementPage() {
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
         <Typography variant="h4" sx={{ fontWeight: 800 }}>Staff & Doctor Management</Typography>
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <TextField select size="small" label="Status" value={statusFilter} onChange={e => setStatusFilter(e.target.value)} sx={{ width: 140 }}>
             <MenuItem value="All">All Statuses</MenuItem>
             <MenuItem value="Active">Active</MenuItem>

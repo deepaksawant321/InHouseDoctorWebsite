@@ -8,13 +8,13 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 
 export const metadata: Metadata = {
-  title: 'About Us | Doctor Doorstep',
+  title: 'About Us',
   description: 'Learn about Doctor Doorstep, our mission to connect patients with trusted healthcare professionals in Mumbai.',
   alternates: {
     canonical: 'https://www.doctordoorstep.com/about',
   },
   openGraph: {
-    title: 'About Us | Doctor Doorstep',
+    title: 'About Us',
     description: 'Learn about Doctor Doorstep, our mission to connect patients with trusted healthcare professionals in Mumbai.',
     url: 'https://www.doctordoorstep.com/about',
     type: 'website',

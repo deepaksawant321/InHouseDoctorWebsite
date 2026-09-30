@@ -25,20 +25,19 @@ export default function AdminDashboardPage() {
     if (showLoading) setLoading(true);
     Promise.all([
       adminApi.getDashboardStats(),
-      adminApi.getBookings(),
+      adminApi.getBookings({ page: 1, pageSize: 5 }), // only the 5 most recent, fetched server-side
     ]).then(([statsRes, bookingsRes]) => {
       setStats(statsRes.data.data);
-      // Show only the 5 most recent
-      setRecentBookings((bookingsRes.data.data || []).slice(0, 5));
+      setRecentBookings(bookingsRes.data.data || []);
     }).catch(console.error).finally(() => { if (showLoading) setLoading(false); });
   };
 
   useEffect(() => {
     fetchDashboardData(true);
-    // Poll for new bookings/stats every 10 seconds silently
+    // Refresh every 30 seconds (both calls are cheap COUNT / LIMIT 5 queries), only while the tab is visible
     const interval = setInterval(() => {
-      fetchDashboardData(false);
-    }, 10000);
+      if (document.visibilityState === 'visible') fetchDashboardData(false);
+    }, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -48,7 +47,7 @@ export default function AdminDashboardPage() {
     { id: 'symptoms' as const, label: 'Symptoms', minWidth: 150 },
     { id: 'status' as const, label: 'Status', minWidth: 120, format: (value: StatusType) => <StatusBadge status={value} /> },
     { id: 'actions' as const, label: 'Actions', minWidth: 100, align: 'center' as const, format: (_: any, row: any) => (
-      <Button component={Link} href={`/admin/bookings`} variant="outlined" size="small" sx={{ borderRadius: 2 }}>View</Button>
+      <Button component={Link} href={`/admin/bookings/${row.id}`} variant="outlined" size="small" sx={{ borderRadius: 2 }}>View</Button>
     )},
   ];
 
@@ -78,7 +77,7 @@ export default function AdminDashboardPage() {
           <StatsCard title="Payments Done" value={String(stats?.completedPayments ?? 0)} icon={<PaymentIcon />} trend="up" trendValue="Success" />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4 }}>
-          <StatsCard title="Completed Visits" value={String(stats?.completedPayments ?? 0)} icon={<CheckCircleIcon />} trend="up" trendValue="Verified" />
+          <StatsCard title="Completed Visits" value={String(stats?.completedVisits ?? 0)} icon={<CheckCircleIcon />} trend="up" trendValue="Done" />
         </Grid>
       </Grid>
 

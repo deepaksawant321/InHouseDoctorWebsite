@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import { HeroSection } from '@/features/home/HeroSection';
 import { TrustBar } from '@/features/home/TrustBar';
+import { getPublicFaqs } from '@/services/serverApi';
+import { jsonLdString } from '@/utils/jsonLd';
 import dynamic from 'next/dynamic';
 
 const HowItWorks = dynamic(() => import('@/features/home/HowItWorks').then(mod => mod.HowItWorks));
@@ -26,13 +28,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
+  const faqs = await getPublicFaqs();
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: jsonLdString({
             '@context': 'https://schema.org',
             '@type': 'MedicalBusiness',
             name: 'Doctor Doorstep',
@@ -52,7 +55,7 @@ export default function Home() {
       <DoctorProfiles />
       <WhyChooseUs />
       <TestimonialsSection />
-      <FaqSection />
+      <FaqSection initialFaqs={faqs} />
       <CtaBanner />
     </>
   );

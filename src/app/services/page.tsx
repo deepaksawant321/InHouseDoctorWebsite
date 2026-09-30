@@ -6,13 +6,13 @@ const ServicesSection = dynamic(() => import('@/features/home/ServicesSection').
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Home Healthcare Services in Mumbai | Doctor Doorstep',
+  title: 'Home Healthcare Services in Mumbai',
   description: 'Explore Doctor Doorstep home healthcare services including doctor home visits, physiotherapy, nursing and other healthcare services across Mumbai.',
   alternates: {
     canonical: 'https://www.doctordoorstep.com/services',
   },
   openGraph: {
-    title: 'Home Healthcare Services in Mumbai | Doctor Doorstep',
+    title: 'Home Healthcare Services in Mumbai',
     description: 'Explore Doctor Doorstep home healthcare services including doctor home visits, physiotherapy, nursing and other healthcare services across Mumbai.',
     url: 'https://www.doctordoorstep.com/services',
     type: 'website',

@@ -52,8 +52,18 @@ export default function SelectServicePage() {
             return (
               <Grid size={{ xs: 12, sm: 6 }} key={svc.id}>
                 <Box
+                  role="button"
+                  tabIndex={0}
+                  aria-pressed={isSelected}
                   onClick={() => setService(svc.id, svc.serviceName, svc.basePrice)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setService(svc.id, svc.serviceName, svc.basePrice);
+                    }
+                  }}
                   sx={{
+                    '&:focus-visible': { outline: '3px solid', outlineColor: 'primary.main', outlineOffset: 2 },
                     p: 3, borderRadius: '24px', height: '100%', cursor: 'pointer',
                     bgcolor: isSelected ? alpha('#4F46E5', 0.04) : 'background.paper',
                     border: '2px solid',

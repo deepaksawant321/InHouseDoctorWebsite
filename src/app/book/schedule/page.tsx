@@ -10,10 +10,33 @@ import { useBooking } from '@/providers/BookingProvider';
 
 const dates = ['Today', 'Tomorrow', 'Choose Date'];
 const timeSlots = [
-  { id: 'morning', label: 'Morning', time: '09:00 AM - 12:00 PM' },
-  { id: 'afternoon', label: 'Afternoon', time: '12:00 PM - 04:00 PM' },
-  { id: 'evening', label: 'Evening', time: '04:00 PM - 08:00 PM' },
+  { id: 'morning', label: 'Morning', time: '09:00 AM - 12:00 PM', startHour: 9 },
+  { id: 'afternoon', label: 'Afternoon', time: '12:00 PM - 04:00 PM', startHour: 12 },
+  { id: 'evening', label: 'Evening', time: '04:00 PM - 08:00 PM', startHour: 16 },
 ];
+
+const pad = (n: number) => String(n).padStart(2, '0');
+const toLocalDateInput = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+
+/** Start of the chosen slot on the chosen day, in the user's local time. */
+function buildSlotStart(selectedDate: string | null, customDate: string, startHour: number): Date | null {
+  const base = new Date();
+  if (selectedDate === 'Tomorrow') base.setDate(base.getDate() + 1);
+  else if (selectedDate === 'Choose Date') {
+    if (!customDate) return null;
+    const [y, m, d] = customDate.split('-').map(Number);
+    base.setFullYear(y, m - 1, d);
+  } else if (selectedDate !== 'Today') return null;
+  base.setHours(startHour, 0, 0, 0);
+  return base;
+}
+
+const optionKeyHandler = (action: () => void) => (e: React.KeyboardEvent) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    action();
+  }
+};
 
 export default function SchedulePage() {
   const router = useRouter();
@@ -22,14 +45,13 @@ export default function SchedulePage() {
   const [customDate, setCustomDate] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
+  const chosenSlot = timeSlots.find((t) => t.id === selectedTime);
+  const chosenStart = chosenSlot ? buildSlotStart(selectedDate, customDate, chosenSlot.startHour) : null;
+  const chosenPast = !!chosenStart && chosenStart.getTime() <= Date.now();
+
   const handleContinue = () => {
-    if (selectedDate && selectedTime) {
-      let finalDate = new Date();
-      if (selectedDate === 'Tomorrow') finalDate.setDate(finalDate.getDate() + 1);
-      else if (selectedDate === 'Choose Date' && customDate) finalDate = new Date(customDate);
-      
-      // Keep it simple, just store the ISO string of the date
-      setScheduledDate(finalDate.toISOString());
+    if (chosenStart && !chosenPast) {
+      setScheduledDate(chosenStart.toISOString(), chosenSlot?.time);
       router.push('/book/prescription');
     }
   };
@@ -51,8 +73,13 @@ export default function SchedulePage() {
         {dates.map((date) => (
           <Grid size={{ xs: 4 }} key={date}>
             <Box
+              role="button"
+              tabIndex={0}
+              aria-pressed={selectedDate === date}
               onClick={() => setSelectedDate(date)}
+              onKeyDown={optionKeyHandler(() => setSelectedDate(date))}
               sx={{
+                '&:focus-visible': { outline: '3px solid', outlineColor: 'primary.main', outlineOffset: 2 },
                 p: 2, borderRadius: '16px', textAlign: 'center', cursor: 'pointer',
                 bgcolor: selectedDate === date ? alpha('#4F46E5', 0.1) : 'background.paper',
                 border: '2px solid', borderColor: selectedDate === date ? 'primary.main' : 'divider',
@@ -73,7 +100,8 @@ export default function SchedulePage() {
                 type="date" 
                 value={customDate}
                 onChange={(e) => setCustomDate(e.target.value)}
-                min={new Date().toISOString().split('T')[0]}
+                aria-label="Custom visit date"
+                min={toLocalDateInput(new Date())}
                 style={{
                   width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #e0e0e0',
                   fontSize: '1rem', fontFamily: 'inherit'
@@ -89,12 +117,22 @@ export default function SchedulePage() {
       </Typography>
 
       <Grid container spacing={2} sx={{ mb: 8 }}>
-        {timeSlots.map((slot) => (
+        {timeSlots.map((slot) => {
+          const start = selectedDate ? buildSlotStart(selectedDate, customDate, slot.startHour) : null;
+          const isPast = !!start && start.getTime() <= Date.now();
+          return (
           <Grid size={{ xs: 12, sm: 4 }} key={slot.id}>
             <Box
-              onClick={() => setSelectedTime(slot.id)}
+              role="button"
+              tabIndex={isPast ? -1 : 0}
+              aria-pressed={selectedTime === slot.id}
+              aria-disabled={isPast}
+              onClick={() => { if (!isPast) setSelectedTime(slot.id); }}
+              onKeyDown={optionKeyHandler(() => { if (!isPast) setSelectedTime(slot.id); })}
               sx={{
-                p: 2, borderRadius: '16px', textAlign: 'center', cursor: 'pointer',
+                '&:focus-visible': { outline: '3px solid', outlineColor: 'primary.main', outlineOffset: 2 },
+                opacity: isPast ? 0.45 : 1,
+                p: 2, borderRadius: '16px', textAlign: 'center', cursor: isPast ? 'not-allowed' : 'pointer',
                 bgcolor: selectedTime === slot.id ? alpha('#4F46E5', 0.1) : 'background.paper',
                 border: '2px solid', borderColor: selectedTime === slot.id ? 'primary.main' : 'divider',
                 transition: 'all 0.2s', '&:hover': { borderColor: 'primary.main' }
@@ -104,11 +142,12 @@ export default function SchedulePage() {
                 {slot.label}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {slot.time}
+                {isPast ? 'Not available' : slot.time}
               </Typography>
             </Box>
           </Grid>
-        ))}
+          );
+        })}
       </Grid>
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -124,7 +163,7 @@ export default function SchedulePage() {
         </Box>
         <Box
           component="button" type="button" onClick={handleContinue} 
-          disabled={!selectedDate || !selectedTime || (selectedDate === 'Choose Date' && !customDate)}
+          disabled={!selectedDate || !selectedTime || chosenPast || (selectedDate === 'Choose Date' && !customDate)}
           sx={{
             py: 1.5, px: 6, borderRadius: '16px', border: 'none', 
             cursor: (selectedDate && selectedTime && (selectedDate !== 'Choose Date' || customDate)) ? 'pointer' : 'not-allowed',

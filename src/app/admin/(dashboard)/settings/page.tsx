@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Box, Typography, Button, TextField, Divider, alpha, useTheme, CircularProgress, Alert } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { adminApi } from '@/services/api';
+import { publicAssetUrl } from '@/utils/files';
 
 export default function SettingsPage() {
   const theme = useTheme();
@@ -176,9 +177,9 @@ export default function SettingsPage() {
                       const res = await adminApi.uploadQrCode(file);
                       if (res.data?.success) {
                         const fileUrl = res.data.data.fileUrl;
-                        const fullUrl = process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace('/api', fileUrl) : `http://localhost:5000${fileUrl}`;
+                        const fullUrl = publicAssetUrl(fileUrl);
                         setFormData(prev => ({ ...prev, qrCodeImage: fullUrl }));
-                        setSuccessMessage('QR Code uploaded successfully!');
+                        setSuccessMessage('QR Code uploaded. Click Save to publish it.');
                       }
                     } catch (err) {
                       console.error('Upload failed', err);

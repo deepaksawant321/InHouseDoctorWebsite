@@ -20,11 +20,10 @@ export const useThemeContext = () => useContext(ThemeContext);
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const { mode, toggleTheme, mounted } = useThemeMode();
 
-  const theme = useMemo(() => (mode === 'light' ? lightTheme : darkTheme), [mode]);
-
-  if (!mounted) {
-    return <div style={{ visibility: 'hidden' }}>{children}</div>;
-  }
+  // The server (and the first client render) always use the light theme; the stored/system preference is
+  // applied right after mount. Keeping the element tree identical avoids remounting the whole app (which
+  // previously ran every page's effects twice) and avoids serving the page as visibility:hidden.
+  const theme = useMemo(() => (mounted && mode === 'dark' ? darkTheme : lightTheme), [mode, mounted]);
 
   return (
     <ThemeContext.Provider value={{ toggleTheme, mode }}>

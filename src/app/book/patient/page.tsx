@@ -43,8 +43,7 @@ export default function SelectPatient() {
       ) : (
         <Grid container spacing={3}>
           {patients.map((p) => {
-            // Calculate age roughly
-            const age = p.dateOfBirth ? new Date().getFullYear() - new Date(p.dateOfBirth).getFullYear() : 'Unknown';
+            const ageLabel = p.age != null ? `${p.age} yrs` : 'Age not set';
             return (
               <Grid size={{ xs: 12, sm: 6 }} key={p.id}>
                 <Card elevation={0} sx={{ borderRadius: '24px', border: '1px solid', borderColor: 'divider', transition: 'all 0.3s ease', '&:hover': { borderColor: 'primary.main', bgcolor: alpha(theme.palette.primary.main, 0.02), transform: 'translateY(-4px)', boxShadow: '0 8px 24px rgba(79, 70, 229, 0.12)' } }}>
@@ -54,7 +53,7 @@ export default function SelectPatient() {
                         {p.fullName}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {p.relationship} • {age} yrs, {p.gender}
+                        {[p.relationship, ageLabel, p.gender].filter(Boolean).join(' • ')}
                       </Typography>
                     </CardContent>
                   </CardActionArea>

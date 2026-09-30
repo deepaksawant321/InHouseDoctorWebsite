@@ -3,7 +3,7 @@
 import Link from 'next/link';
 
 import { Box, Container, Typography, Grid, useTheme, alpha } from '@mui/material';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { fadeInUp, slideInLeft, slideInRight, staggerContainer, floatAnimation } from '@/constants/animations';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -94,7 +94,7 @@ export const HeroSection = () => {
                   }}
                 >
                   <VerifiedIcon sx={{ fontSize: 16, color: 'secondary.main' }} />
-                  <Typography variant="caption" sx={{ fontWeight: 600, color: 'secondary.main' }}>
+                  <Typography variant="caption" sx={{ fontWeight: 600, color: 'secondary.dark' }}>
                     500+ Verified Doctors Across Mumbai
                   </Typography>
                 </Box>
@@ -288,7 +288,7 @@ export const HeroSection = () => {
                       <Typography variant="caption" sx={{ fontWeight: 700, display: 'block', color: 'text.primary' }}>
                         Home Visit
                       </Typography>
-                      <Typography variant="caption" sx={{ color: '#6C63FF', fontWeight: 600 }}>
+                      <Typography variant="caption" sx={{ color: '#5A52E0', fontWeight: 600 }}>
                         Confirmed ✓
                       </Typography>
                     </Box>

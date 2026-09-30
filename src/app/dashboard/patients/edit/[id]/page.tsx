@@ -105,7 +105,7 @@ export default function EditPatient() {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Controller name="fullName" control={control} rules={{ required: 'Name is required' }} render={({ field }) => (
+                <Controller name="fullName" control={control} rules={{ required: 'Name is required', validate: (v: string) => v.trim().length >= 2 || 'Name must be at least 2 characters' }} render={({ field }) => (
                   <TextField {...field} fullWidth label="Full Name" required variant="outlined" error={!!errors.fullName} helperText={errors.fullName?.message} />
                 )} />
               </Grid>
@@ -121,7 +121,7 @@ export default function EditPatient() {
                 )} />
               </Grid>
               <Grid size={{ xs: 12, md: 4 }}>
-                <Controller name="age" control={control} rules={{ required: 'Age is required' }} render={({ field }) => (
+                <Controller name="age" control={control} rules={{ required: 'Age is required', min: { value: 0, message: 'Age must be between 0 and 150' }, max: { value: 150, message: 'Age must be between 0 and 150' } }} render={({ field }) => (
                   <TextField {...field} fullWidth label="Age" type="number" required error={!!errors.age} helperText={errors.age?.message} />
                 )} />
               </Grid>
@@ -149,13 +149,13 @@ export default function EditPatient() {
                 )} />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Controller name="mobileNo" control={control} render={({ field }) => (
-                  <TextField {...field} fullWidth label="Mobile Number" />
+                <Controller name="mobileNo" control={control} rules={{ pattern: { value: /^$|^[6-9][0-9]{9}$/, message: 'Enter a valid 10-digit mobile number' } }} render={({ field }) => (
+                  <TextField {...field} fullWidth label="Mobile Number" error={!!errors.mobileNo} helperText={errors.mobileNo?.message} slotProps={{ htmlInput: { inputMode: 'numeric', maxLength: 10 } }} />
                 )} />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Controller name="emergencyContact" control={control} render={({ field }) => (
-                  <TextField {...field} fullWidth label="Emergency Contact" />
+                <Controller name="emergencyContact" control={control} rules={{ pattern: { value: /^$|^[6-9][0-9]{9}$/, message: 'Enter a valid 10-digit mobile number' } }} render={({ field }) => (
+                  <TextField {...field} fullWidth label="Emergency Contact" error={!!errors.emergencyContact} helperText={errors.emergencyContact?.message} slotProps={{ htmlInput: { inputMode: 'numeric', maxLength: 10 } }} />
                 )} />
               </Grid>
               <Grid size={{ xs: 12 }}>

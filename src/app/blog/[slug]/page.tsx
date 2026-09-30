@@ -2,14 +2,26 @@ import { PageHero } from '@/components/ui/PageHero';
 import { CtaBanner } from '@/features/home/CtaBanner';
 import { Box, Container, Typography, Breadcrumbs, Link as MuiLink } from '@mui/material';
 import { Metadata } from 'next';
-import Link from 'next/link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { jsonLdString } from '@/utils/jsonLd';
+import { BLOGS, getBlog } from '@/constants/blogs';
+
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return BLOGS.map((b) => ({ slug: b.slug }));
+}
 
 // This would typically fetch from CMS
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
+  const post = getBlog(resolvedParams.slug);
+  if (!post) notFound();
   return {
-    title: `${resolvedParams.slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')} | Doctor Doorstep`,
+    robots: { index: false, follow: true }, // placeholder content
+    title: post.title,
     description: `Read about ${resolvedParams.slug.replace(/-/g, ' ')} on the Doctor Doorstep healthcare blog.`,
     alternates: {
       canonical: `https://www.doctordoorstep.com/blog/${resolvedParams.slug}`,
@@ -25,14 +37,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const title = resolvedParams.slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const post = getBlog(resolvedParams.slug);
+  if (!post) notFound();
+  const title = post.title;
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: jsonLdString({
             '@context': 'https://schema.org',
             '@type': 'Article',
             headline: title,
@@ -64,7 +78,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           </Breadcrumbs>
           <Typography variant="h2" sx={{ fontWeight: 800, mb: 4 }}>{title}</Typography>
           <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 4 }}>
-            Published on August 10, 2026 • Medically reviewed by Dr. [Placeholder Name]
+            Published on {post.date}
           </Typography>
         </Container>
       </Box>

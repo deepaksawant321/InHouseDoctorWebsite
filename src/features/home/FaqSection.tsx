@@ -1,7 +1,8 @@
 'use client';
 
+import { jsonLdString } from '@/utils/jsonLd';
 import { Box, Container, Typography, useTheme, alpha } from '@mui/material';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { useState } from 'react';
 import { fadeInUp, staggerContainer } from '@/constants/animations';
 import AddIcon from '@mui/icons-material/Add';
@@ -10,21 +11,6 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { cmsApi } from '@/services/api';
 import { CircularProgress } from '@mui/material';
 import { useEffect } from 'react';
-
-const FALLBACK_FAQS = [
-  {
-    q: 'How quickly can a doctor arrive?',
-    a: 'In most areas of Mumbai, a doctor can reach your home within 30–60 minutes of your confirmed request. Our intelligent dispatch system ensures the nearest available doctor is assigned to you.',
-  },
-  {
-    q: 'Are all doctors verified and licensed?',
-    a: 'Absolutely. Every doctor on our platform undergoes a rigorous vetting process including license verification, background checks, and peer reviews before being approved to take home visits.',
-  },
-  {
-    q: 'How do payments work?',
-    a: 'Payment is handled securely after the consultation. We accept all major UPI apps, credit/debit cards, and net banking. A detailed receipt is sent to your email after every visit.',
-  },
-];
 
 const FaqItem = ({ q, a, index }: { q: string; a: string; index: number }) => {
   const [open, setOpen] = useState(false);
@@ -46,7 +32,14 @@ const FaqItem = ({ q, a, index }: { q: string; a: string; index: number }) => {
       >
         <Box
           onClick={() => setOpen(!open)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setOpen(!open);
+            }
+          }}
           role="button"
+          tabIndex={0}
           aria-expanded={open}
           aria-controls={`faq-content-${index}`}
           id={`faq-header-${index}`}
@@ -93,23 +86,25 @@ const FaqItem = ({ q, a, index }: { q: string; a: string; index: number }) => {
   );
 };
 
-export const FaqSection = () => {
-  const [faqs, setFaqs] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+/**
+ * `initialFaqs` is fetched on the server so the questions/answers are in the initial HTML (SEO + FAQ rich results).
+ * When it is null (API unreachable at render time) the component falls back to fetching in the browser.
+ */
+export const FaqSection = ({ initialFaqs = null }: { initialFaqs?: { q: string; a: string }[] | null }) => {
+  const [faqs, setFaqs] = useState<{ q: string; a: string }[]>(initialFaqs ?? []);
+  const [loading, setLoading] = useState(initialFaqs === null);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
+    if (initialFaqs !== null) return;
     cmsApi.getFaqs().then(res => {
       const data = res.data.data || [];
-      if (data.length > 0) {
-        setFaqs(data.map((f: any) => ({ q: f.question, a: f.answer })));
-      } else {
-        setFaqs(FALLBACK_FAQS);
-      }
+      setFaqs(data.map((f: any) => ({ q: f.question, a: f.answer })));
     }).catch(err => {
       console.error(err);
-      setFaqs(FALLBACK_FAQS);
+      setFailed(true);
     }).finally(() => setLoading(false));
-  }, []);
+  }, [initialFaqs]);
 
   return (
     <Box component="section" sx={{ py: { xs: 8, md: 15 }, bgcolor: 'background.default' }}>
@@ -117,7 +112,7 @@ export const FaqSection = () => {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: jsonLdString({
               "@context": "https://schema.org",
               "@type": "FAQPage",
               mainEntity: faqs.map(faq => ({
@@ -137,7 +132,7 @@ export const FaqSection = () => {
           <motion.div variants={fadeInUp}>
             <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
               <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75, borderRadius: 10, mb: 2, border: '1px solid', borderColor: alpha('#0D9488', 0.3), bgcolor: alpha('#0D9488', 0.06) }}>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: 'secondary.main' }}>FAQ</Typography>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: 'secondary.dark' }}>FAQ</Typography>
               </Box>
               <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '2rem', md: '2.75rem' } }}>
                 Frequently Asked{' '}
@@ -155,9 +150,15 @@ export const FaqSection = () => {
             {loading ? (
               <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}><CircularProgress /></Box>
             ) : (
-              faqs.map((faq, i) => (
-                <FaqItem key={i} q={faq.q} a={faq.a} index={i} />
-              ))
+              faqs.length > 0 ? (
+                faqs.map((faq, i) => (
+                  <FaqItem key={i} q={faq.q} a={faq.a} index={i} />
+                ))
+              ) : (
+                <Typography color="text.secondary" sx={{ textAlign: 'center', py: 3 }}>
+                  {failed ? 'We could not load the FAQs right now. Please try again shortly or contact us.' : 'No FAQs are published yet. Please contact us with any questions.'}
+                </Typography>
+              )
             )}
           </Box>
         </motion.div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Container, Typography, Grid, useTheme, alpha, Avatar, Rating } from '@mui/material';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { staggerContainer, fadeInUp } from '@/constants/animations';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 

@@ -16,9 +16,17 @@ interface DataTableProps<T> {
   columns: Column<T>[];
   rows: T[];
   actions?: ReactNode;
+  /** Server-side pagination: rows is already the current page; total/page come from the API. */
+  serverPagination?: {
+    total: number;
+    page: number; // 0-based
+    rowsPerPage: number;
+    onPageChange: (page: number) => void;
+    onRowsPerPageChange: (rowsPerPage: number) => void;
+  };
 }
 
-export function DataTable<T extends { id: string | number }>({ title, columns, rows, actions }: DataTableProps<T>) {
+export function DataTable<T extends { id: string | number }>({ title, columns, rows, actions, serverPagination }: DataTableProps<T>) {
   const theme = useTheme();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -64,8 +72,7 @@ export function DataTable<T extends { id: string | number }>({ title, columns, r
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            {(serverPagination ? rows : rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage))
               .map((row) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
@@ -86,11 +93,11 @@ export function DataTable<T extends { id: string | number }>({ title, columns, r
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
+        count={serverPagination ? serverPagination.total : rows.length}
+        rowsPerPage={serverPagination ? serverPagination.rowsPerPage : rowsPerPage}
+        page={serverPagination ? serverPagination.page : page}
+        onPageChange={(_e, p) => (serverPagination ? serverPagination.onPageChange(p) : handleChangePage(_e, p))}
+        onRowsPerPageChange={(e) => { const n = +e.target.value; if (serverPagination) { serverPagination.onRowsPerPageChange(n); } else { setRowsPerPage(n); setPage(0); } }}
       />
     </Paper>
   );

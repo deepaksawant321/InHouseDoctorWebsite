@@ -1,11 +1,11 @@
 'use client';
 
-import { Box, Typography, Tabs, Tab, Card, CardContent, Chip, Button, Stack, CircularProgress } from '@mui/material';
+import { Box, Typography, Tabs, Tab, Card, CardContent, Chip, Button, Stack, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Divider } from '@mui/material';
 import { useState, useEffect } from 'react';
-import ReceiptIcon from '@mui/icons-material/Receipt';
-import { bookingsApi } from '@/services/api';
+import { bookingsApi, servicesApi } from '@/services/api';
 import { useRouter } from 'next/navigation';
 import EmptyState from '@/components/EmptyState';
+import { openPrivateFile } from '@/utils/files';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -26,22 +26,41 @@ export default function MyBookings() {
   const [tab, setTab] = useState(0);
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState<any | null>(null);
+  const [files, setFiles] = useState<any[] | null>(null);
 
   const router = useRouter();
 
   useEffect(() => {
-    bookingsApi.getMyBookings().then(res => {
+    Promise.all([
+      bookingsApi.getMyBookings(),
+      servicesApi.findAllActive().catch(() => null),
+    ]).then(([res, servicesRes]) => {
+      const serviceNames = new Map<string, string>(
+        (servicesRes?.data?.data || []).map((svc: any) => [String(svc.id), svc.serviceName]),
+      );
       // Map backend booking format to the UI format
       const mapped = (res.data.data || []).map((b: any) => ({
-        id: b.bookingNo || `#${b.id.slice(0, 6)}`,
-        service: b.symptoms || 'General Consultation',
+        rawId: String(b.id),
+        paymentStatus: b.paymentStatus,
+        id: b.bookingNo || `#${String(b.id).slice(0, 6)}`,
+        service: serviceNames.get(String(b.serviceId)) || 'Home healthcare visit',
         patient: b.patient?.fullName || 'Self',
-        date: new Date(b.scheduledDate).toLocaleDateString() + (b.preferredTime ? `, ${b.preferredTime}` : ''),
+        // PreferredDate is a date-only column, so format it in UTC to avoid shifting the day
+        date: new Date(b.scheduledDate).toLocaleDateString('en-IN', { timeZone: 'UTC', dateStyle: 'medium' }) + (b.preferredTime ? `, ${b.preferredTime}` : ''),
         status: b.status,
       }));
       setBookings(mapped);
     }).catch(console.error).finally(() => setLoading(false));
   }, []);
+
+  const openDetails = (booking: any) => {
+    setSelected(booking);
+    setFiles(null);
+    bookingsApi.getPrescriptions(booking.rawId)
+      .then((res) => setFiles(res.data.data || []))
+      .catch(() => setFiles([]));
+  };
 
   if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}><CircularProgress /></Box>;
 
@@ -99,14 +118,9 @@ export default function MyBookings() {
                         </Typography>
                       </Box>
                       <Box sx={{ display: 'flex', gap: 1 }}>
-                        <Button onClick={() => alert('View Details coming soon!')} variant="outlined" size="small" sx={{ borderRadius: 2, textTransform: 'none' }}>
+                        <Button onClick={() => openDetails(booking)} variant="outlined" size="small" sx={{ borderRadius: 2, textTransform: 'none' }}>
                           View Details
                         </Button>
-                        {booking.status === 'Completed' && (
-                          <Button onClick={() => alert('Prescription download coming soon!')} variant="text" size="small" startIcon={<ReceiptIcon />} sx={{ borderRadius: 2, textTransform: 'none' }}>
-                            Prescription
-                          </Button>
-                        )}
                         {booking.status === 'Cancelled' && (
                           <Button onClick={() => router.push('/book/service')} variant="contained" size="small" sx={{ borderRadius: 2, textTransform: 'none' }}>
                             Rebook
@@ -121,6 +135,37 @@ export default function MyBookings() {
           </CustomTabPanel>
         );
       })}
+      <Dialog open={!!selected} onClose={() => setSelected(null)} fullWidth maxWidth="sm" aria-labelledby="booking-details-title">
+        <DialogTitle id="booking-details-title">Booking {selected?.id}</DialogTitle>
+        <DialogContent dividers>
+          {selected && (
+            <Stack spacing={1.5}>
+              <Typography variant="body2"><strong>Service:</strong> {selected.service}</Typography>
+              <Typography variant="body2"><strong>Patient:</strong> {selected.patient}</Typography>
+              <Typography variant="body2"><strong>Scheduled:</strong> {selected.date}</Typography>
+              <Typography variant="body2"><strong>Status:</strong> {selected.status}</Typography>
+              <Typography variant="body2"><strong>Payment:</strong> {selected.paymentStatus || 'Not paid'}</Typography>
+              <Divider />
+              <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Documents you uploaded</Typography>
+              {files === null ? (
+                <CircularProgress size={20} />
+              ) : files.length === 0 ? (
+                <Typography variant="body2" color="text.secondary">No documents were uploaded for this booking.</Typography>
+              ) : (
+                files.map((f) => (
+                  <Box key={f.id} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
+                    <Typography variant="body2" noWrap sx={{ minWidth: 0 }}>{f.fileName}</Typography>
+                    <Button size="small" variant="outlined" onClick={() => openPrivateFile(f.filePath)}>View</Button>
+                  </Box>
+                ))
+              )}
+            </Stack>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setSelected(null)}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

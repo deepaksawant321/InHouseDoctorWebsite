@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Terms & Conditions',
-  description: 'InHouse Doctor Terms & Conditions.',
+  description: 'Read the terms and conditions for booking and using Doctor Doorstep home doctor and healthcare services in Mumbai.',
 };
 
 export default function TermsPage() {

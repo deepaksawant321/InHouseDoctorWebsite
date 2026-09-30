@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Container, Typography, alpha, useTheme } from '@mui/material';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import Link from 'next/link';
 
 export default function NotFound() {

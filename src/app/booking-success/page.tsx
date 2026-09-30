@@ -3,16 +3,18 @@
 import { Box, Container, Typography, alpha } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import SmsIcon from '@mui/icons-material/Sms';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EmailIcon from '@mui/icons-material/Email';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { motion } from 'framer-motion';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { m as motion } from 'framer-motion';
 import { BookingStepper } from '@/features/booking/BookingStepper';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-export default function BookingSuccessPage() {
+function BookingSuccessContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const bookingRef = searchParams.get('ref');
+  const prescriptionFailed = searchParams.get('rx') === 'failed';
 
   return (
     <>
@@ -37,11 +39,20 @@ export default function BookingSuccessPage() {
             </Typography>
 
             <Box sx={{ display: 'inline-block', p: 3, borderRadius: '24px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', boxShadow: '0 8px 32px rgba(0,0,0,0.04)' }}>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>Booking ID</Typography>
-              <Typography variant="h4" sx={{ fontWeight: 800, color: 'primary.main', letterSpacing: 2, mb: 3 }}>
-                IH20260001
-              </Typography>
+              {bookingRef && (
+                <>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>Booking ID</Typography>
+                  <Typography variant="h4" sx={{ fontWeight: 800, color: 'primary.main', letterSpacing: 2, mb: 3 }}>
+                    {bookingRef}
+                  </Typography>
+                </>
+              )}
 
+              {prescriptionFailed && (
+                <Typography variant="body2" color="error" role="alert" sx={{ mb: 2 }}>
+                  Your booking was created, but the prescription upload failed. Please share it from your dashboard or with our team.
+                </Typography>
+              )}
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'center', bgcolor: alpha('#FFA000', 0.1), color: '#F57C00', py: 1, px: 3, borderRadius: 6 }}>
                 <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Status: Pending Verification</Typography>
               </Box>
@@ -49,40 +60,31 @@ export default function BookingSuccessPage() {
           </Box>
 
           <Grid container spacing={3} sx={{ mb: 8, maxWidth: 600, mx: 'auto' }}>
-            <Grid size={{ xs: 12, sm: 4 }}>
-              <Box sx={{ p: 2, borderRadius: '16px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Box sx={{ bgcolor: alpha('#4F46E5', 0.1), color: 'primary.main', p: 1, borderRadius: 2 }}><SmsIcon /></Box>
-                <Box>
-                  <Typography variant="body2" sx={{ fontWeight: 700 }}>SMS</Typography>
-                  <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>Scheduled <CheckCircleIcon sx={{ fontSize: 14, color: 'secondary.main' }} /></Typography>
-                </Box>
-              </Box>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 4 }}>
-              <Box sx={{ p: 2, borderRadius: '16px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Box sx={{ bgcolor: alpha('#25D366', 0.1), color: '#25D366', p: 1, borderRadius: 2 }}><WhatsAppIcon /></Box>
-                <Box>
-                  <Typography variant="body2" sx={{ fontWeight: 700 }}>WhatsApp</Typography>
-                  <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>Scheduled <CheckCircleIcon sx={{ fontSize: 14, color: 'secondary.main' }} /></Typography>
-                </Box>
-              </Box>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 4 }}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Box sx={{ p: 2, borderRadius: '16px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 2 }}>
                 <Box sx={{ bgcolor: alpha('#4F46E5', 0.1), color: 'primary.main', p: 1, borderRadius: 2 }}><EmailIcon /></Box>
                 <Box>
                   <Typography variant="body2" sx={{ fontWeight: 700 }}>Email</Typography>
-                  <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>Scheduled <CheckCircleIcon sx={{ fontSize: 14, color: 'secondary.main' }} /></Typography>
+                  <Typography variant="caption" color="text.secondary">Confirmation sent to your email on file</Typography>
+                </Box>
+              </Box>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Box sx={{ p: 2, borderRadius: '16px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box sx={{ bgcolor: alpha('#4F46E5', 0.1), color: 'primary.main', p: 1, borderRadius: 2 }}><NotificationsIcon /></Box>
+                <Box>
+                  <Typography variant="body2" sx={{ fontWeight: 700 }}>Dashboard</Typography>
+                  <Typography variant="caption" color="text.secondary">Track status under My Bookings</Typography>
                 </Box>
               </Box>
             </Grid>
           </Grid>
 
-          <Box sx={{ display: 'flex', gap: 3, justifyContent: 'center' }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: { xs: 2, sm: 3 }, justifyContent: 'center' }}>
             <Box
               component="button" onClick={() => router.push('/dashboard')}
               sx={{
-                py: 2, px: 6, borderRadius: '16px', border: '1px solid', borderColor: 'primary.main', cursor: 'pointer',
+                py: 2, px: { xs: 3, sm: 6 }, borderRadius: '16px', border: '1px solid', borderColor: 'primary.main', cursor: 'pointer',
                 bgcolor: 'transparent', color: 'primary.main', fontWeight: 700, fontSize: '1rem',
                 transition: 'all 0.2s', '&:hover': { bgcolor: alpha('#4F46E5', 0.05) },
               }}
@@ -92,7 +94,7 @@ export default function BookingSuccessPage() {
             <Box
               component="button" onClick={() => router.push('/book/service')}
               sx={{
-                py: 2, px: 6, borderRadius: '16px', border: 'none', cursor: 'pointer',
+                py: 2, px: { xs: 3, sm: 6 }, borderRadius: '16px', border: 'none', cursor: 'pointer',
                 background: 'linear-gradient(135deg, #4F46E5, #0D9488)', color: 'white',
                 fontWeight: 700, fontSize: '1rem', boxShadow: '0 8px 24px rgba(25, 118, 210, 0.3)',
                 transition: 'all 0.2s', '&:hover': { transform: 'translateY(-2px)' },
@@ -104,5 +106,13 @@ export default function BookingSuccessPage() {
         </Container>
       </Box>
     </>
+  );
+}
+
+export default function BookingSuccessPage() {
+  return (
+    <Suspense fallback={null}>
+      <BookingSuccessContent />
+    </Suspense>
   );
 }

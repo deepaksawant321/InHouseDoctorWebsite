@@ -13,11 +13,14 @@ import LockIcon from '@mui/icons-material/Lock';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Link from 'next/link';
 
+// Must match the API's OTP resend cooldown (60s) so "Resend" isn't offered before the API will accept it.
+const RESEND_COOLDOWN_SECONDS = 60;
+
 export default function LoginPage() {
   const [loginId, setLoginId] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState('');
-  const [timer, setTimer] = useState(30);
+  const [timer, setTimer] = useState(RESEND_COOLDOWN_SECONDS);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
@@ -79,7 +82,7 @@ export default function LoginPage() {
         }
 
         setOtpSent(true);
-        setTimer(30);
+        setTimer(RESEND_COOLDOWN_SECONDS);
       } catch (err: any) {
         setError(err.message || 'Something went wrong');
       } finally {
@@ -291,7 +294,7 @@ export default function LoginPage() {
                 <Button
                   size="small"
                   startIcon={<ArrowBackIcon sx={{ fontSize: '14px !important' }} />}
-                  onClick={() => { setOtpSent(false); setTimer(30); setOtp(''); setError(''); }}
+                  onClick={() => { setOtpSent(false); setTimer(RESEND_COOLDOWN_SECONDS); setOtp(''); setError(''); }}
                   sx={{
                     flexShrink: 0,
                     color: 'primary.main',

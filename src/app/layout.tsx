@@ -27,14 +27,6 @@ export const metadata: Metadata = {
     description: 'Book verified doctors for convenient home visits across Mumbai. Doctor Doorstep provides trusted home doctor consultations with easy booking and 24×7 support.',
     url: 'https://www.doctordoorstep.com',
     siteName: 'Doctor Doorstep',
-    images: [
-      {
-        url: 'https://www.doctordoorstep.com/og-image.jpg', // Placeholder for actual OG image
-        width: 1200,
-        height: 630,
-        alt: 'InHouse Doctor - Premium Healthcare at Home',
-      },
-    ],
     locale: 'en_IN',
     type: 'website',
   },
@@ -42,7 +34,6 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Doctor at Home in Mumbai | Doctor Doorstep',
     description: 'Book verified doctors for convenient home visits across Mumbai. Doctor Doorstep provides trusted home doctor consultations with easy booking and 24×7 support.',
-    images: ['https://www.doctordoorstep.com/twitter-image.jpg'], // Placeholder
     creator: '@InHouseDoctor',
   },
   robots: {
@@ -57,7 +48,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://www.doctordoorstep.com',
+    canonical: './', // resolved per route; pages may override with an absolute URL
   },
 };
 

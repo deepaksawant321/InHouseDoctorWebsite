@@ -7,16 +7,16 @@ import {
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import YouTubeIcon from '@mui/icons-material/YouTube';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 import { usePathname } from 'next/navigation';
+import { contactApi, settingsApi } from '@/services/api';
 
 const footerLinks = {
   Company: [
@@ -42,6 +42,44 @@ export const Footer = () => {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const pathname = usePathname();
+  const isPrivateArea = !!(pathname?.startsWith('/dashboard') || pathname?.startsWith('/admin') || pathname?.startsWith('/login'));
+
+  // Social links come from the admin-managed site settings; only configured ones are shown.
+  const [socialLinks, setSocialLinks] = useState<{ label: string; href: string; icon: typeof FacebookIcon }[]>([]);
+  useEffect(() => {
+    if (isPrivateArea) return;
+    settingsApi.get()
+      .then((res) => {
+        const data = res.data?.data || {};
+        const candidates = [
+          { label: 'Facebook', href: data.socialFacebook, icon: FacebookIcon },
+          { label: 'Instagram', href: data.socialInstagram, icon: InstagramIcon },
+          { label: 'Twitter', href: data.socialTwitter, icon: TwitterIcon },
+        ];
+        setSocialLinks(candidates.filter((c) => typeof c.href === 'string' && /^https?:\/\//i.test(c.href)) as typeof socialLinks);
+      })
+      .catch(() => setSocialLinks([]));
+  }, [isPrivateArea]);
+
+  // Newsletter sign-ups are forwarded to the admin inbox through the contact endpoint.
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletter, setNewsletter] = useState<{ status: 'idle' | 'sending' | 'ok' | 'error'; text?: string }>({ status: 'idle' });
+  const handleNewsletter = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const email = newsletterEmail.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setNewsletter({ status: 'error', text: 'Please enter a valid email address.' });
+      return;
+    }
+    setNewsletter({ status: 'sending' });
+    try {
+      await contactApi.send({ name: 'Newsletter subscriber', email, message: 'Please add me to the newsletter.' });
+      setNewsletter({ status: 'ok', text: 'Thanks for subscribing!' });
+      setNewsletterEmail('');
+    } catch {
+      setNewsletter({ status: 'error', text: 'Could not subscribe right now. Please try again later.' });
+    }
+  };
 
   if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/admin') || pathname?.startsWith('/login')) {
     return null;
@@ -88,6 +126,7 @@ export const Footer = () => {
               </Box>
               <Typography
                 variant="h6"
+                component="span"
                 sx={{ fontWeight: 800, background: 'linear-gradient(135deg, #4F46E5, #0D9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
               >
                 InHouse Doctor
@@ -131,6 +170,8 @@ export const Footer = () => {
                     href={link.href}
                     variant="body2"
                     sx={{
+                      display: 'inline-block',
+                      py: 0.5,
                       textDecoration: 'none',
                       color: 'text.secondary',
                       cursor: 'pointer',
@@ -153,15 +194,24 @@ export const Footer = () => {
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Get health tips and service updates.
             </Typography>
+            <Box component="form" noValidate onSubmit={handleNewsletter}>
             <TextField
               fullWidth
+              type="email"
               placeholder="Enter email"
               size="small"
+              value={newsletterEmail}
+              onChange={(e) => setNewsletterEmail(e.target.value)}
+              error={newsletter.status === 'error'}
+              helperText={newsletter.text}
+              disabled={newsletter.status === 'sending'}
               slotProps={{
+                htmlInput: { 'aria-label': 'Email address for newsletter' },
                 input: {
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
+                        type="submit"
                         size="small"
                         aria-label="Subscribe to newsletter"
                         sx={{
@@ -179,6 +229,7 @@ export const Footer = () => {
               }}
               sx={{ '& .MuiOutlinedInput-root': { borderRadius: '16px' } }}
             />
+            </Box>
           </Grid>
         </Grid>
 
@@ -199,26 +250,31 @@ export const Footer = () => {
           <Typography variant="body2" color="text.secondary">
             &copy; {new Date().getFullYear()} InHouse Doctor. All rights reserved. Made with ❤️ in Mumbai.
           </Typography>
-          <Box sx={{ display: 'flex', gap: 0.5 }}>
-            {[{ icon: FacebookIcon, label: 'Facebook' }, { icon: TwitterIcon, label: 'Twitter' }, { icon: InstagramIcon, label: 'Instagram' }, { icon: LinkedInIcon, label: 'LinkedIn' }, { icon: YouTubeIcon, label: 'YouTube' }].map((social, i) => (
-              <IconButton
-                key={i}
-                size="small"
-                aria-label={`Visit our ${social.label} page`}
-                sx={{
-                  color: 'text.secondary',
-                  transition: 'all 0.2s',
-                  '&:hover': {
-                    color: 'primary.main',
-                    bgcolor: alpha('#4F46E5', 0.08),
-                    transform: 'translateY(-2px)',
-                  },
-                }}
-              >
-                <social.icon fontSize="small" />
-              </IconButton>
-            ))}
-          </Box>
+          {socialLinks.length > 0 && (
+            <Box sx={{ display: 'flex', gap: 0.5 }}>
+              {socialLinks.map((social) => (
+                <IconButton
+                  key={social.label}
+                  component="a"
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Visit our ${social.label} page`}
+                  sx={{
+                    color: 'text.secondary',
+                    transition: 'all 0.2s',
+                    '&:hover': {
+                      color: 'primary.main',
+                      bgcolor: alpha('#4F46E5', 0.08),
+                      transform: 'translateY(-2px)',
+                    },
+                  }}
+                >
+                  <social.icon fontSize="small" />
+                </IconButton>
+              ))}
+            </Box>
+          )}
         </Box>
       </Container>
     </Box>

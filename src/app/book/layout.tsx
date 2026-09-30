@@ -1,20 +1,11 @@
-'use client';
+import type { Metadata } from 'next';
+import BookingShell from './BookingShell';
 
-import { Box, Container } from '@mui/material';
-import { BookingStepper } from '@/features/booking/BookingStepper';
-import { BookingProvider } from '@/providers/BookingProvider';
+// Booking is a private, transactional flow: keep it out of search indexes (matches the X-Robots-Tag header)
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default function BookingLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <BookingProvider>
-      <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
-        <BookingStepper />
-        <Box component="section" sx={{ py: { xs: 8, md: 10 } }}>
-          <Container maxWidth="md">
-            {children}
-          </Container>
-        </Box>
-      </Box>
-    </BookingProvider>
-  );
+  return <BookingShell>{children}</BookingShell>;
 }

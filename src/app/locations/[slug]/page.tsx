@@ -5,12 +5,22 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { notFound } from 'next/navigation';
+import { jsonLdString } from '@/utils/jsonLd';
+import { LOCATION_SLUGS, locationNameFromSlug } from '@/constants/locations';
+
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return LOCATION_SLUGS.map((slug) => ({ slug }));
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
-  const locationName = resolvedParams.slug.charAt(0).toUpperCase() + resolvedParams.slug.slice(1);
+  const locationName = locationNameFromSlug(resolvedParams.slug);
+  if (!locationName) notFound();
   return {
-    title: `Doctor Home Visit in ${locationName} | Doctor Doorstep`,
+    title: `Doctor Home Visit in ${locationName}`,
     description: `Book verified doctors for home visits in ${locationName}, Mumbai. Get professional healthcare services including general physician and nursing care in ${locationName} 24x7.`,
     alternates: {
       canonical: `https://www.doctordoorstep.com/locations/${resolvedParams.slug}`,
@@ -26,14 +36,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function LocationDetail({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const locationName = resolvedParams.slug.charAt(0).toUpperCase() + resolvedParams.slug.slice(1);
+  const locationName = locationNameFromSlug(resolvedParams.slug);
+  if (!locationName) notFound();
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: jsonLdString({
             '@context': 'https://schema.org',
             '@type': 'LocalBusiness',
             name: `Doctor Doorstep - ${locationName}`,
@@ -107,7 +118,7 @@ export default async function LocationDetail({ params }: { params: Promise<{ slu
                   Call +91 90291 90955
                 </Box>
                 <Box
-                  component={Link}
+                  component="a"
                   href="/request-doctor"
                   sx={{
                     display: 'block', textAlign: 'center', width: '100%', py: 2, borderRadius: '16px',

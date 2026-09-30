@@ -1,4 +1,4 @@
-import { createTheme, ThemeOptions } from '@mui/material/styles';
+import { createTheme, responsiveFontSizes, ThemeOptions } from '@mui/material/styles';
 import { Inter } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -67,6 +67,10 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
     borderRadius: 16,
   },
   components: {
+    MuiTypography: {
+      // Render h6 as <h3> so heading levels never skip (h1 -> h2 -> h3); MUI's default <h6> breaks the outline
+      defaultProps: { variantMapping: { h6: 'h3' } },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
@@ -106,5 +110,6 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
   },
 });
 
-export const lightTheme = createTheme(getDesignTokens('light'));
-export const darkTheme = createTheme(getDesignTokens('dark'));
+// responsiveFontSizes scales headings down on narrow screens (MUI's default h1-h2 sizes overflow at 320-414px).
+export const lightTheme = responsiveFontSizes(createTheme(getDesignTokens('light')));
+export const darkTheme = responsiveFontSizes(createTheme(getDesignTokens('dark')));

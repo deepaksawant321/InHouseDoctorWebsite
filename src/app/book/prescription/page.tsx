@@ -3,9 +3,11 @@
 import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { UploadZone } from '@/features/booking/UploadZone';
+import { useBooking } from '@/providers/BookingProvider';
 
 export default function PrescriptionPage() {
   const router = useRouter();
+  const { setPrescriptionFile } = useBooking();
 
   return (
     <Box>
@@ -22,10 +24,10 @@ export default function PrescriptionPage() {
       </Typography>
 
       <Box sx={{ mb: 8 }}>
-        <UploadZone />
+        <UploadZone onFileChange={setPrescriptionFile} />
       </Box>
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'space-between', alignItems: 'center' }}>
         <Box
           component="button" type="button" onClick={() => router.back()}
           sx={{
@@ -48,7 +50,7 @@ export default function PrescriptionPage() {
           <Box
             component="button" type="button" onClick={() => router.push('/book/payment')}
             sx={{
-              py: 1.5, px: 6, borderRadius: '16px', border: 'none', cursor: 'pointer',
+              py: 1.5, px: { xs: 3, sm: 6 }, borderRadius: '16px', border: 'none', cursor: 'pointer',
               background: 'linear-gradient(135deg, #4F46E5, #0D9488)', color: 'white', 
               fontWeight: 700, fontSize: '1rem', boxShadow: '0 8px 24px rgba(25, 118, 210, 0.3)',
               transition: 'all 0.2s', '&:hover': { transform: 'translateY(-2px)' },

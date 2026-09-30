@@ -54,14 +54,20 @@ export const adminApi = {
     apiClient.patch(`/admin/doctors/${id}/toggle-status`),
 
   // Bookings
-  getBookings: (params?: { status?: string; startDate?: string; endDate?: string }) =>
+  getBookings: (params?: { status?: string; startDate?: string; endDate?: string; page?: number; pageSize?: number }) =>
     apiClient.get('/admin/bookings', { params }),
+
+  getDoctorById: (id: string) =>
+    apiClient.get(`/admin/doctors/${id}`),
+
+  getBookingById: (id: string) =>
+    apiClient.get(`/admin/bookings/${id}`),
 
   updateBookingStatus: (id: string, status: string, remarks?: string) =>
     apiClient.patch(`/admin/bookings/${id}/status`, { status, remarks }),
 
   // Payments
-  getPayments: (params?: { status?: string; startDate?: string; endDate?: string }) =>
+  getPayments: (params?: { status?: string; startDate?: string; endDate?: string; page?: number; pageSize?: number }) =>
     apiClient.get('/admin/payments', { params }),
 
   verifyPayment: (id: string, status: 'Success' | 'Rejected', remarks?: string) =>
@@ -160,15 +166,19 @@ export const doctorAvailabilityApi = {
 export const settingsApi = {
   get: () =>
     apiClient.get('/settings'),
+};
 
-  update: (data: any) =>
-    apiClient.put('/settings', data),
+// ─── Contact ──────────────────────────────────────────────────────────────────
+
+export const contactApi = {
+  send: (data: { name: string; mobile?: string; email?: string; message: string }) =>
+    apiClient.post('/contact', data),
 };
 
 // ─── Bookings ─────────────────────────────────────────────────────────────────
 
 export const bookingsApi = {
-  create: (data: { patientId: string; doctorId?: string; scheduledDate: string; symptoms?: string; serviceId?: number; addressId?: string }) =>
+  create: (data: { patientId: string; doctorId?: string; scheduledDate: string; preferredTime?: string; symptoms?: string; serviceId?: number; addressId?: string }) =>
     apiClient.post('/bookings', data),
 
   getMyBookings: () =>
@@ -222,9 +232,6 @@ export const assignmentsApi = {
   getAll: () =>
     apiClient.get('/admin/assignments'),
 
-  getByBooking: (bookingId: string) =>
-    apiClient.get(`/admin/assignments/booking/${bookingId}`),
-
   revoke: (id: string) =>
     apiClient.patch(`/admin/assignments/${id}/revoke`),
 };
@@ -234,6 +241,10 @@ export const assignmentsApi = {
 export const notificationsApi = {
   getAll: () =>
     apiClient.get('/notifications'),
+
+  // Admin: every notification across all users
+  getAllAdmin: () =>
+    apiClient.get('/notifications/all'),
 
   getByBooking: (bookingId: string) =>
     apiClient.get(`/notifications/booking/${bookingId}`),
