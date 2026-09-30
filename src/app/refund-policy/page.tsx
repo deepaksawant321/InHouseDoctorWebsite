@@ -15,7 +15,7 @@ export default function RefundPolicyPage() {
         subtitle="Transparent policies for your peace of mind."
       />
 
-      <Box component="section" sx={{ py: { xs: 8, md: 15 }, bgcolor: 'background.paper' }}>
+      <Box component="section" sx={{ py: { xs: 6, md: 9 }, bgcolor: 'background.paper' }}>
         <Container maxWidth="md">
           <Typography variant="h4" sx={{ mb: 3, fontWeight: 700 }}>
             1. Cancellation by User

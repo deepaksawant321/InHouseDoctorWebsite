@@ -1,121 +1,71 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 import { Box, Container, Typography, Grid, useTheme, alpha } from '@mui/material';
 import { m as motion } from 'framer-motion';
-import { useRef, useState } from 'react';
-import { fadeInUp, slideInLeft, slideInRight, staggerContainer, floatAnimation } from '@/constants/animations';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import { fadeInUp, slideInRight, staggerContainer, floatAnimation } from '@/constants/animations';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import StarIcon from '@mui/icons-material/Star';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import PhoneIcon from '@mui/icons-material/Phone';
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
+const stats = [
+  { icon: <VerifiedIcon />, value: '500+', label: 'Verified Doctors' },
+  { icon: <AccessTimeIcon />, value: '24x7', label: 'Care Support' },
+  { icon: <StarIcon />, value: '4.9', label: 'Patient Rating' },
+];
 
 export const HeroSection = () => {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const statsRef = useRef<HTMLDivElement>(null);
+  const cardSx = {
+    display: 'flex', alignItems: 'center', gap: 1.5, px: 2, py: 1.5, borderRadius: '18px',
+    bgcolor: isDark ? alpha('#0F2036', 0.96) : 'white',
+    boxShadow: '0 12px 36px rgba(10, 92, 184, 0.16)',
+    border: '1px solid', borderColor: alpha('#0A5CB8', 0.08),
+  };
 
   return (
     <Box
       component="section"
       id="home"
       sx={{
-        minHeight: '100vh',
+        minHeight: { md: '92vh' },
         display: 'flex',
         alignItems: 'center',
         position: 'relative',
         overflow: 'hidden',
-        pt: { xs: 12, md: 10 },
+        pt: { xs: 12, md: 11 },
         pb: { xs: 8, md: 6 },
-        bgcolor: 'background.default',
+        background: isDark
+          ? 'linear-gradient(180deg, #0A1626 0%, #0D1B2E 100%)'
+          : 'linear-gradient(180deg, #EAF5FD 0%, #F8FCFF 70%, #FFFFFF 100%)',
       }}
     >
-      {/* Animated gradient blobs */}
-      <Box sx={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }}
-          style={{
-            position: 'absolute', top: '-20%', right: '-10%',
-            width: 600, height: 600, borderRadius: '50%',
-            background: isDark
-              ? 'radial-gradient(circle, rgba(79, 70, 229, 0.18) 0%, transparent 70%)'
-              : 'radial-gradient(circle, rgba(79, 70, 229, 0.12) 0%, transparent 70%)',
-          }}
-        />
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5, delay: 0.2 }}
-          style={{
-            position: 'absolute', bottom: '-10%', left: '-5%',
-            width: 500, height: 500, borderRadius: '50%',
-            background: isDark
-              ? 'radial-gradient(circle, rgba(13, 148, 136, 0.15) 0%, transparent 70%)'
-              : 'radial-gradient(circle, rgba(13, 148, 136, 0.1) 0%, transparent 70%)',
-          }}
-        />
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5, delay: 0.4 }}
-          style={{
-            position: 'absolute', top: '30%', left: '40%',
-            width: 400, height: 400, borderRadius: '50%',
-            background: isDark
-              ? 'radial-gradient(circle, rgba(108, 99, 255, 0.1) 0%, transparent 70%)'
-              : 'radial-gradient(circle, rgba(108, 99, 255, 0.07) 0%, transparent 70%)',
-          }}
-        />
-      </Box>
-
-      {/* Dot grid pattern */}
-      <Box
-        sx={{
-          position: 'absolute', inset: 0, pointerEvents: 'none', opacity: isDark ? 0.15 : 0.06,
-          backgroundImage: 'radial-gradient(circle, #4F46E5 1px, transparent 1px)',
-          backgroundSize: '36px 36px',
-        }}
-      />
+      <Box aria-hidden sx={{ position: 'absolute', top: '-12%', right: '-8%', width: 620, height: 620, borderRadius: '50%', background: 'radial-gradient(circle, rgba(20,181,165,0.22) 0%, transparent 68%)', pointerEvents: 'none' }} />
+      <Box aria-hidden sx={{ position: 'absolute', bottom: '-18%', left: '-8%', width: 520, height: 520, borderRadius: '50%', background: 'radial-gradient(circle, rgba(10,92,184,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
       <Container maxWidth="xl" sx={{ position: 'relative', zIndex: 1 }}>
-        <Grid container spacing={{ xs: 4, md: 8 }} sx={{ alignItems: 'center' }}>
-          {/* Left: Content */}
+        <Grid container spacing={{ xs: 4, md: 6 }} sx={{ alignItems: 'center' }}>
           <Grid size={{ xs: 12, md: 6 }}>
             <motion.div variants={staggerContainer} initial="hidden" animate="visible">
-              {/* Trust badge */}
               <motion.div variants={fadeInUp}>
-                <Box
-                  sx={{
-                    display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75,
-                    borderRadius: 10, mb: 3,
-                    border: '1px solid',
-                    borderColor: alpha('#4F46E5', 0.3),
-                    bgcolor: alpha('#4F46E5', 0.06),
-                  }}
-                >
-                  <VerifiedIcon sx={{ fontSize: 16, color: 'secondary.main' }} />
-                  <Typography variant="caption" sx={{ fontWeight: 600, color: 'secondary.dark' }}>
-                    500+ Verified Doctors Across Mumbai
-                  </Typography>
-                </Box>
+                <Typography sx={{ color: 'primary.main', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.14em', textTransform: 'uppercase', mb: 2 }}>
+                  Your health. Our commitment.
+                </Typography>
               </motion.div>
 
-              {/* Headline */}
               <motion.div variants={fadeInUp}>
                 <Typography
                   variant="h1"
-                  sx={{
-                    fontSize: { xs: '2.2rem', sm: '3.2rem', md: '3.8rem', lg: '4.2rem' },
-                    lineHeight: 1.05,
-                    mb: 2,
-                    color: 'text.primary',
-                  }}
+                  sx={{ fontSize: { xs: '2.4rem', sm: '3.4rem', md: '3.4rem', lg: '4rem' }, mb: 2.5, color: 'text.primary' }}
                 >
                   Doctor At Your{' '}
-                  <Box
-                    component="span"
-                    sx={{ background: 'linear-gradient(135deg, #4F46E5 0%, #0D9488 60%, #6C63FF 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', display: 'inline' }}
-                  >
+                  <Box component="span" sx={{ background: 'linear-gradient(90deg, #0A5CB8 0%, #14B5A5 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                     Doorstep
                   </Box>
                   <br />
@@ -123,14 +73,12 @@ export const HeroSection = () => {
                 </Typography>
               </motion.div>
 
-              {/* Sub */}
               <motion.div variants={fadeInUp}>
-                <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400, mb: 4, maxWidth: 480, lineHeight: 1.7 }}>
+                <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400, mb: 4, maxWidth: 500, lineHeight: 1.7, fontSize: { xs: '1rem', md: '1.1rem' } }}>
                   Connect with trusted healthcare professionals for home visits, nursing care, physiotherapy, and elder care — right at your doorstep.
                 </Typography>
               </motion.div>
 
-              {/* CTA Buttons */}
               <motion.div variants={fadeInUp}>
                 <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 5 }}>
                   <Box
@@ -138,12 +86,11 @@ export const HeroSection = () => {
                     href="/request-doctor"
                     sx={{
                       display: 'inline-flex', alignItems: 'center', gap: 1, textDecoration: 'none',
-                      py: 1.75, px: 3.5, borderRadius: '16px', border: 'none', cursor: 'pointer',
-                      background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
-                      color: 'white', fontWeight: 700, fontSize: '1rem',
-                      boxShadow: '0 8px 24px rgba(79, 70, 229, 0.4)',
-                      transition: 'all 0.3s ease',
-                      '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 12px 32px rgba(79, 70, 229, 0.5)' },
+                      py: 1.6, px: 3.5, minHeight: 48, borderRadius: '999px', border: 'none', cursor: 'pointer',
+                      bgcolor: '#0A5CB8', color: 'white', fontWeight: 700, fontSize: '1rem',
+                      boxShadow: '0 10px 26px rgba(10, 92, 184, 0.35)',
+                      transition: 'all 0.25s ease',
+                      '&:hover': { bgcolor: '#084A94', transform: 'translateY(-2px)' },
                     }}
                   >
                     Request Doctor <ArrowForwardIcon sx={{ fontSize: 18 }} />
@@ -151,146 +98,63 @@ export const HeroSection = () => {
                   <Box
                     component="button"
                     sx={{
-                      display: 'inline-flex', alignItems: 'center', gap: 1,
-                      py: 1.75, px: 3.5, borderRadius: '16px', cursor: 'pointer',
-                      border: '2px solid', borderColor: alpha('#0D9488', 0.5),
-                      bgcolor: 'transparent', color: 'text.primary', fontWeight: 700, fontSize: '1rem',
-                      transition: 'all 0.3s ease',
-                      '&:hover': { borderColor: 'secondary.main', bgcolor: alpha('#0D9488', 0.06) },
+                      display: 'inline-flex', alignItems: 'center', gap: 1, minHeight: 48,
+                      py: 1.6, px: 3.5, borderRadius: '999px', cursor: 'pointer',
+                      border: '1.5px solid', borderColor: 'primary.main',
+                      bgcolor: 'transparent', color: 'primary.main', fontWeight: 700, fontSize: '1rem', fontFamily: 'inherit',
+                      transition: 'all 0.25s ease',
+                      '&:hover': { bgcolor: alpha('#0A5CB8', 0.07) },
                     }}
                   >
                     <PhoneIcon sx={{ fontSize: 18 }} /> Call Now
                   </Box>
                 </Box>
               </motion.div>
-            </motion.div>
 
-          </Grid>
-
-          {/* Right: Visual */}
-          <Grid size={{ xs: 12, md: 6 }}>
-            <motion.div variants={slideInRight} initial="hidden" animate="visible" style={{ position: 'relative' }}>
-              {/* Central Orb Illustration */}
-              <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 480 }}>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }}
-                  style={{
-                    position: 'absolute',
-                    width: 380, height: 380,
-                    borderRadius: '50%',
-                    border: `2px dashed ${alpha('#4F46E5', 0.2)}`,
-                  }}
-                />
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.2 }}
-                  style={{
-                    position: 'absolute',
-                    width: 280, height: 280,
-                    borderRadius: '50%',
-                    border: `2px dashed ${alpha('#0D9488', 0.25)}`,
-                  }}
-                />
-
-                {/* Core circle */}
-                <Box
-                  sx={{
-                    width: 220, height: 220, borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #4F46E5 0%, #0D9488 50%, #6C63FF 100%)',
-                    display: 'flex', flexDirection: 'column',
-                    alignItems: 'center', justifyContent: 'center',
-                    boxShadow: '0 20px 60px rgba(79, 70, 229, 0.4)',
-                    zIndex: 2,
-                  }}
-                >
-                  <LocalHospitalIcon sx={{ fontSize: 56, color: 'white', mb: 1 }} />
-                  <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.9)', fontWeight: 700, fontSize: '0.85rem', textAlign: 'center', px: 2 }}>
-                    Premium<br />Healthcare
-                  </Typography>
-                </Box>
-
-                {/* Floating Card 1 - Doctor Available */}
-                <motion.div
-                  animate={floatAnimation}
-                  style={{ position: 'absolute', top: '8%', right: '2%', zIndex: 3 }}
-                >
-                  <Box
-                    sx={{
-                      display: 'flex', alignItems: 'center', gap: 1.5,
-                      px: 2.5, py: 1.5, borderRadius: '16px',
-                      bgcolor: isDark ? alpha('#1F2937', 0.95) : 'white',
-                      boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-                      border: '1px solid', borderColor: alpha('#0D9488', 0.2),
-                      backdropFilter: 'blur(10px)',
-                    }}
-                  >
-                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#0D9488', flexShrink: 0, boxShadow: '0 0 0 3px rgba(13,148,136,0.2)' }} />
-                    <Box>
-                      <Typography variant="caption" sx={{ fontWeight: 700, display: 'block', color: 'text.primary' }}>
-                        Doctor Available
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        ETA 20 Minutes
-                      </Typography>
-                    </Box>
-                  </Box>
-                </motion.div>
-
-                {/* Floating Card 2 - Verified Doctor */}
-                <motion.div
-                  animate={{ ...floatAnimation, y: [8, -8, 8] }}
-                  style={{ position: 'absolute', bottom: '18%', left: '-5%', zIndex: 3 }}
-                >
-                  <Box
-                    sx={{
-                      display: 'flex', alignItems: 'center', gap: 1.5,
-                      px: 2.5, py: 1.5, borderRadius: '16px',
-                      bgcolor: isDark ? alpha('#1F2937', 0.95) : 'white',
-                      boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-                      border: '1px solid', borderColor: alpha('#4F46E5', 0.2),
-                      backdropFilter: 'blur(10px)',
-                    }}
-                  >
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 2, background: 'linear-gradient(135deg, #4F46E5, #6C63FF)' }}>
-                      <VerifiedIcon sx={{ fontSize: 18, color: 'white' }} />
-                    </Box>
-                    <Box>
-                      <Typography variant="caption" sx={{ fontWeight: 700, display: 'block', color: 'text.primary' }}>
-                        Verified Doctor
-                      </Typography>
-                      <Box sx={{ display: 'flex', gap: 0.3 }}>
-                        {[1, 2, 3, 4, 5].map((i) => (
-                          <StarIcon key={i} sx={{ fontSize: 10, color: '#F59E0B' }} />
-                        ))}
+              <motion.div variants={fadeInUp}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 2.5, sm: 4 } }}>
+                  {stats.map((s) => (
+                    <Box key={s.label} sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
+                      <Box sx={{ color: 'primary.main', display: 'flex', '& svg': { fontSize: 28 } }}>{s.icon}</Box>
+                      <Box>
+                        <Typography sx={{ fontWeight: 800, lineHeight: 1.1 }}>{s.value}</Typography>
+                        <Typography variant="caption" color="text.secondary">{s.label}</Typography>
                       </Box>
                     </Box>
+                  ))}
+                </Box>
+              </motion.div>
+            </motion.div>
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 6 }}>
+            <motion.div variants={slideInRight} initial="hidden" animate="visible" style={{ position: 'relative' }}>
+              <Box sx={{ position: 'relative', maxWidth: 520, mx: 'auto', aspectRatio: '4 / 4.6' }}>
+                <Box sx={{ position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: '200px 40px 160px 40px', boxShadow: '0 24px 60px rgba(10, 92, 184, 0.22)' }}>
+                <Image src="/images/7345465.jpg" alt="A nurse smiling while checking a patient with a stethoscope during a home visit" fill priority sizes="(max-width: 900px) 90vw, 520px" style={{ objectFit: "cover", objectPosition: "45% 50%" }} />
+                </Box>
+
+                <motion.div animate={floatAnimation} style={{ position: 'absolute', top: '14%', left: '-4%', zIndex: 3 }}>
+                  <Box sx={cardSx}>
+                    <Box sx={{ width: 40, height: 40, borderRadius: '50%', bgcolor: alpha('#14B5A5', 0.15), color: 'secondary.dark', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <VerifiedIcon fontSize="small" />
+                    </Box>
+                    <Box>
+                      <Typography variant="caption" sx={{ fontWeight: 700, display: 'block', color: 'text.primary' }}>Doctor Available</Typography>
+                      <Typography variant="caption" sx={{ color: 'secondary.dark', fontWeight: 600 }}>● ETA 20 Minutes</Typography>
+                    </Box>
                   </Box>
                 </motion.div>
 
-                {/* Floating Card 3 - Home Visit */}
-                <motion.div
-                  animate={{ y: [8, -8, 8], transition: { duration: 4, repeat: Infinity, ease: 'easeInOut' as const, delay: 1 } }}
-                  style={{ position: 'absolute', top: '48%', right: '-8%', zIndex: 3 }}
-                >
-                  <Box
-                    sx={{
-                      display: 'flex', alignItems: 'center', gap: 1.5,
-                      px: 2.5, py: 1.5, borderRadius: '16px',
-                      bgcolor: isDark ? alpha('#1F2937', 0.95) : 'white',
-                      boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-                      border: '1px solid', borderColor: alpha('#6C63FF', 0.2),
-                      backdropFilter: 'blur(10px)',
-                    }}
-                  >
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 2, background: 'linear-gradient(135deg, #0D9488, #6C63FF)' }}>
-                      <AccessTimeIcon sx={{ fontSize: 18, color: 'white' }} />
+                <motion.div animate={{ ...floatAnimation, y: [8, -8, 8] }} style={{ position: 'absolute', top: '50%', right: '-2%', zIndex: 3 }}>
+                  <Box sx={{ ...cardSx, flexDirection: 'column', alignItems: 'flex-start', gap: 0.5 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <FavoriteIcon sx={{ color: '#EF4444' }} />
+                      <Typography sx={{ fontWeight: 800 }}>Home Visit</Typography>
                     </Box>
-                    <Box>
-                      <Typography variant="caption" sx={{ fontWeight: 700, display: 'block', color: 'text.primary' }}>
-                        Home Visit
-                      </Typography>
-                      <Typography variant="caption" sx={{ color: '#5A52E0', fontWeight: 600 }}>
-                        Confirmed ✓
-                      </Typography>
+                    <Typography variant="caption" color="text.secondary">Confirmed ✓</Typography>
+                    <Box sx={{ display: 'flex', gap: 0.3 }}>
+                      {[1, 2, 3, 4, 5].map((i) => <StarIcon key={i} sx={{ fontSize: 13, color: '#F59E0B' }} />)}
                     </Box>
                   </Box>
                 </motion.div>

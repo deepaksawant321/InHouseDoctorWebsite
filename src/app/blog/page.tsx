@@ -29,7 +29,7 @@ export default function BlogPage() {
         subtitle="Insights, advice, and updates from our medical experts."
       />
 
-      <Box component="section" sx={{ py: { xs: 8, md: 15 }, bgcolor: 'background.paper' }}>
+      <Box component="section" sx={{ py: { xs: 6, md: 9 }, bgcolor: 'background.paper' }}>
         <Container maxWidth="lg">
           <Grid container spacing={4}>
             {BLOGS.map((blog) => (

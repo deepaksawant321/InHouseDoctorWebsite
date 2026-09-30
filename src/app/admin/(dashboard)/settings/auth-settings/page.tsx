@@ -60,7 +60,7 @@ export default function AuthSettingsPage() {
           
           <div style={{ width: '100%', marginTop: '16px' }}>
             <button 
-              style={{ padding: '10px 20px', backgroundColor: '#1976d2', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+              style={{ padding: '10px 20px', backgroundColor: '#0A5CB8', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
             >
               Save Settings
             </button>

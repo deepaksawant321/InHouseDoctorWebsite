@@ -26,7 +26,7 @@ export default function ServicesPage() {
         title="Healthcare Services At Home"
         subtitle="Comprehensive medical care tailored for your comfort and convenience."
       />
-      <ServicesSection />
+      <ServicesSection showHeader={false} />
       <CtaBanner />
     </>
   );

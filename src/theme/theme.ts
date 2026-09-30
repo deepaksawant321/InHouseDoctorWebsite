@@ -1,7 +1,7 @@
 import { createTheme, responsiveFontSizes, ThemeOptions } from '@mui/material/styles';
-import { Inter } from 'next/font/google';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Plus_Jakarta_Sans({ subsets: ['latin'] });
 
 declare module '@mui/material/styles' {
   interface Palette {
@@ -16,19 +16,19 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
   palette: {
     mode,
     primary: {
-      main: '#4F46E5', // Indigo
-      light: '#818CF8',
-      dark: '#3730A3',
+      main: mode === 'dark' ? '#5BA8F0' : '#0A5CB8', // Healthcare blue (lighter on dark for contrast)
+      light: mode === 'dark' ? '#8EC5F7' : '#4F95DB',
+      dark: mode === 'dark' ? '#3B8FE0' : '#084A94',
     },
     secondary: {
-      main: '#0D9488', // Teal
-      light: '#2DD4BF',
-      dark: '#0F766E',
+      main: '#14B5A5', // Teal
+      light: '#5FD9CB',
+      dark: mode === 'dark' ? '#5FD9CB' : '#0E9486',
     },
     accent: {
-      main: '#6C63FF',
-      light: '#9D97FF',
-      dark: '#4B44CC',
+      main: '#2B8CE6',
+      light: '#7DB8F0',
+      dark: '#1A6FC4',
     },
     success: {
       main: '#2E7D32',
@@ -40,18 +40,18 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
       main: '#D32F2F',
     },
     background: {
-      default: mode === 'light' ? '#F8FAFD' : '#0B1220',
-      paper: mode === 'light' ? '#FFFFFF' : '#111827',
+      default: mode === 'light' ? '#F3F9FD' : '#0A1626',
+      paper: mode === 'light' ? '#FFFFFF' : '#0F2036',
     },
     text: {
-      primary: mode === 'light' ? '#0D1117' : '#F1F5F9',
-      secondary: mode === 'light' ? '#4B5563' : '#94A3B8',
+      primary: mode === 'light' ? '#0B1F3A' : '#F1F5F9',
+      secondary: mode === 'light' ? '#51627A' : '#94A3B8',
     },
     divider: mode === 'light' ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)',
   },
   typography: {
     fontFamily: inter.style.fontFamily,
-    h1: { fontWeight: 800, letterSpacing: '-0.035em', lineHeight: 1.1 },
+    h1: { fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.08 },
     h2: { fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.2 },
     h3: { fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.3 },
     h4: { fontWeight: 600, letterSpacing: '-0.01em', lineHeight: 1.4 },
@@ -59,7 +59,8 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
     h6: { fontWeight: 600, letterSpacing: '0', lineHeight: 1.6 },
     button: { textTransform: 'none', fontWeight: 600, letterSpacing: '0.01em' },
     body1: { lineHeight: 1.75, letterSpacing: '0' },
-    body2: { lineHeight: 1.65, letterSpacing: '0' },
+    body2: { fontSize: '0.9rem', lineHeight: 1.65, letterSpacing: '0' },
+    caption: { fontSize: '0.8125rem', lineHeight: 1.5 },
     subtitle1: { fontWeight: 600, lineHeight: 1.6, letterSpacing: '0' },
     subtitle2: { fontWeight: 600, lineHeight: 1.57, letterSpacing: '0' },
   },
@@ -74,16 +75,16 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: '14px',
+          borderRadius: '999px',
           boxShadow: 'none',
           padding: '12px 28px',
           fontSize: '0.95rem',
           '&:hover': { boxShadow: 'none' },
           '&.MuiButton-containedPrimary': {
-            background: 'linear-gradient(135deg, #4F46E5 0%, #0D9488 100%)',
+            background: '#0A5CB8',
             '&:hover': {
-              background: 'linear-gradient(135deg, #3730A3 0%, #0F766E 100%)',
-              boxShadow: '0 6px 20px rgba(79, 70, 229, 0.4)',
+              background: '#084A94',
+              boxShadow: '0 6px 20px rgba(10, 92, 184, 0.4)',
             },
           },
         },
@@ -93,9 +94,10 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
       styleOverrides: {
         root: {
           borderRadius: '20px',
+          border: mode === 'light' ? '1px solid rgba(10,92,184,0.08)' : '1px solid rgba(255,255,255,0.06)',
           boxShadow:
             mode === 'light'
-              ? '0px 8px 30px rgba(0, 0, 0, 0.04)' // Softer and more dispersed shadow
+              ? '0px 8px 30px rgba(10, 92, 184, 0.07)'
               : '0px 8px 30px rgba(0, 0, 0, 0.3)',
         },
       },

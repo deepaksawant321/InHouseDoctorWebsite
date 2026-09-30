@@ -50,11 +50,11 @@ export default async function Home() {
       />
       <HeroSection />
       <TrustBar />
-      <HowItWorks />
       <ServicesSection />
-      <DoctorProfiles />
       <WhyChooseUs />
       <TestimonialsSection />
+      <HowItWorks />
+      <DoctorProfiles />
       <FaqSection initialFaqs={faqs} />
       <CtaBanner />
     </>

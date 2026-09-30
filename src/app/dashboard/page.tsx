@@ -30,7 +30,7 @@ export default function DashboardHome() {
       desc: 'Schedule a new home visit for a patient',
       icon: <AddCircleIcon sx={{ fontSize: 40 }} />,
       href: '/book/service',
-      color: '#0D9488',
+      color: '#14B5A5',
     },
     {
       title: 'Medical Records',

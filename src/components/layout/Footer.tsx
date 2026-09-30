@@ -89,10 +89,10 @@ export const Footer = () => {
     <Box
       component="footer"
       sx={{
-        bgcolor: isDark ? '#0B1220' : '#FFFFFF', // Use the deepest dark background for footer
+        bgcolor: isDark ? '#0A1626' : '#FFFFFF',
         borderTop: '1px solid',
         borderColor: 'divider',
-        pt: 10,
+        pt: { xs: 7, md: 8 },
         pb: 4,
         position: 'relative',
         overflow: 'hidden',
@@ -106,20 +106,20 @@ export const Footer = () => {
           left: 0,
           right: 0,
           height: 3,
-          background: 'linear-gradient(90deg, #4F46E5, #0D9488, #6C63FF)',
+          background: 'linear-gradient(90deg, #0A5CB8, #14B5A5, #2B8CE6)',
         }}
       />
 
       <Container maxWidth="xl">
-        <Grid container spacing={6}>
+        <Grid container spacing={{ xs: 4, md: 5 }}>
           {/* Brand Column */}
-          <Grid size={{ xs: 12, md: 4 }}>
+          <Grid size={{ xs: 12, md: 3.5 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
               <Box
                 sx={{
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  width: 40, height: 40, borderRadius: 2,
-                  background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
+                  width: 40, height: 40, borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #0A5CB8, #14B5A5)',
                 }}
               >
                 <MedicalServicesIcon sx={{ fontSize: 22, color: 'white' }} />
@@ -127,7 +127,7 @@ export const Footer = () => {
               <Typography
                 variant="h6"
                 component="span"
-                sx={{ fontWeight: 800, background: 'linear-gradient(135deg, #4F46E5, #0D9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+                sx={{ fontWeight: 800, color: 'primary.main' }}
               >
                 InHouse Doctor
               </Typography>
@@ -187,7 +187,7 @@ export const Footer = () => {
           ))}
 
           {/* Newsletter */}
-          <Grid size={{ xs: 12, sm: 6, md: 2 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 2.5 }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2.5 }}>
               Newsletter
             </Typography>
@@ -215,9 +215,9 @@ export const Footer = () => {
                         size="small"
                         aria-label="Subscribe to newsletter"
                         sx={{
-                          bgcolor: 'primary.main',
+                          bgcolor: '#0A5CB8',
                           color: 'white',
-                          borderRadius: 1.5,
+                          borderRadius: '50%',
                           '&:hover': { bgcolor: 'primary.dark' },
                         }}
                       >
@@ -227,7 +227,7 @@ export const Footer = () => {
                   ),
                 },
               }}
-              sx={{ '& .MuiOutlinedInput-root': { borderRadius: '16px' } }}
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: '999px' } }}
             />
             </Box>
           </Grid>
@@ -265,7 +265,7 @@ export const Footer = () => {
                     transition: 'all 0.2s',
                     '&:hover': {
                       color: 'primary.main',
-                      bgcolor: alpha('#4F46E5', 0.08),
+                      bgcolor: alpha('#0A5CB8', 0.08),
                       transform: 'translateY(-2px)',
                     },
                   }}

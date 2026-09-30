@@ -110,8 +110,8 @@ export default async function LocationDetail({ params }: { params: Promise<{ slu
                   component="a"
                   href="tel:+919029190955"
                   sx={{
-                    display: 'block', textAlign: 'center', width: '100%', py: 2, borderRadius: '16px',
-                    bgcolor: 'primary.main', color: 'white', fontWeight: 700, textDecoration: 'none',
+                    display: 'block', textAlign: 'center', width: '100%', py: 2, borderRadius: '999px',
+                    bgcolor: '#0A5CB8', color: 'white', fontWeight: 700, textDecoration: 'none',
                     mb: 2, transition: 'all 0.2s', '&:hover': { bgcolor: 'primary.dark' }
                   }}
                 >
@@ -121,9 +121,9 @@ export default async function LocationDetail({ params }: { params: Promise<{ slu
                   component="a"
                   href="/request-doctor"
                   sx={{
-                    display: 'block', textAlign: 'center', width: '100%', py: 2, borderRadius: '16px',
+                    display: 'block', textAlign: 'center', width: '100%', py: 2, borderRadius: '999px',
                     border: '1px solid', borderColor: 'primary.main', color: 'primary.main', fontWeight: 700, textDecoration: 'none',
-                    transition: 'all 0.2s', '&:hover': { bgcolor: 'rgba(79, 70, 229, 0.04)' }
+                    transition: 'all 0.2s', '&:hover': { bgcolor: 'rgba(10, 92, 184, 0.04)' }
                   }}
                 >
                   Request Online

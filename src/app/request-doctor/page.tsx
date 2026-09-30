@@ -29,15 +29,15 @@ export default function RequestDoctorPage() {
         subtitle="Book trusted healthcare professionals in minutes. Safe, reliable, and verified medical care delivered to your doorstep."
       />
 
-      <Box component="section" sx={{ py: { xs: 8, md: 15 }, bgcolor: 'background.paper' }}>
+      <Box component="section" sx={{ py: { xs: 6, md: 9 }, bgcolor: 'background.paper' }}>
         <Container maxWidth="lg">
-          <Grid container spacing={{ xs: 8, md: 12 }} sx={{ alignItems: 'center' }}>
+          <Grid container spacing={{ xs: 5, md: 8 }} sx={{ alignItems: 'center' }}>
             <Grid size={{ xs: 12, md: 6 }}>
-              <Typography variant="h2" sx={{ mb: 4, fontWeight: 700 }}>
+              <Typography variant="h2" sx={{ mb: 3, fontSize: { xs: "1.6rem", md: "2.1rem" } }}>
                 Why choose our Home Visit Doctors?
               </Typography>
               
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mb: 6 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 4 }}>
                 {[
                   '100% Verified & Experienced Doctors',
                   'Fast Response & Arrival Time',
@@ -46,7 +46,7 @@ export default function RequestDoctorPage() {
                 ].map((benefit, idx) => (
                   <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <CheckCircleIcon sx={{ color: 'primary.main' }} />
-                    <Typography variant="h6" sx={{ fontWeight: 500 }}>{benefit}</Typography>
+                    <Typography sx={{ fontWeight: 500, fontSize: '1.05rem' }}>{benefit}</Typography>
                   </Box>
                 ))}
               </Box>
@@ -55,12 +55,12 @@ export default function RequestDoctorPage() {
                 <Box
                   sx={{
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                    py: 2, px: 6, borderRadius: '16px', textDecoration: 'none',
-                    background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
+                    py: 2, px: 6, borderRadius: '999px', textDecoration: 'none',
+                    background: '#0A5CB8',
                     color: 'white', fontWeight: 700, fontSize: '1.1rem',
-                    boxShadow: '0 8px 24px rgba(25, 118, 210, 0.3)',
+                    boxShadow: '0 8px 24px rgba(10, 92, 184, 0.3)',
                     transition: 'all 0.2s',
-                    '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 12px 32px rgba(25, 118, 210, 0.4)' },
+                    '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 12px 32px rgba(10, 92, 184, 0.4)' },
                   }}
                 >
                   Start Booking Now
@@ -69,21 +69,21 @@ export default function RequestDoctorPage() {
             </Grid>
 
             <Grid size={{ xs: 12, md: 6 }}>
-              <Grid container spacing={3}>
+              <Grid container spacing={2}>
                 {services.map((service, index) => (
-                  <Grid size={{ xs: 12, sm: 6 }} key={index}>
+                  <Grid size={{ xs: 6 }} key={index}>
                     <Box
                       sx={{
-                        p: 4, borderRadius: '24px', height: '100%',
+                        p: { xs: 2.5, md: 3.5 }, borderRadius: '20px', height: '100%',
                         bgcolor: 'background.default', border: '1px solid', borderColor: 'divider',
                         transition: 'transform 0.2s',
                         '&:hover': { transform: 'translateY(-4px)', borderColor: 'primary.main' }
                       }}
                     >
-                      <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: alpha('#4F46E5', 0.1), color: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+                      <Box sx={{ width: 48, height: 48, borderRadius: '50%', bgcolor: alpha('#0A5CB8', 0.1), color: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
                         <service.icon />
                       </Box>
-                      <Typography variant="h6" sx={{ fontWeight: 600 }}>{service.title}</Typography>
+                      <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 700, fontSize: "1rem" }}>{service.title}</Typography>
                     </Box>
                   </Grid>
                 ))}

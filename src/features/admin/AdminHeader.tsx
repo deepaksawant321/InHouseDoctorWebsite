@@ -47,7 +47,7 @@ export const AdminHeader = ({ onDrawerToggle, title = 'Dashboard' }: AdminHeader
           <IconButton sx={{ bgcolor: alpha(theme.palette.text.primary, 0.05) }}>
             <NotificationsIcon sx={{ fontSize: 20 }} />
           </IconButton>
-          <Avatar sx={{ bgcolor: 'primary.main', width: 36, height: 36, fontWeight: 700, fontSize: '0.9rem' }}>AD</Avatar>
+          <Avatar sx={{ bgcolor: '#0A5CB8', width: 36, height: 36, fontWeight: 700, fontSize: '0.9rem' }}>AD</Avatar>
         </Box>
       </Toolbar>
     </AppBar>

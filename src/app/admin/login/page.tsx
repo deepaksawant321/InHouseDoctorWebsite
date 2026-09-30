@@ -49,7 +49,7 @@ export default function AdminLoginPage() {
         <Box sx={{ p: { xs: 4, md: 6 }, borderRadius: '24px', bgcolor: 'background.paper', boxShadow: theme.palette.mode === 'light' ? '0 12px 48px rgba(0,0,0,0.06)' : '0 12px 48px rgba(0,0,0,0.5)', border: '1px solid', borderColor: 'divider', textAlign: 'center' }}>
 
           <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
-            <Box sx={{ width: 48, height: 48, borderRadius: 2, background: 'linear-gradient(135deg, #4F46E5, #0D9488)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+            <Box sx={{ width: 48, height: 48, borderRadius: 2, background: 'linear-gradient(135deg, #0A5CB8, #14B5A5)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
               <MedicalServicesIcon sx={{ fontSize: 28 }} />
             </Box>
             <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: 'text.primary' }}>
@@ -96,9 +96,9 @@ export default function AdminLoginPage() {
             <Box
               component="button" type="submit" disabled={isLoading}
               sx={{
-                width: '100%', py: 1.75, borderRadius: '16px', border: 'none', cursor: isLoading ? 'not-allowed' : 'pointer',
-                background: isLoading ? 'action.disabledBackground' : 'linear-gradient(135deg, #4F46E5, #0D9488)', color: 'white',
-                fontWeight: 700, fontSize: '1.1rem', boxShadow: isLoading ? 'none' : '0 8px 24px rgba(25, 118, 210, 0.3)',
+                width: '100%', py: 1.75, borderRadius: '999px', border: 'none', cursor: isLoading ? 'not-allowed' : 'pointer',
+                background: isLoading ? 'action.disabledBackground' : '#0A5CB8', color: 'white',
+                fontWeight: 700, fontSize: '1.1rem', boxShadow: isLoading ? 'none' : '0 8px 24px rgba(10, 92, 184, 0.3)',
                 transition: 'all 0.2s', '&:hover': { transform: isLoading ? 'none' : 'translateY(-2px)' },
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1,
               }}

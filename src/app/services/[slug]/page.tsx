@@ -79,7 +79,7 @@ export default async function ServiceDetailsPage({ params }: { params: Promise<{
         subtitle={service.description || 'Professional healthcare services at home.'}
       />
 
-      <Box component="section" sx={{ py: { xs: 8, md: 15 }, bgcolor: 'background.paper' }}>
+      <Box component="section" sx={{ py: { xs: 6, md: 9 }, bgcolor: 'background.paper' }}>
         <Container maxWidth="lg">
           <Grid container spacing={{ xs: 8, md: 12 }} sx={{ alignItems: 'center' }}>
             <Grid size={{ xs: 12, md: 6 }}>
@@ -108,11 +108,11 @@ export default async function ServiceDetailsPage({ params }: { params: Promise<{
             <Grid size={{ xs: 12, md: 6 }}>
               <Box
                 sx={{
-                  width: '100%', height: 400, borderRadius: 6,
+                  width: '100%', height: 400, borderRadius: '28px',
                   backgroundImage: service.imageUrl ? `url(${service.imageUrl})` : undefined,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
-                  background: !service.imageUrl ? 'linear-gradient(135deg, rgba(25, 118, 210, 0.1), rgba(0, 191, 165, 0.1))' : undefined,
+                  background: !service.imageUrl ? 'linear-gradient(135deg, rgba(10, 92, 184, 0.1), rgba(20, 181, 165, 0.1))' : undefined,
                   border: '1px solid', borderColor: 'divider',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}

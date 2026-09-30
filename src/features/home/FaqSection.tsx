@@ -23,7 +23,7 @@ const FaqItem = ({ q, a, index }: { q: string; a: string; index: number }) => {
         sx={{
           borderRadius: '16px',
           border: '1px solid',
-          borderColor: open ? alpha('#4F46E5', 0.4) : 'divider',
+          borderColor: open ? alpha('#0A5CB8', 0.4) : 'divider',
           overflow: 'hidden',
           transition: 'border-color 0.3s ease',
           mb: 2,
@@ -46,7 +46,7 @@ const FaqItem = ({ q, a, index }: { q: string; a: string; index: number }) => {
           sx={{
             display: 'flex', justifyContent: 'space-between', alignItems: 'center',
             px: 3, py: 2.5, cursor: 'pointer',
-            bgcolor: open ? alpha('#4F46E5', isDark ? 0.12 : 0.04) : 'transparent',
+            bgcolor: open ? alpha('#0A5CB8', isDark ? 0.12 : 0.04) : 'transparent',
             transition: 'background 0.3s ease',
           }}
         >
@@ -90,7 +90,7 @@ const FaqItem = ({ q, a, index }: { q: string; a: string; index: number }) => {
  * `initialFaqs` is fetched on the server so the questions/answers are in the initial HTML (SEO + FAQ rich results).
  * When it is null (API unreachable at render time) the component falls back to fetching in the browser.
  */
-export const FaqSection = ({ initialFaqs = null }: { initialFaqs?: { q: string; a: string }[] | null }) => {
+export const FaqSection = ({ initialFaqs = null, showHeader = true }: { initialFaqs?: { q: string; a: string }[] | null; showHeader?: boolean }) => {
   const [faqs, setFaqs] = useState<{ q: string; a: string }[]>(initialFaqs ?? []);
   const [loading, setLoading] = useState(initialFaqs === null);
   const [failed, setFailed] = useState(false);
@@ -107,7 +107,7 @@ export const FaqSection = ({ initialFaqs = null }: { initialFaqs?: { q: string; 
   }, [initialFaqs]);
 
   return (
-    <Box component="section" sx={{ py: { xs: 8, md: 15 }, bgcolor: 'background.default' }}>
+    <Box component="section" sx={{ py: { xs: 7, md: 10 }, bgcolor: 'background.default' }}>
       {faqs.length > 0 && (
         <script
           type="application/ld+json"
@@ -129,22 +129,14 @@ export const FaqSection = ({ initialFaqs = null }: { initialFaqs?: { q: string; 
       )}
       <Container maxWidth="md">
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
+          {showHeader && (
           <motion.div variants={fadeInUp}>
-            <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
-              <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75, borderRadius: 10, mb: 2, border: '1px solid', borderColor: alpha('#0D9488', 0.3), bgcolor: alpha('#0D9488', 0.06) }}>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: 'secondary.dark' }}>FAQ</Typography>
-              </Box>
-              <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '2rem', md: '2.75rem' } }}>
-                Frequently Asked{' '}
-                <Box component="span" sx={{ background: 'linear-gradient(135deg, #0D9488, #4F46E5)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                  Questions
-                </Box>
-              </Typography>
-              <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400 }}>
-                Everything you need to know about InHouse Doctor.
-              </Typography>
+            <Box sx={{ mb: { xs: 4, md: 5 } }}>
+              <Typography variant="h2" sx={{ mb: 1, fontSize: { xs: '1.75rem', md: '2.4rem' } }}>Frequently Asked Questions</Typography>
+              <Typography color="text.secondary">Everything you need to know about InHouse Doctor.</Typography>
             </Box>
           </motion.div>
+          )}
 
           <Box>
             {loading ? (

@@ -31,16 +31,16 @@ export default function ReportsPage() {
 
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid size={{ xs: 12, md: 6 }}>
-          <ChartCard title="Revenue Trend (Last 7 Days)" data={revenueData} type="line" dataKey="revenue" xAxisKey="name" color="#0D9488" />
+          <ChartCard title="Revenue Trend (Last 7 Days)" data={revenueData} type="line" dataKey="revenue" xAxisKey="name" color="#14B5A5" />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
-          <ChartCard title="Weekly Bookings" data={bookingsTrend} type="bar" dataKey="bookings" xAxisKey="name" color="#4F46E5" />
+          <ChartCard title="Weekly Bookings" data={bookingsTrend} type="bar" dataKey="bookings" xAxisKey="name" color="#0A5CB8" />
         </Grid>
       </Grid>
       
       <Grid container spacing={3}>
         <Grid size={{ xs: 12 }}>
-          <ChartCard title="Top Doctors by Booking Volume" data={doctorUtilization} type="bar" dataKey="utilization" xAxisKey="name" color="#6C63FF" />
+          <ChartCard title="Top Doctors by Booking Volume" data={doctorUtilization} type="bar" dataKey="utilization" xAxisKey="name" color="#2B8CE6" />
         </Grid>
       </Grid>
     </Box>

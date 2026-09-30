@@ -80,7 +80,7 @@ export const Header = () => {
   const drawer = (
     <Box sx={{ width: 280, height: '100%', bgcolor: 'background.paper', display: 'flex', flexDirection: 'column', p: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Typography variant="h6" sx={{ fontWeight: 800, background: 'linear-gradient(135deg, #4F46E5, #0D9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+        <Typography variant="h6" sx={{ fontWeight: 800, color: 'primary.main' }}>
           InHouse Doctor
         </Typography>
         <IconButton onClick={handleDrawerToggle} size="small" aria-label="Close menu">
@@ -94,7 +94,7 @@ export const Header = () => {
               component={Link}
               href={item.href}
               onClick={handleDrawerToggle}
-              sx={{ borderRadius: '16px', py: 1.5, '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.08) } }}
+              sx={{ borderRadius: '999px', py: 1.5, bgcolor: pathname === item.href ? alpha(theme.palette.primary.main, 0.1) : 'transparent', color: pathname === item.href ? 'primary.main' : 'inherit', '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.08) } }}
             >
               <ListItemText primary={item.label} slotProps={{ primary: { sx: { fontWeight: 500 } } }} />
             </ListItemButton>
@@ -106,7 +106,7 @@ export const Header = () => {
               component={Link}
               href={item.href}
               onClick={handleDrawerToggle}
-              sx={{ borderRadius: '16px', py: 1.5, '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.08) } }}
+              sx={{ borderRadius: '999px', py: 1.5, '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.08) } }}
             >
               <ListItemText primary={item.label} slotProps={{ primary: { sx: { fontWeight: 400, color: 'text.secondary', fontSize: '0.9rem' } } }} />
             </ListItemButton>
@@ -116,12 +116,24 @@ export const Header = () => {
       <Box sx={{ pt: 3, borderTop: '1px solid', borderColor: 'divider' }}>
         <Box
           component={Link}
+          href={token ? '/dashboard' : '/login'}
+          onClick={handleDrawerToggle}
+          sx={{
+            display: 'block', textAlign: 'center', textDecoration: 'none', width: '100%', mb: 1.5,
+            py: 1.5, px: 3, borderRadius: '999px', border: '1px solid', borderColor: 'primary.main',
+            color: 'primary.main', fontWeight: 700, fontSize: '0.95rem',
+          }}
+        >
+          {token ? 'My Dashboard' : 'Login'}
+        </Box>
+        <Box
+          component={Link}
           href="/request-doctor"
           onClick={handleDrawerToggle}
           sx={{
             display: 'block', textAlign: 'center', textDecoration: 'none',
-            width: '100%', py: 1.5, px: 3, borderRadius: '16px', border: 'none', cursor: 'pointer',
-            background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
+            width: '100%', py: 1.5, px: 3, borderRadius: '999px', border: 'none', cursor: 'pointer',
+            background: '#0A5CB8',
             color: 'white', fontWeight: 700, fontSize: '0.95rem',
           }}
         >
@@ -144,13 +156,13 @@ export const Header = () => {
           transition: 'all 0.3s ease',
           bgcolor: scrolled
             ? isDark
-              ? alpha('#111827', 0.85)
+              ? alpha('#0F2036', 0.85)
               : alpha('#ffffff', 0.85)
             : 'transparent',
           backdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
           borderBottom: scrolled ? `1px solid ${alpha(isDark ? '#fff' : '#000', 0.06)}` : 'none',
           boxShadow: scrolled
-            ? `0 4px 30px ${alpha(isDark ? '#000' : '#4F46E5', 0.08)}`
+            ? `0 4px 30px ${alpha(isDark ? '#000' : '#0A5CB8', 0.08)}`
             : 'none',
         }}
       >
@@ -158,14 +170,14 @@ export const Header = () => {
           <Toolbar sx={{ py: scrolled ? 0.5 : 1.5, transition: 'all 0.3s ease', minHeight: 'unset !important' }}>
             {/* Logo */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
-              <Box component={Link} href="/" aria-hidden="true" tabIndex={-1} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 2, background: 'linear-gradient(135deg, #4F46E5, #0D9488)', flexShrink: 0 }}>
+              <Box component={Link} href="/" aria-hidden="true" tabIndex={-1} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: '50%', background: 'linear-gradient(135deg, #0A5CB8, #14B5A5)', flexShrink: 0 }}>
                 <MedicalServicesIcon sx={{ fontSize: 20, color: 'white' }} />
               </Box>
               <Typography
                 component={Link}
                 href="/"
                 variant="h6"
-                sx={{ textDecoration: 'none', fontWeight: 800, background: 'linear-gradient(135deg, #4F46E5, #0D9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}
+                sx={{ textDecoration: 'none', fontWeight: 800, color: 'primary.main', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}
               >
                 InHouse Doctor
               </Typography>
@@ -179,8 +191,8 @@ export const Header = () => {
                   component={Link}
                   href={item.href}
                   sx={{
-                    px: 2, py: 1, borderRadius: 2, textDecoration: 'none',
-                    color: 'text.primary', fontWeight: 500, fontSize: '0.9rem',
+                    px: { md: 1.25, lg: 2 }, py: 1, borderRadius: '999px', textDecoration: 'none', position: 'relative', whiteSpace: 'nowrap',
+                    color: pathname === item.href ? 'primary.main' : 'text.primary', fontWeight: pathname === item.href ? 700 : 500, fontSize: '0.9rem',
                     transition: 'all 0.2s',
                     '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.08), color: 'primary.main' },
                   }}
@@ -201,11 +213,11 @@ export const Header = () => {
                     href="tel:+919029190955"
                     sx={{
                       display: { xs: 'none', lg: 'inline-flex' }, alignItems: 'center', gap: 0.75,
-                      py: 1, px: 2, borderRadius: '16px', textDecoration: 'none',
+                      py: 1, px: 2, borderRadius: '999px', textDecoration: 'none',
                       border: '1px solid', borderColor: 'divider',
                       color: 'text.primary', fontWeight: 600, fontSize: '0.875rem',
                       transition: 'all 0.2s',
-                      '&:hover': { bgcolor: alpha('#4F46E5', 0.08), borderColor: 'primary.main', color: 'primary.main' },
+                      '&:hover': { bgcolor: alpha('#0A5CB8', 0.08), borderColor: 'primary.main', color: 'primary.main' },
                     }}
                   >
                     <PhoneIcon sx={{ fontSize: 16 }} /> +91 90291 90955
@@ -215,10 +227,10 @@ export const Header = () => {
                     href="/login"
                     sx={{
                       display: 'inline-flex', alignItems: 'center', textDecoration: 'none',
-                      py: 1, px: 2.5, borderRadius: '16px', border: '1px solid', borderColor: 'primary.main',
+                      py: 1, px: 2.5, borderRadius: '999px', border: '1px solid', borderColor: 'primary.main',
                       color: 'primary.main', fontWeight: 700, fontSize: '0.875rem',
                       transition: 'all 0.2s',
-                      '&:hover': { bgcolor: alpha('#4F46E5', 0.05) },
+                      '&:hover': { bgcolor: alpha('#0A5CB8', 0.05) },
                     }}
                   >
                     Login
@@ -229,12 +241,12 @@ export const Header = () => {
                     aria-label="Request Doctor Home Visit"
                     sx={{
                       display: 'inline-flex', alignItems: 'center', textDecoration: 'none',
-                      py: 1, px: 2.5, borderRadius: '16px', border: 'none', cursor: 'pointer',
-                      background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
+                      py: 1, px: 2.5, borderRadius: '999px', border: 'none', cursor: 'pointer',
+                      background: '#0A5CB8',
                       color: 'white', fontWeight: 700, fontSize: '0.875rem',
                       transition: 'transform 0.2s, box-shadow 0.2s',
-                      boxShadow: '0 4px 15px rgba(79, 70, 229, 0.4)',
-                      '&:hover': { transform: 'translateY(-1px)', boxShadow: '0 6px 20px rgba(79, 70, 229, 0.5)' },
+                      boxShadow: '0 4px 15px rgba(10, 92, 184, 0.4)',
+                      '&:hover': { transform: 'translateY(-1px)', boxShadow: '0 6px 20px rgba(10, 92, 184, 0.5)' },
                     }}
                   >
                     Request Doctor
@@ -275,7 +287,7 @@ export const Header = () => {
 
                   <Tooltip title="Account settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, ml: 1, border: '2px solid', borderColor: 'divider' }}>
-                      <Avatar sx={{ bgcolor: 'primary.main', width: 36, height: 36 }}>
+                      <Avatar sx={{ bgcolor: '#0A5CB8', width: 36, height: 36 }}>
                         <PersonIcon />
                       </Avatar>
                     </IconButton>
@@ -301,7 +313,7 @@ export const Header = () => {
             {/* Mobile */}
             <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', gap: 1 }}>
               <ThemeToggle />
-              <IconButton onClick={handleDrawerToggle} color="inherit" edge="end" aria-label="Open mobile menu">
+              <IconButton onClick={handleDrawerToggle} edge="end" aria-label="Open mobile menu" sx={{ color: "text.primary" }}>
                 <MenuIcon />
               </IconButton>
             </Box>

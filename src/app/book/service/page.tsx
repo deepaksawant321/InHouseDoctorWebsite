@@ -65,18 +65,18 @@ export default function SelectServicePage() {
                   sx={{
                     '&:focus-visible': { outline: '3px solid', outlineColor: 'primary.main', outlineOffset: 2 },
                     p: 3, borderRadius: '24px', height: '100%', cursor: 'pointer',
-                    bgcolor: isSelected ? alpha('#4F46E5', 0.04) : 'background.paper',
+                    bgcolor: isSelected ? alpha('#0A5CB8', 0.04) : 'background.paper',
                     border: '2px solid',
                     borderColor: isSelected ? 'primary.main' : 'divider',
                     transition: 'all 0.3s ease',
-                    '&:hover': { transform: 'translateY(-4px)', borderColor: isSelected ? 'primary.main' : alpha('#4F46E5', 0.5), boxShadow: '0 8px 24px rgba(79, 70, 229, 0.12)' }
+                    '&:hover': { transform: 'translateY(-4px)', borderColor: isSelected ? 'primary.main' : alpha('#0A5CB8', 0.5), boxShadow: '0 8px 24px rgba(10, 92, 184, 0.12)' }
                   }}
                 >
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                    <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: isSelected ? 'primary.main' : alpha('#4F46E5', 0.1), color: isSelected ? 'white' : 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: isSelected ? 'primary.main' : alpha('#0A5CB8', 0.1), color: isSelected ? 'white' : 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <LocalHospitalIcon />
                     </Box>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: 'primary.main', bgcolor: alpha('#4F46E5', 0.1), px: 1.5, py: 0.5, borderRadius: 2 }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: 'primary.main', bgcolor: alpha('#0A5CB8', 0.1), px: 1.5, py: 0.5, borderRadius: 2 }}>
                       Starts at ₹{svc.basePrice}
                     </Typography>
                   </Box>
@@ -97,11 +97,11 @@ export default function SelectServicePage() {
         <Box
           component="button" onClick={handleContinue} disabled={!state.serviceId}
           sx={{
-            py: 1.5, px: 6, borderRadius: '16px', border: 'none', cursor: state.serviceId ? 'pointer' : 'not-allowed',
-            background: state.serviceId ? 'linear-gradient(135deg, #4F46E5, #0D9488)' : 'action.disabledBackground',
+            py: 1.5, px: 6, borderRadius: '999px', border: 'none', cursor: state.serviceId ? 'pointer' : 'not-allowed',
+            background: state.serviceId ? '#0A5CB8' : 'action.disabledBackground',
             color: state.serviceId ? 'white' : 'text.disabled', fontWeight: 700, fontSize: '1rem',
-            boxShadow: state.serviceId ? '0 8px 24px rgba(79, 70, 229, 0.3)' : 'none',
-            transition: 'all 0.3s ease', '&:hover': { transform: state.serviceId ? 'translateY(-2px)' : 'none', boxShadow: state.serviceId ? '0 12px 32px rgba(79, 70, 229, 0.4)' : 'none' },
+            boxShadow: state.serviceId ? '0 8px 24px rgba(10, 92, 184, 0.3)' : 'none',
+            transition: 'all 0.3s ease', '&:hover': { transform: state.serviceId ? 'translateY(-2px)' : 'none', boxShadow: state.serviceId ? '0 12px 32px rgba(10, 92, 184, 0.4)' : 'none' },
           }}
         >
           Continue to Patient Selection

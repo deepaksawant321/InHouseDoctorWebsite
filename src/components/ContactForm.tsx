@@ -73,13 +73,13 @@ export function ContactForm() {
       noValidate
       onSubmit={handleSubmit}
       sx={{
-        p: { xs: 4, md: 6 }, borderRadius: 6,
+        p: { xs: 3, md: 5 }, borderRadius: '24px',
         bgcolor: 'background.default',
         border: '1px solid', borderColor: 'divider',
         boxShadow: '0 4px 24px rgba(0,0,0,0.03)',
       }}
     >
-      <Typography variant="h4" component="h2" sx={{ mb: 4, fontWeight: 700 }}>
+      <Typography variant="h2" sx={{ mb: 3, fontSize: { xs: "1.6rem", md: "2.1rem" } }}>
         Send us a Message
       </Typography>
       {result && (
@@ -106,10 +106,10 @@ export function ContactForm() {
             type="submit"
             disabled={submitting}
             sx={{
-              width: '100%', py: 2, borderRadius: '16px', border: 'none', cursor: submitting ? 'not-allowed' : 'pointer',
-              background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
+              width: '100%', py: 2, borderRadius: '999px', border: 'none', cursor: submitting ? 'not-allowed' : 'pointer',
+              background: '#0A5CB8',
               color: 'white', fontWeight: 700, fontSize: '1rem',
-              boxShadow: '0 8px 24px rgba(25, 118, 210, 0.3)',
+              boxShadow: '0 8px 24px rgba(10, 92, 184, 0.3)',
               opacity: submitting ? 0.7 : 1,
               transition: 'transform 0.2s',
               '&:hover': { transform: submitting ? 'none' : 'translateY(-2px)' },

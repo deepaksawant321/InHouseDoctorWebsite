@@ -30,12 +30,12 @@ export default function ContactPage() {
         subtitle="We're here to help. Reach out to us for any medical assistance or queries."
       />
 
-      <Box component="section" sx={{ py: { xs: 8, md: 15 }, bgcolor: 'background.paper' }}>
+      <Box component="section" sx={{ py: { xs: 6, md: 9 }, bgcolor: 'background.paper' }}>
         <Container maxWidth="lg">
-          <Grid container spacing={{ xs: 8, md: 12 }}>
+          <Grid container spacing={{ xs: 5, md: 8 }}>
             {/* Left: Contact Info */}
             <Grid size={{ xs: 12, md: 5 }}>
-              <Typography variant="h3" sx={{ mb: 4, fontWeight: 700 }}>
+              <Typography variant="h2" sx={{ mb: 3, fontSize: { xs: "1.6rem", md: "2.1rem" } }}>
                 Get in Touch
               </Typography>
               <Typography variant="body1" color="text.secondary" sx={{ mb: 6 }}>
@@ -45,7 +45,7 @@ export default function ContactPage() {
 
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                 <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>
-                  <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: alpha('#4F46E5', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main', flexShrink: 0 }}>
+                  <Box sx={{ width: 48, height: 48, borderRadius: '50%', bgcolor: alpha('#0A5CB8', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main', flexShrink: 0 }}>
                     <PhoneIcon />
                   </Box>
                   <Box>
@@ -56,7 +56,7 @@ export default function ContactPage() {
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>
-                  <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: alpha('#25D366', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#25D366', flexShrink: 0 }}>
+                  <Box sx={{ width: 48, height: 48, borderRadius: '50%', bgcolor: alpha('#25D366', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#25D366', flexShrink: 0 }}>
                     <WhatsAppIcon />
                   </Box>
                   <Box>
@@ -67,7 +67,7 @@ export default function ContactPage() {
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>
-                  <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: alpha('#4F46E5', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main', flexShrink: 0 }}>
+                  <Box sx={{ width: 48, height: 48, borderRadius: '50%', bgcolor: alpha('#0A5CB8', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main', flexShrink: 0 }}>
                     <EmailIcon />
                   </Box>
                   <Box sx={{ minWidth: 0 }}>
@@ -76,7 +76,7 @@ export default function ContactPage() {
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>
-                  <Box sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: alpha('#4F46E5', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main', flexShrink: 0 }}>
+                  <Box sx={{ width: 48, height: 48, borderRadius: '50%', bgcolor: alpha('#0A5CB8', 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main', flexShrink: 0 }}>
                     <LocationOnIcon />
                   </Box>
                   <Box>

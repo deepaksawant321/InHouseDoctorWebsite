@@ -17,7 +17,7 @@ const flowSteps = [
     title: 'Patient Request',
     subtitle: 'You submit a request',
     detail: 'Specify symptoms, time & location',
-    color: '#4F46E5',
+    color: '#0A5CB8',
     status: 'Submitted',
   },
   {
@@ -25,7 +25,7 @@ const flowSteps = [
     title: 'Admin Review',
     subtitle: 'Our team reviews',
     detail: 'Matching best available doctor',
-    color: '#6C63FF',
+    color: '#2B8CE6',
     status: 'Processing',
   },
   {
@@ -33,7 +33,7 @@ const flowSteps = [
     title: 'Doctor Confirmed',
     subtitle: 'Doctor is assigned',
     detail: 'You receive ETA confirmation',
-    color: '#0D9488',
+    color: '#14B5A5',
     status: 'Confirmed ✓',
   },
   {
@@ -41,7 +41,7 @@ const flowSteps = [
     title: 'Doctor Arrives',
     subtitle: 'Care at your home',
     detail: 'Professional consultation begins',
-    color: '#4F46E5',
+    color: '#0A5CB8',
     status: 'Completed',
   },
 ];
@@ -71,12 +71,12 @@ export const LiveExperience = () => {
           {/* Header */}
           <motion.div variants={fadeInUp}>
             <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 10 } }}>
-              <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75, borderRadius: 10, mb: 2, border: '1px solid', borderColor: alpha('#4F46E5', 0.3), bgcolor: alpha('#4F46E5', 0.06) }}>
+              <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75, borderRadius: 10, mb: 2, border: '1px solid', borderColor: alpha('#0A5CB8', 0.3), bgcolor: alpha('#0A5CB8', 0.06) }}>
                 <Typography variant="caption" sx={{ fontWeight: 600, color: 'primary.main' }}>Live Flow</Typography>
               </Box>
-              <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '2rem', md: '2.75rem' } }}>
+              <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '1.75rem', md: '2.4rem' } }}>
                 The{' '}
-                <Box component="span" sx={{ background: 'linear-gradient(135deg, #4F46E5, #6C63FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                <Box component="span" sx={{ background: 'linear-gradient(135deg, #0A5CB8, #2B8CE6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   InHouse Experience
                 </Box>
               </Typography>
@@ -99,7 +99,7 @@ export const LiveExperience = () => {
                 overflow: 'hidden',
                 boxShadow: isDark
                   ? '0 32px 80px rgba(0,0,0,0.5)'
-                  : '0 32px 80px rgba(25,118,210,0.12)',
+                  : '0 32px 80px rgba(10, 92, 184,0.12)',
               }}
             >
               {/* Header bar */}
@@ -139,14 +139,14 @@ export const LiveExperience = () => {
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             transition: 'all 0.4s ease',
                             bgcolor: isCompleted
-                              ? alpha('#0D9488', 0.12)
+                              ? alpha('#14B5A5', 0.12)
                               : isActive
                               ? alpha(step.color, 0.12)
                               : alpha('#94A3B8', 0.08),
-                            color: isCompleted ? '#0D9488' : isActive ? step.color : 'text.disabled',
+                            color: isCompleted ? '#14B5A5' : isActive ? step.color : 'text.disabled',
                           }}
                         >
-                          {isCompleted ? <CheckCircleIcon sx={{ fontSize: 28, color: '#0D9488' }} /> : step.icon}
+                          {isCompleted ? <CheckCircleIcon sx={{ fontSize: 28, color: '#14B5A5' }} /> : step.icon}
                         </Box>
 
                         {/* Content */}
@@ -165,8 +165,8 @@ export const LiveExperience = () => {
                                   <Box
                                     sx={{
                                       px: 1.5, py: 0.4, borderRadius: 10, fontSize: '0.7rem', fontWeight: 700,
-                                      bgcolor: isCompleted ? alpha('#0D9488', 0.12) : alpha(step.color, 0.12),
-                                      color: isCompleted ? '#0D9488' : step.color,
+                                      bgcolor: isCompleted ? alpha('#14B5A5', 0.12) : alpha(step.color, 0.12),
+                                      color: isCompleted ? '#14B5A5' : step.color,
                                     }}
                                   >
                                     {isCompleted ? 'Done ✓' : step.status}
@@ -187,7 +187,7 @@ export const LiveExperience = () => {
                           <ArrowDownwardIcon
                             sx={{
                               fontSize: 18,
-                              color: index < activeStep ? '#0D9488' : alpha('#94A3B8', 0.5),
+                              color: index < activeStep ? '#14B5A5' : alpha('#94A3B8', 0.5),
                               transition: 'color 0.4s ease',
                             }}
                           />
@@ -200,10 +200,10 @@ export const LiveExperience = () => {
 
               {/* Bottom badge */}
               <Box sx={{ px: 3, py: 2, bgcolor: isDark ? alpha('#1F2937', 0.5) : alpha('#F0FDF4', 0.8), borderTop: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#0D9488', boxShadow: '0 0 0 3px rgba(0,191,165,0.2)' }} />
+                <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#14B5A5', boxShadow: '0 0 0 3px rgba(20, 181, 165,0.2)' }} />
                 <Typography variant="caption" sx={{ fontWeight: 600, color: 'text.secondary' }}>
                   Average doorstep time:{' '}
-                  <Box component="span" sx={{ color: '#0D9488' }}>Under 60 minutes</Box>
+                  <Box component="span" sx={{ color: '#14B5A5' }}>Under 60 minutes</Box>
                 </Typography>
               </Box>
             </Box>

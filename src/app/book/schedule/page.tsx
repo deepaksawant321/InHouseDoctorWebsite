@@ -81,7 +81,7 @@ export default function SchedulePage() {
               sx={{
                 '&:focus-visible': { outline: '3px solid', outlineColor: 'primary.main', outlineOffset: 2 },
                 p: 2, borderRadius: '16px', textAlign: 'center', cursor: 'pointer',
-                bgcolor: selectedDate === date ? alpha('#4F46E5', 0.1) : 'background.paper',
+                bgcolor: selectedDate === date ? alpha('#0A5CB8', 0.1) : 'background.paper',
                 border: '2px solid', borderColor: selectedDate === date ? 'primary.main' : 'divider',
                 fontWeight: selectedDate === date ? 700 : 500,
                 color: selectedDate === date ? 'primary.main' : 'text.primary',
@@ -133,7 +133,7 @@ export default function SchedulePage() {
                 '&:focus-visible': { outline: '3px solid', outlineColor: 'primary.main', outlineOffset: 2 },
                 opacity: isPast ? 0.45 : 1,
                 p: 2, borderRadius: '16px', textAlign: 'center', cursor: isPast ? 'not-allowed' : 'pointer',
-                bgcolor: selectedTime === slot.id ? alpha('#4F46E5', 0.1) : 'background.paper',
+                bgcolor: selectedTime === slot.id ? alpha('#0A5CB8', 0.1) : 'background.paper',
                 border: '2px solid', borderColor: selectedTime === slot.id ? 'primary.main' : 'divider',
                 transition: 'all 0.2s', '&:hover': { borderColor: 'primary.main' }
               }}
@@ -154,7 +154,7 @@ export default function SchedulePage() {
         <Box
           component="button" type="button" onClick={() => router.back()}
           sx={{
-            py: 1.5, px: 4, borderRadius: '16px', border: '1px solid', borderColor: 'divider', cursor: 'pointer',
+            py: 1.5, px: 4, borderRadius: '999px', border: '1px solid', borderColor: 'divider', cursor: 'pointer',
             bgcolor: 'transparent', color: 'text.primary', fontWeight: 600, fontSize: '1rem',
             transition: 'all 0.2s', '&:hover': { bgcolor: 'action.hover' },
           }}
@@ -165,11 +165,11 @@ export default function SchedulePage() {
           component="button" type="button" onClick={handleContinue} 
           disabled={!selectedDate || !selectedTime || chosenPast || (selectedDate === 'Choose Date' && !customDate)}
           sx={{
-            py: 1.5, px: 6, borderRadius: '16px', border: 'none', 
+            py: 1.5, px: 6, borderRadius: '999px', border: 'none', 
             cursor: (selectedDate && selectedTime && (selectedDate !== 'Choose Date' || customDate)) ? 'pointer' : 'not-allowed',
-            background: (selectedDate && selectedTime && (selectedDate !== 'Choose Date' || customDate)) ? 'linear-gradient(135deg, #4F46E5, #0D9488)' : 'action.disabledBackground', 
+            background: (selectedDate && selectedTime && (selectedDate !== 'Choose Date' || customDate)) ? '#0A5CB8' : 'action.disabledBackground', 
             color: (selectedDate && selectedTime && (selectedDate !== 'Choose Date' || customDate)) ? 'white' : 'text.disabled',  
-            fontWeight: 700, fontSize: '1rem', boxShadow: (selectedDate && selectedTime) ? '0 8px 24px rgba(25, 118, 210, 0.3)' : 'none',
+            fontWeight: 700, fontSize: '1rem', boxShadow: (selectedDate && selectedTime) ? '0 8px 24px rgba(10, 92, 184, 0.3)' : 'none',
             transition: 'all 0.2s', '&:hover': { transform: (selectedDate && selectedTime) ? 'translateY(-2px)' : 'none' },
           }}
         >

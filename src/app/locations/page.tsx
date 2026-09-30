@@ -29,7 +29,7 @@ export default function LocationsPage() {
         subtitle="Professional healthcare delivered to your doorstep across Mumbai."
       />
 
-      <Box component="section" sx={{ py: { xs: 8, md: 15 }, bgcolor: 'background.paper' }}>
+      <Box component="section" sx={{ py: { xs: 6, md: 9 }, bgcolor: 'background.paper' }}>
         <Container maxWidth="lg">
           <Typography variant="h3" sx={{ textAlign: 'center', mb: 8, fontWeight: 700 }}>
             Find a Doctor Near You

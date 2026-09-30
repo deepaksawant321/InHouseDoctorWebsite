@@ -64,7 +64,7 @@ export const DashboardSidebar = ({ onClick }: { onClick?: () => void }) => {
                 href={item.href}
                 onClick={onClick}
                 sx={{
-                  borderRadius: 2,
+                  borderRadius: '14px',
                   py: 1.5,
                   bgcolor: isActive ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
                   color: isActive ? 'primary.main' : 'text.primary',

@@ -42,20 +42,13 @@ export const DoctorProfiles = () => {
   const isDark = theme.palette.mode === 'dark';
 
   return (
-    <Box component="section" sx={{ py: { xs: 8, md: 15 }, bgcolor: isDark ? alpha('#111827', 0.5) : alpha('#F1F5F9', 0.7) }}>
+    <Box component="section" sx={{ py: { xs: 7, md: 10 }, bgcolor: isDark ? alpha('#0F2036', 0.5) : '#EAF5FD' }}>
       <Container maxWidth="lg">
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
           <motion.div variants={fadeInUp}>
-            <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
-              <Typography variant="caption" sx={{ fontWeight: 600, color: 'primary.main', textTransform: 'uppercase', letterSpacing: 1.5 }}>
-                Meet Our Experts
-              </Typography>
-              <Typography variant="h2" sx={{ mt: 1, mb: 1.5, fontSize: { xs: '2rem', md: '2.75rem' } }}>
-                Verified Medical Professionals
-              </Typography>
-              <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400, maxWidth: 600, mx: 'auto' }}>
-                Every doctor on our platform is background-checked and highly experienced.
-              </Typography>
+            <Box sx={{ mb: { xs: 4, md: 5 } }}>
+              <Typography variant="h2" sx={{ mb: 1, fontSize: { xs: '1.75rem', md: '2.4rem' } }}>Verified Medical Professionals</Typography>
+              <Typography color="text.secondary" sx={{ maxWidth: 560 }}>Every doctor on our platform is background-checked and highly experienced.</Typography>
             </Box>
           </motion.div>
 
@@ -65,7 +58,7 @@ export const DoctorProfiles = () => {
                 <motion.div variants={fadeInUp} style={{ height: '100%' }}>
                   <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderRadius: '24px', boxShadow: '0 4px 24px rgba(0,0,0,0.03)' }}>
                     <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2, borderBottom: '1px solid', borderColor: 'divider', bgcolor: alpha(theme.palette.primary.main, 0.03) }}>
-                      <Box sx={{ width: 64, height: 64, borderRadius: '50%', bgcolor: 'primary.main', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Box sx={{ width: 64, height: 64, borderRadius: '50%', bgcolor: '#0A5CB8', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <MedicalInformationIcon fontSize="large" />
                       </Box>
                       <Box>

@@ -62,7 +62,7 @@ function BookingSuccessContent() {
           <Grid container spacing={3} sx={{ mb: 8, maxWidth: 600, mx: 'auto' }}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <Box sx={{ p: 2, borderRadius: '16px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Box sx={{ bgcolor: alpha('#4F46E5', 0.1), color: 'primary.main', p: 1, borderRadius: 2 }}><EmailIcon /></Box>
+                <Box sx={{ bgcolor: alpha('#0A5CB8', 0.1), color: 'primary.main', p: 1, borderRadius: 2 }}><EmailIcon /></Box>
                 <Box>
                   <Typography variant="body2" sx={{ fontWeight: 700 }}>Email</Typography>
                   <Typography variant="caption" color="text.secondary">Confirmation sent to your email on file</Typography>
@@ -71,7 +71,7 @@ function BookingSuccessContent() {
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <Box sx={{ p: 2, borderRadius: '16px', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Box sx={{ bgcolor: alpha('#4F46E5', 0.1), color: 'primary.main', p: 1, borderRadius: 2 }}><NotificationsIcon /></Box>
+                <Box sx={{ bgcolor: alpha('#0A5CB8', 0.1), color: 'primary.main', p: 1, borderRadius: 2 }}><NotificationsIcon /></Box>
                 <Box>
                   <Typography variant="body2" sx={{ fontWeight: 700 }}>Dashboard</Typography>
                   <Typography variant="caption" color="text.secondary">Track status under My Bookings</Typography>
@@ -84,9 +84,9 @@ function BookingSuccessContent() {
             <Box
               component="button" onClick={() => router.push('/dashboard')}
               sx={{
-                py: 2, px: { xs: 3, sm: 6 }, borderRadius: '16px', border: '1px solid', borderColor: 'primary.main', cursor: 'pointer',
+                py: 2, px: { xs: 3, sm: 6 }, borderRadius: '999px', border: '1px solid', borderColor: 'primary.main', cursor: 'pointer',
                 bgcolor: 'transparent', color: 'primary.main', fontWeight: 700, fontSize: '1rem',
-                transition: 'all 0.2s', '&:hover': { bgcolor: alpha('#4F46E5', 0.05) },
+                transition: 'all 0.2s', '&:hover': { bgcolor: alpha('#0A5CB8', 0.05) },
               }}
             >
               Go to Dashboard
@@ -94,9 +94,9 @@ function BookingSuccessContent() {
             <Box
               component="button" onClick={() => router.push('/book/service')}
               sx={{
-                py: 2, px: { xs: 3, sm: 6 }, borderRadius: '16px', border: 'none', cursor: 'pointer',
-                background: 'linear-gradient(135deg, #4F46E5, #0D9488)', color: 'white',
-                fontWeight: 700, fontSize: '1rem', boxShadow: '0 8px 24px rgba(25, 118, 210, 0.3)',
+                py: 2, px: { xs: 3, sm: 6 }, borderRadius: '999px', border: 'none', cursor: 'pointer',
+                background: '#0A5CB8', color: 'white',
+                fontWeight: 700, fontSize: '1rem', boxShadow: '0 8px 24px rgba(10, 92, 184, 0.3)',
                 transition: 'all 0.2s', '&:hover': { transform: 'translateY(-2px)' },
               }}
             >

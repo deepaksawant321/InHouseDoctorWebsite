@@ -14,32 +14,32 @@ const steps = [
     icon: <AssignmentIcon sx={{ fontSize: 28 }} />,
     title: 'Request Service',
     description: 'Tell us your health concern and preferred time. No waiting rooms, no hassle.',
-    color: '#4F46E5',
+    color: '#0A5CB8',
   },
   {
     number: '02',
     icon: <ManageAccountsIcon sx={{ fontSize: 28 }} />,
     title: 'Admin Assigns Doctor',
     description: 'Our team carefully matches you with the most suitable verified doctor.',
-    color: '#0D9488',
+    color: '#14B5A5',
   },
   {
     number: '03',
     icon: <DirectionsCarIcon sx={{ fontSize: 28 }} />,
     title: 'Doctor Visits Home',
     description: 'Your doctor arrives at your home, fully equipped for the consultation.',
-    color: '#6C63FF',
+    color: '#2B8CE6',
   },
   {
     number: '04',
     icon: <HealthAndSafetyIcon sx={{ fontSize: 28 }} />,
     title: 'Receive Care',
     description: 'Get professional diagnosis, treatment, and a personalised care plan.',
-    color: '#0D9488',
+    color: '#14B5A5',
   },
 ];
 
-export const HowItWorks = () => {
+export const HowItWorks = ({ showHeader = true }: { showHeader?: boolean }) => {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
@@ -47,27 +47,21 @@ export const HowItWorks = () => {
     <Box
       component="section"
       id="how-it-works"
-      sx={{ py: { xs: 8, md: 15 }, bgcolor: 'background.default' }}
+      sx={{ py: { xs: 7, md: 10 }, bgcolor: 'background.default' }}
     >
       <Container maxWidth="lg">
         {/* Section Header */}
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
-          <motion.div variants={fadeInUp}>
-            <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 10 } }}>
-              <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75, borderRadius: 10, mb: 2, border: '1px solid', borderColor: alpha('#6C63FF', 0.3), bgcolor: alpha('#6C63FF', 0.06) }}>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: '#5A52E0' }}>Simple Process</Typography>
+          {showHeader && (
+            <motion.div variants={fadeInUp}>
+              <Box sx={{ mb: { xs: 5, md: 8 } }}>
+                <Typography variant="h2" sx={{ mb: 1, fontSize: { xs: "1.75rem", md: "2.4rem" } }}>How It Works</Typography>
+                <Typography color="text.secondary" sx={{ maxWidth: 520 }}>
+                  Four simple steps to get premium healthcare delivered to your doorstep.
+                </Typography>
               </Box>
-              <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '2rem', md: '2.75rem' } }}>
-                How It{' '}
-                <Box component="span" sx={{ background: 'linear-gradient(135deg, #4F46E5, #0D9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                  Works
-                </Box>
-              </Typography>
-              <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400, maxWidth: 500, mx: 'auto' }}>
-                Four simple steps to get premium healthcare delivered to your doorstep.
-              </Typography>
-            </Box>
-          </motion.div>
+            </motion.div>
+          )}
 
           {/* Steps — horizontal timeline on desktop, vertical on mobile */}
           <Box
@@ -87,7 +81,7 @@ export const HowItWorks = () => {
                 left: '12.5%',
                 right: '12.5%',
                 height: 2,
-                background: `linear-gradient(90deg, #4F46E5, #0D9488, #6C63FF, #0D9488)`,
+                background: `linear-gradient(90deg, #0A5CB8, #14B5A5, #2B8CE6, #14B5A5)`,
                 zIndex: 0,
               }}
             />

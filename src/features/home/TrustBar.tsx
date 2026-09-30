@@ -1,82 +1,66 @@
 'use client';
 
-import { Box, useTheme, alpha } from '@mui/material';
+import { Box, Container, Typography, Grid, alpha } from '@mui/material';
+import { m as motion } from 'framer-motion';
+import { fadeInUp, staggerContainer } from '@/constants/animations';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
-import SpeedIcon from '@mui/icons-material/Speed';
 import HomeIcon from '@mui/icons-material/Home';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
-import ShieldIcon from '@mui/icons-material/Shield';
-import StarIcon from '@mui/icons-material/Star';
-import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 
 const items = [
-  { icon: <VerifiedUserIcon sx={{ fontSize: 18 }} />, label: 'Verified Doctors' },
-  { icon: <ShieldIcon sx={{ fontSize: 18 }} />, label: 'Background Checked' },
-  { icon: <LocalHospitalIcon sx={{ fontSize: 18 }} />, label: 'Licensed Practitioners' },
-  { icon: <SpeedIcon sx={{ fontSize: 18 }} />, label: 'Fast Response' },
-  { icon: <SupportAgentIcon sx={{ fontSize: 18 }} />, label: '24x7 Support' },
-  { icon: <HomeIcon sx={{ fontSize: 18 }} />, label: 'Home Visits' },
-  { icon: <StarIcon sx={{ fontSize: 18 }} />, label: '4.9★ Rated' },
-  { icon: <MedicalServicesIcon sx={{ fontSize: 18 }} />, label: 'Expert Care' },
+  { icon: <AssignmentIcon />, title: 'Request a Doctor', text: 'Tell us what you need in a few taps', color: '#0A5CB8' },
+  { icon: <VerifiedUserIcon />, title: 'Verified Doctors', text: 'Background-checked, licensed practitioners', color: '#14B5A5' },
+  { icon: <HomeIcon />, title: 'Home Visits', text: 'Care delivered right to your doorstep', color: '#2B8CE6' },
+  { icon: <SupportAgentIcon />, title: '24x7 Support', text: 'Help whenever you need it', color: '#14B5A5' },
 ];
 
-const TrustItem = ({ icon, label, isHidden }: { icon: React.ReactNode; label: string; isHidden?: boolean }) => {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
-  return (
-    <Box
-      aria-hidden={isHidden}
-      sx={{
-        display: 'inline-flex', alignItems: 'center', gap: 1.5,
-        px: 3, py: 1.25, borderRadius: 10, flexShrink: 0,
-        bgcolor: isDark ? alpha('#1F2937', 0.8) : 'white',
-        border: '1px solid', borderColor: 'divider',
-        color: 'text.secondary', mx: 1.5,
-      }}
-    >
-      <Box sx={{ color: 'primary.main' }}>{icon}</Box>
-      <Box component="span" sx={{ fontWeight: 600, fontSize: '0.875rem', whiteSpace: 'nowrap', color: 'text.primary' }}>
-        {label}
-      </Box>
-    </Box>
-  );
-};
-
-export const TrustBar = () => {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
-  const doubledItems = [...items, ...items];
-
-  return (
-    <Box
-      sx={{
-        py: 4,
-        bgcolor: isDark ? alpha('#111827', 0.8) : alpha('#F8FAFD', 1),
-        borderTop: '1px solid', borderBottom: '1px solid', borderColor: 'divider',
-        overflow: 'hidden',
-        position: 'relative',
-      }}
-    >
-      {/* Fade masks */}
-      <Box sx={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to right, ${isDark ? '#111827' : '#F8FAFD'}, transparent)`, zIndex: 1 }} />
-      <Box sx={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to left, ${isDark ? '#111827' : '#F8FAFD'}, transparent)`, zIndex: 1 }} />
-
-      <Box
-        sx={{
-          display: 'flex',
-          width: 'max-content',
-          animation: 'marquee 28s linear infinite',
-          '@keyframes marquee': {
-            '0%': { transform: 'translateX(0)' },
-            '100%': { transform: 'translateX(-50%)' },
-          },
-        }}
-      >
-        {doubledItems.map((item, i) => (
-          <TrustItem key={i} {...item} isHidden={i >= items.length} />
-        ))}
-      </Box>
-    </Box>
-  );
-};
+export const TrustBar = () => (
+  <Box component="section" sx={{ py: { xs: 6, md: 8 }, bgcolor: 'background.paper' }}>
+    <Container maxWidth="xl">
+      <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }}>
+        <Grid container spacing={{ xs: 3, md: 2 }} sx={{ alignItems: 'center' }}>
+          {items.map((item) => (
+            <Grid size={{ xs: 6, md: 2 }} key={item.title}>
+              <motion.div variants={fadeInUp}>
+                <Box sx={{ textAlign: 'center', px: 1 }}>
+                  <Box
+                    sx={{
+                      width: 72, height: 72, borderRadius: '22px', mx: 'auto', mb: 2,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      bgcolor: alpha(item.color, 0.12), color: item.color,
+                      '& svg': { fontSize: 34 },
+                    }}
+                  >
+                    {item.icon}
+                  </Box>
+                  <Typography sx={{ fontWeight: 700, fontSize: '0.95rem', mb: 0.5 }}>{item.title}</Typography>
+                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>{item.text}</Typography>
+                </Box>
+              </motion.div>
+            </Grid>
+          ))}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <motion.div variants={fadeInUp}>
+              <Box
+                sx={{
+                  pl: { md: 4 }, pt: { xs: 3, md: 0 },
+                  borderLeft: { md: '1px solid' }, borderTop: { xs: '1px solid', md: 'none' }, borderColor: 'divider',
+                  display: 'flex', gap: 1.5, alignItems: 'flex-start',
+                }}
+              >
+                <Typography aria-hidden sx={{ fontSize: '4rem', lineHeight: 0.8, color: alpha('#0A5CB8', 0.2), fontFamily: 'Georgia, serif' }}>&ldquo;</Typography>
+                <Box>
+                  <Typography sx={{ fontSize: '1.05rem', color: 'text.secondary', lineHeight: 1.6 }}>
+                    Good health is not a luxury, it&apos;s a foundation for a brighter tomorrow.
+                  </Typography>
+                  <Typography sx={{ mt: 1, color: 'secondary.dark', fontWeight: 700, fontStyle: 'italic' }}>Stay Healthy</Typography>
+                </Box>
+              </Box>
+            </motion.div>
+          </Grid>
+        </Grid>
+      </motion.div>
+    </Container>
+  </Box>
+);

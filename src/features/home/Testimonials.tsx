@@ -19,7 +19,7 @@ const FALLBACK_TESTIMONIALS = [
     content: 'InHouse Doctor is truly incredible. When my father had a fever at midnight, they sent a verified doctor within 45 minutes. The doctor was thorough, professional, and incredibly calming. This service is a game-changer.',
     rating: 5,
     initials: 'RS',
-    color: '#4F46E5',
+    color: '#0A5CB8',
   },
   {
     name: 'Priya Patel',
@@ -27,11 +27,11 @@ const FALLBACK_TESTIMONIALS = [
     content: 'I was sceptical about home visits but InHouse Doctor exceeded my expectations. The doctor spent 40 minutes with me, addressed all my concerns, and followed up the next day. Absolutely remarkable service.',
     rating: 5,
     initials: 'PP',
-    color: '#0D9488',
+    color: '#14B5A5',
   },
 ];
 
-const COLORS = ['#4F46E5', '#0D9488', '#6C63FF', '#9333EA', '#0284C7'];
+const COLORS = ['#0A5CB8', '#14B5A5', '#2B8CE6', '#9333EA', '#0284C7'];
 
 const getInitials = (name: string) => {
   if (!name) return 'U';
@@ -98,12 +98,12 @@ export const Testimonials = () => {
           {/* Header */}
           <motion.div variants={fadeInUp}>
             <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 10 } }}>
-              <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75, borderRadius: 10, mb: 2, border: '1px solid', borderColor: alpha('#6C63FF', 0.3), bgcolor: alpha('#6C63FF', 0.06) }}>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: '#5A52E0' }}>Patient Stories</Typography>
+              <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75, borderRadius: 10, mb: 2, border: '1px solid', borderColor: alpha('#2B8CE6', 0.3), bgcolor: alpha('#2B8CE6', 0.06) }}>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: '#0A5CB8' }}>Patient Stories</Typography>
               </Box>
-              <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '2rem', md: '2.75rem' } }}>
+              <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '1.75rem', md: '2.4rem' } }}>
                 What Our{' '}
-                <Box component="span" sx={{ background: 'linear-gradient(135deg, #6C63FF, #0D9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                <Box component="span" sx={{ background: 'linear-gradient(135deg, #2B8CE6, #14B5A5)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Patients Say
                 </Box>
               </Typography>
@@ -129,7 +129,7 @@ export const Testimonials = () => {
                       bgcolor: 'background.paper',
                       border: '1px solid', borderColor: 'divider',
                       position: 'relative',
-                      boxShadow: isDark ? '0 24px 64px rgba(0,0,0,0.4)' : '0 24px 64px rgba(25,118,210,0.08)',
+                      boxShadow: isDark ? '0 24px 64px rgba(0,0,0,0.4)' : '0 24px 64px rgba(10, 92, 184,0.08)',
                     }}
                   >
                     {/* Quote icon */}
@@ -176,7 +176,7 @@ export const Testimonials = () => {
 
               {/* Controls */}
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, mt: 4 }}>
-                <IconButton onClick={handlePrev} aria-label="Previous testimonial" sx={{ bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', '&:hover': { bgcolor: alpha('#4F46E5', 0.08) } }}>
+                <IconButton onClick={handlePrev} aria-label="Previous testimonial" sx={{ bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', '&:hover': { bgcolor: alpha('#0A5CB8', 0.08) } }}>
                   <ArrowBackIosIcon sx={{ fontSize: 16, ml: 0.5 }} />
                 </IconButton>
 
@@ -207,7 +207,7 @@ export const Testimonials = () => {
                   ))}
                 </Box>
 
-                <IconButton onClick={handleNext} aria-label="Next testimonial" sx={{ bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', '&:hover': { bgcolor: alpha('#4F46E5', 0.08) } }}>
+                <IconButton onClick={handleNext} aria-label="Next testimonial" sx={{ bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', '&:hover': { bgcolor: alpha('#0A5CB8', 0.08) } }}>
                   <ArrowForwardIosIcon sx={{ fontSize: 16 }} />
                 </IconButton>
               </Box>

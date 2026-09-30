@@ -65,10 +65,10 @@ export const UploadZone = ({ onFileChange }: UploadZoneProps = {}) => {
         border: '2px dashed',
         borderColor: isDragging ? 'primary.main' : 'divider',
         borderRadius: '24px', p: 4, textAlign: 'center',
-        bgcolor: isDragging ? alpha('#4F46E5', 0.04) : 'background.paper',
+        bgcolor: isDragging ? alpha('#0A5CB8', 0.04) : 'background.paper',
         transition: 'all 0.2s', cursor: 'pointer',
         position: 'relative',
-        '&:hover': { bgcolor: alpha('#4F46E5', 0.02), borderColor: 'primary.main' },
+        '&:hover': { bgcolor: alpha('#0A5CB8', 0.02), borderColor: 'primary.main' },
       }}
     >
       <input
@@ -94,7 +94,7 @@ export const UploadZone = ({ onFileChange }: UploadZoneProps = {}) => {
         </Box>
       ) : (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-          <Box sx={{ width: 64, height: 64, borderRadius: '50%', bgcolor: alpha('#4F46E5', 0.1), color: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Box sx={{ width: 64, height: 64, borderRadius: '50%', bgcolor: alpha('#0A5CB8', 0.1), color: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <CloudUploadIcon fontSize="large" />
           </Box>
           <Box>

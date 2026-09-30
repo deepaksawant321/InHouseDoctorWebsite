@@ -125,7 +125,7 @@ export default function AddressDetailsPage() {
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>Select an Address</Typography>
               <RadioGroup value={selectedAddressId} onChange={(e) => setSelectedAddressId(e.target.value)}>
                 {addresses.map(addr => (
-                  <Box key={addr.id} sx={{ p: 2, mb: 2, border: '1px solid', borderColor: selectedAddressId === addr.id ? 'primary.main' : 'divider', borderRadius: 2, bgcolor: selectedAddressId === addr.id ? alpha('#4F46E5', 0.05) : 'background.paper' }}>
+                  <Box key={addr.id} sx={{ p: 2, mb: 2, border: '1px solid', borderColor: selectedAddressId === addr.id ? 'primary.main' : 'divider', borderRadius: 2, bgcolor: selectedAddressId === addr.id ? alpha('#0A5CB8', 0.05) : 'background.paper' }}>
                     <FormControlLabel 
                       value={addr.id} 
                       control={<Radio />} 
@@ -138,7 +138,7 @@ export default function AddressDetailsPage() {
                     />
                   </Box>
                 ))}
-                <Box sx={{ p: 2, border: '1px solid', borderColor: selectedAddressId === 'new' ? 'primary.main' : 'divider', borderRadius: 2, bgcolor: selectedAddressId === 'new' ? alpha('#4F46E5', 0.05) : 'background.paper' }}>
+                <Box sx={{ p: 2, border: '1px solid', borderColor: selectedAddressId === 'new' ? 'primary.main' : 'divider', borderRadius: 2, bgcolor: selectedAddressId === 'new' ? alpha('#0A5CB8', 0.05) : 'background.paper' }}>
                   <FormControlLabel value="new" control={<Radio />} label={<Typography sx={{ fontWeight: 600 }}>Add a New Address</Typography>} />
                 </Box>
               </RadioGroup>
@@ -148,7 +148,7 @@ export default function AddressDetailsPage() {
           {selectedAddressId === 'new' && (
             <Box>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-                <Box component="button" type="button" onClick={handleCurrentLocation} disabled={gettingLocation} sx={{ display: 'flex', alignItems: 'center', gap: 1, py: 1, px: 2, borderRadius: 2, border: '1px solid', borderColor: 'primary.main', bgcolor: alpha('#4F46E5', 0.05), color: 'primary.main', cursor: gettingLocation ? 'wait' : 'pointer', fontWeight: 600, transition: 'all 0.2s', '&:hover': { bgcolor: alpha('#4F46E5', 0.1) }, opacity: gettingLocation ? 0.7 : 1 }}>
+                <Box component="button" type="button" onClick={handleCurrentLocation} disabled={gettingLocation} sx={{ display: 'flex', alignItems: 'center', gap: 1, py: 1, px: 2, borderRadius: 2, border: '1px solid', borderColor: 'primary.main', bgcolor: alpha('#0A5CB8', 0.05), color: 'primary.main', cursor: gettingLocation ? 'wait' : 'pointer', fontWeight: 600, transition: 'all 0.2s', '&:hover': { bgcolor: alpha('#0A5CB8', 0.1) }, opacity: gettingLocation ? 0.7 : 1 }}>
                   {gettingLocation ? <CircularProgress size={16} color="primary" /> : <MyLocationIcon fontSize="small" />} 
                   {gettingLocation ? 'Locating...' : 'Use Current Location'}
                 </Box>
@@ -191,10 +191,10 @@ export default function AddressDetailsPage() {
       )}
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Box component="button" type="button" onClick={() => router.back()} sx={{ py: 1.5, px: 4, borderRadius: '16px', border: '1px solid', borderColor: 'divider', cursor: 'pointer', bgcolor: 'transparent', color: 'text.primary', fontWeight: 600, fontSize: '1rem', transition: 'all 0.2s', '&:hover': { bgcolor: 'action.hover' } }}>
+        <Box component="button" type="button" onClick={() => router.back()} sx={{ py: 1.5, px: 4, borderRadius: '999px', border: '1px solid', borderColor: 'divider', cursor: 'pointer', bgcolor: 'transparent', color: 'text.primary', fontWeight: 600, fontSize: '1rem', transition: 'all 0.2s', '&:hover': { bgcolor: 'action.hover' } }}>
           Back
         </Box>
-        <Box component="button" type="submit" disabled={isSubmitting} sx={{ py: 1.5, px: 6, borderRadius: '16px', border: 'none', cursor: isSubmitting ? 'not-allowed' : 'pointer', background: isSubmitting ? 'action.disabledBackground' : 'linear-gradient(135deg, #4F46E5, #0D9488)', color: 'white', fontWeight: 700, fontSize: '1rem', boxShadow: isSubmitting ? 'none' : '0 8px 24px rgba(25, 118, 210, 0.3)', transition: 'all 0.2s', '&:hover': { transform: isSubmitting ? 'none' : 'translateY(-2px)' } }}>
+        <Box component="button" type="submit" disabled={isSubmitting} sx={{ py: 1.5, px: 6, borderRadius: '999px', border: 'none', cursor: isSubmitting ? 'not-allowed' : 'pointer', background: isSubmitting ? 'action.disabledBackground' : '#0A5CB8', color: 'white', fontWeight: 700, fontSize: '1rem', boxShadow: isSubmitting ? 'none' : '0 8px 24px rgba(10, 92, 184, 0.3)', transition: 'all 0.2s', '&:hover': { transform: isSubmitting ? 'none' : 'translateY(-2px)' } }}>
           {isSubmitting ? 'Saving...' : 'Continue to Schedule'}
         </Box>
       </Box>

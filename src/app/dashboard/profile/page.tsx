@@ -69,7 +69,7 @@ export default function Profile() {
 
       <Card elevation={0} sx={{ mb: 4, borderRadius: '24px', border: '1px solid', borderColor: 'divider' }}>
         <CardContent sx={{ p: 4, display: 'flex', alignItems: 'center', gap: 3 }}>
-          <Avatar sx={{ width: 80, height: 80, bgcolor: 'primary.main', fontSize: '2rem' }}>
+          <Avatar sx={{ width: 80, height: 80, bgcolor: '#0A5CB8', fontSize: '2rem' }}>
             {profile?.firstName?.charAt(0) || 'U'}
           </Avatar>
           <Box>

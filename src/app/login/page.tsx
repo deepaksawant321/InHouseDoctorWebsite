@@ -134,7 +134,7 @@ export default function LoginPage() {
     }
   };
 
-  const gradientBg = 'linear-gradient(135deg, #4F46E5, #0D9488)';
+  const gradientBg = '#0A5CB8';
 
   return (
     <Box
@@ -146,7 +146,7 @@ export default function LoginPage() {
         pt: { xs: 10, md: 12 }, // offset for fixed Header
         pb: 6,
         background: isDark
-          ? `linear-gradient(135deg, ${alpha('#111827', 0.98)}, ${alpha('#1e293b', 0.98)})`
+          ? `linear-gradient(135deg, ${alpha('#0F2036', 0.98)}, ${alpha('#16304F', 0.98)})`
           : `linear-gradient(135deg, ${alpha('#EEF2FF', 1)} 0%, ${alpha('#f0fdf4', 1)} 100%)`,
       }}
     >
@@ -155,14 +155,14 @@ export default function LoginPage() {
           elevation={0}
           sx={{
             p: { xs: 3, sm: 4 },
-            borderRadius: 4,
+            borderRadius: '28px',
             border: '1px solid',
-            borderColor: isDark ? alpha('#fff', 0.08) : alpha('#4F46E5', 0.12),
-            bgcolor: isDark ? alpha('#1e293b', 0.8) : alpha('#fff', 0.9),
+            borderColor: isDark ? alpha('#fff', 0.08) : alpha('#0A5CB8', 0.12),
+            bgcolor: isDark ? alpha('#16304F', 0.8) : alpha('#fff', 0.9),
             backdropFilter: 'blur(20px)',
             boxShadow: isDark
               ? `0 25px 50px ${alpha('#000', 0.4)}`
-              : `0 25px 50px ${alpha('#4F46E5', 0.1)}`,
+              : `0 25px 50px ${alpha('#0A5CB8', 0.1)}`,
           }}
         >
           {/* Logo + Brand */}
@@ -172,9 +172,9 @@ export default function LoginPage() {
               href="/"
               sx={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: 52, height: 52, borderRadius: 3,
+                width: 52, height: 52, borderRadius: '50%',
                 background: gradientBg,
-                mb: 2, boxShadow: `0 8px 24px ${alpha('#4F46E5', 0.35)}`,
+                mb: 2, boxShadow: `0 8px 24px ${alpha('#0A5CB8', 0.35)}`,
               }}
             >
               <MedicalServicesIcon sx={{ fontSize: 28, color: 'white' }} />
@@ -245,10 +245,10 @@ export default function LoginPage() {
                   fontWeight: 700,
                   fontSize: '0.95rem',
                   background: loading ? undefined : gradientBg,
-                  boxShadow: loading ? 'none' : `0 4px 15px ${alpha('#4F46E5', 0.4)}`,
+                  boxShadow: loading ? 'none' : `0 4px 15px ${alpha('#0A5CB8', 0.4)}`,
                   '&:hover': {
                     background: gradientBg,
-                    boxShadow: `0 6px 20px ${alpha('#4F46E5', 0.5)}`,
+                    boxShadow: `0 6px 20px ${alpha('#0A5CB8', 0.5)}`,
                     transform: 'translateY(-1px)',
                   },
                   transition: 'all 0.2s ease',
@@ -271,9 +271,9 @@ export default function LoginPage() {
                 sx={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   px: 2, py: 1.5, borderRadius: 2,
-                  bgcolor: isDark ? alpha('#fff', 0.05) : alpha('#4F46E5', 0.05),
+                  bgcolor: isDark ? alpha('#fff', 0.05) : alpha('#0A5CB8', 0.05),
                   border: '1px solid',
-                  borderColor: isDark ? alpha('#fff', 0.1) : alpha('#4F46E5', 0.15),
+                  borderColor: isDark ? alpha('#fff', 0.1) : alpha('#0A5CB8', 0.15),
                   gap: 1,
                   overflow: 'hidden',
                 }}
@@ -301,7 +301,7 @@ export default function LoginPage() {
                     fontWeight: 700,
                     fontSize: '0.75rem',
                     whiteSpace: 'nowrap',
-                    '&:hover': { bgcolor: alpha('#4F46E5', 0.08) },
+                    '&:hover': { bgcolor: alpha('#0A5CB8', 0.08) },
                   }}
                 >
                   Edit
@@ -347,10 +347,10 @@ export default function LoginPage() {
                     fontWeight: 700,
                     fontSize: '0.95rem',
                     background: loading ? undefined : gradientBg,
-                    boxShadow: loading ? 'none' : `0 4px 15px ${alpha('#4F46E5', 0.4)}`,
+                    boxShadow: loading ? 'none' : `0 4px 15px ${alpha('#0A5CB8', 0.4)}`,
                     '&:hover': {
                       background: gradientBg,
-                      boxShadow: `0 6px 20px ${alpha('#4F46E5', 0.5)}`,
+                      boxShadow: `0 6px 20px ${alpha('#0A5CB8', 0.5)}`,
                       transform: 'translateY(-1px)',
                     },
                     transition: 'all 0.2s ease',

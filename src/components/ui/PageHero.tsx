@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Container, Typography, alpha, useTheme } from '@mui/material';
+import { Box, Container, Typography, useTheme } from '@mui/material';
 import { m as motion } from 'framer-motion';
 
 interface PageHeroProps {
@@ -16,37 +16,17 @@ export const PageHero = ({ title, subtitle }: PageHeroProps) => {
     <Box
       component="section"
       sx={{
-        pt: { xs: 20, md: 24 }, // Extra top padding to account for fixed header
-        pb: { xs: 8, md: 10 },
+        pt: { xs: 11, md: 13 }, // Extra top padding to account for fixed header
+        pb: { xs: 4, md: 5 },
         position: 'relative',
         overflow: 'hidden',
-        bgcolor: 'background.default',
-        borderBottom: `1px solid ${alpha(isDark ? '#fff' : '#000', 0.05)}`,
+        background: isDark
+          ? 'linear-gradient(180deg, #0A1626 0%, #0D1B2E 100%)'
+          : 'linear-gradient(180deg, #EAF5FD 0%, #F8FCFF 100%)',
       }}
     >
-      {/* Background Gradients */}
-      <Box sx={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }}
-          style={{
-            position: 'absolute', top: '-20%', right: '-10%',
-            width: 600, height: 600, borderRadius: '50%',
-            background: isDark
-              ? 'radial-gradient(circle, rgba(25, 118, 210, 0.12) 0%, transparent 70%)'
-              : 'radial-gradient(circle, rgba(25, 118, 210, 0.08) 0%, transparent 70%)',
-          }}
-        />
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5, delay: 0.2 }}
-          style={{
-            position: 'absolute', bottom: '-10%', left: '-5%',
-            width: 500, height: 500, borderRadius: '50%',
-            background: isDark
-              ? 'radial-gradient(circle, rgba(0, 191, 165, 0.1) 0%, transparent 70%)'
-              : 'radial-gradient(circle, rgba(0, 191, 165, 0.06) 0%, transparent 70%)',
-          }}
-        />
-      </Box>
+      <Box aria-hidden sx={{ position: 'absolute', top: '-30%', right: '-8%', width: 520, height: 520, borderRadius: '50%', background: 'radial-gradient(circle, rgba(20,181,165,0.2) 0%, transparent 68%)', pointerEvents: 'none' }} />
+      <Box aria-hidden sx={{ position: 'absolute', bottom: '-40%', left: '-6%', width: 420, height: 420, borderRadius: '50%', background: 'radial-gradient(circle, rgba(10,92,184,0.1) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
       <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
         <motion.div
@@ -56,20 +36,14 @@ export const PageHero = ({ title, subtitle }: PageHeroProps) => {
         >
           <Typography
             variant="h1"
-            sx={{
-              fontWeight: 800, mb: 3,
-              fontSize: { xs: '2.5rem', sm: '3rem', md: '3.5rem' },
-              background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
+            sx={{ fontWeight: 800, mb: 1.5, color: 'text.primary', fontSize: { xs: '1.75rem', sm: '2.1rem', md: '2.5rem' } }}
           >
             {title}
           </Typography>
+          <Box aria-hidden sx={{ width: 56, height: 4, borderRadius: 2, mx: 'auto', mb: subtitle ? 1.75 : 0, background: 'linear-gradient(90deg, #0A5CB8, #14B5A5)' }} />
           {subtitle && (
             <Typography
-              variant="h6"
-              sx={{ color: 'text.secondary', fontWeight: 400, maxWidth: 600, mx: 'auto', lineHeight: 1.6 }}
+              sx={{ color: 'text.secondary', maxWidth: 620, mx: 'auto', lineHeight: 1.7, fontSize: { xs: '0.95rem', md: '1rem' } }}
             >
               {subtitle}
             </Typography>

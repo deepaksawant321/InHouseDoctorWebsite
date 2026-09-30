@@ -4,6 +4,7 @@ import { jsonLdString } from '@/utils/jsonLd';
 import { Box, Container, Typography, Grid, useTheme, alpha } from '@mui/material';
 import { m as motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { staggerContainer, fadeInUp } from '@/constants/animations';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import MasksIcon from '@mui/icons-material/Masks';
@@ -18,13 +19,13 @@ import { CircularProgress } from '@mui/material';
 const SERVICE_UI_MAP: Record<string, any> = {
   'General Physician': {
     icon: <LocalHospitalIcon sx={{ fontSize: 36 }} />,
-    color: '#4F46E5', // Indigo
-    gradient: 'linear-gradient(135deg, #4F46E5, #818CF8)',
+    color: '#0A5CB8', // Indigo
+    gradient: 'linear-gradient(135deg, #0A5CB8, #4F95DB)',
   },
   'Nursing Care': {
     icon: <MasksIcon sx={{ fontSize: 36 }} />,
-    color: '#0D9488', // Teal
-    gradient: 'linear-gradient(135deg, #0D9488, #2DD4BF)',
+    color: '#14B5A5', // Teal
+    gradient: 'linear-gradient(135deg, #14B5A5, #5FD9CB)',
   },
   'Physiotherapy': {
     icon: <DirectionsWalkIcon sx={{ fontSize: 36 }} />,
@@ -40,8 +41,8 @@ const SERVICE_UI_MAP: Record<string, any> = {
 
 const DEFAULT_UI = {
   icon: <LocalHospitalIcon sx={{ fontSize: 36 }} />,
-  color: '#4F46E5',
-  gradient: 'linear-gradient(135deg, #4F46E5, #818CF8)',
+  color: '#0A5CB8',
+  gradient: 'linear-gradient(135deg, #0A5CB8, #4F95DB)',
 };
 
 const FALLBACK_SERVICES = [
@@ -63,7 +64,7 @@ const FALLBACK_SERVICES = [
   },
 ];
 
-export const ServicesSection = () => {
+export const ServicesSection = ({ showHeader = true }: { showHeader?: boolean }) => {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const [services, setServices] = useState<any[]>([]);
@@ -88,8 +89,8 @@ export const ServicesSection = () => {
       component="section"
       id="services"
       sx={{
-        py: { xs: 8, md: 15 },
-        bgcolor: isDark ? alpha('#111827', 0.5) : alpha('#F1F5F9', 0.7),
+        py: { xs: 7, md: 10 },
+        bgcolor: 'background.paper',
       }}
     >
       {services.length > 0 && (
@@ -117,23 +118,21 @@ export const ServicesSection = () => {
       )}
       <Container maxWidth="lg">
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
+          <Grid container spacing={{ xs: 4, md: 6 }} sx={{ alignItems: 'center' }}>
+          <Grid size={{ xs: 12, md: 7 }}>
           {/* Section Header */}
+          {showHeader && (
           <motion.div variants={fadeInUp}>
-            <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 10 } }}>
-              <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.75, borderRadius: 10, mb: 2, border: '1px solid', borderColor: alpha('#0D9488', 0.3), bgcolor: alpha('#0D9488', 0.06) }}>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: 'secondary.dark' }}>What We Offer</Typography>
-              </Box>
-              <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '2rem', md: '2.75rem' } }}>
-                Our{' '}
-                <Box component="span" sx={{ background: 'linear-gradient(135deg, #4F46E5, #0D9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                  Services
-                </Box>
+            <Box sx={{ mb: { xs: 4, md: 5 } }}>
+              <Typography variant="h2" sx={{ mb: 1, fontSize: { xs: '1.75rem', md: '2.4rem' } }}>
+                Complete Care for Every Stage of Life
               </Typography>
-              <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400, maxWidth: 480, mx: 'auto' }}>
+              <Typography color="text.secondary" sx={{ maxWidth: 480 }}>
                 Comprehensive medical services brought directly to your doorstep.
               </Typography>
             </Box>
           </motion.div>
+          )}
 
           <Grid container spacing={3}>
             {loading ? (
@@ -153,8 +152,8 @@ export const ServicesSection = () => {
                             color: 'inherit',
                             textDecoration: 'none',
                             height: '100%',
-                            p: 4,
-                            borderRadius: '32px', // Was 4 which evaluated to 64px!
+                            p: 3,
+                            borderRadius: '24px',
                             bgcolor: 'background.paper',
                             border: '1px solid',
                             borderColor: 'divider',
@@ -184,38 +183,33 @@ export const ServicesSection = () => {
                         {/* Icon */}
                         <Box
                           sx={{
-                            width: 68, height: 68, borderRadius: '16px', mb: 3,
+                            width: 64, height: 64, borderRadius: '18px', mb: 3,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            background: ui.gradient,
-                            boxShadow: `0 8px 20px ${alpha(ui.color, 0.35)}`,
-                            color: 'white',
+                            bgcolor: alpha(ui.color, 0.12),
+                            
+                            color: ui.color,
                           }}
                         >
                           {ui.icon}
                         </Box>
 
-                        <Typography variant="h5" sx={{ fontWeight: 700, mb: 1.5 }}>
+                        <Typography component="h3" variant="subtitle1" sx={{ fontSize: "1.15rem", fontWeight: 700, mb: 1 }}>
                           {service.serviceName}
                         </Typography>
-                        <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.75, mb: 2 }}>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                           {service.description || 'Professional home healthcare service tailored to your needs.'}
                         </Typography>
 
-                        <Box sx={{ mb: 3 }}>
-                          <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary', mb: 0.5 }}>
-                            Availability: <Typography component="span" variant="body2" color="text.secondary">24/7 across Mumbai</Typography>
-                          </Typography>
-                          <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary' }}>
-                            Pricing: <Typography component="span" variant="body2" color="text.secondary">Varies based on location and service type.</Typography>
-                          </Typography>
-                        </Box>
+                        <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 2 }}>
+                          Available 24/7 across Mumbai · Pricing varies by location and service type.
+                        </Typography>
 
                         <Box
                           className="service-arrow"
                           sx={{
                             display: 'inline-flex', alignItems: 'center', gap: 0.5,
                             color: ui.color, fontWeight: 700, fontSize: '0.875rem',
-                            opacity: 0, transform: 'translateX(-8px)',
+                            opacity: 1, transform: "translateX(0)",
                             transition: 'all 0.3s ease',
                           }}
                         >
@@ -228,6 +222,19 @@ export const ServicesSection = () => {
               })
             )}
           </Grid>
+          </Grid>
+          <Grid size={{ xs: 12, md: 5 }}>
+            <motion.div variants={fadeInUp}>
+              <Box sx={{ position: 'relative', overflow: 'hidden', borderRadius: '28px', minHeight: { xs: 260, md: 420 }, boxShadow: '0 16px 48px rgba(10, 92, 184, 0.14)' }}>
+                <Image src="/images/7653136.jpg" alt="A doctor checking a young girl while her mother looks on, at home" fill sizes="(max-width: 900px) 100vw, 40vw" style={{ objectFit: "cover", objectPosition: "40% 50%" }} />
+                <Box sx={{ position: 'absolute', left: 0, bottom: 0, right: 0, p: 3, background: 'linear-gradient(0deg, rgba(11,42,82,0.85) 0%, transparent 100%)', color: 'white' }}>
+                  <Typography component="h3" variant="subtitle1" sx={{ fontSize: "1.4rem", fontWeight: 800 }}>Care for Every Generation</Typography>
+                  <Typography variant="body2" sx={{ opacity: 0.85 }}>Because every life stage matters.</Typography>
+                </Box>
+              </Box>
+            </motion.div>
+          </Grid>
+        </Grid>
         </motion.div>
       </Container>
     </Box>

@@ -28,7 +28,7 @@ export default async function FaqPage() {
         title="Frequently Asked Questions"
         subtitle="Everything you need to know about booking, payments, and our medical services."
       />
-      <FaqSection initialFaqs={faqs} />
+      <FaqSection initialFaqs={faqs} showHeader={false} />
       <CtaBanner />
     </>
   );

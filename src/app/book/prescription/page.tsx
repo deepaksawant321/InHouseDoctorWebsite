@@ -31,7 +31,7 @@ export default function PrescriptionPage() {
         <Box
           component="button" type="button" onClick={() => router.back()}
           sx={{
-            py: 1.5, px: 4, borderRadius: '16px', border: '1px solid', borderColor: 'divider', cursor: 'pointer',
+            py: 1.5, px: 4, borderRadius: '999px', border: '1px solid', borderColor: 'divider', cursor: 'pointer',
             bgcolor: 'transparent', color: 'text.primary', fontWeight: 600, fontSize: '1rem',
             transition: 'all 0.2s', '&:hover': { bgcolor: 'action.hover' },
           }}
@@ -50,9 +50,9 @@ export default function PrescriptionPage() {
           <Box
             component="button" type="button" onClick={() => router.push('/book/payment')}
             sx={{
-              py: 1.5, px: { xs: 3, sm: 6 }, borderRadius: '16px', border: 'none', cursor: 'pointer',
-              background: 'linear-gradient(135deg, #4F46E5, #0D9488)', color: 'white', 
-              fontWeight: 700, fontSize: '1rem', boxShadow: '0 8px 24px rgba(25, 118, 210, 0.3)',
+              py: 1.5, px: { xs: 3, sm: 6 }, borderRadius: '999px', border: 'none', cursor: 'pointer',
+              background: '#0A5CB8', color: 'white', 
+              fontWeight: 700, fontSize: '1rem', boxShadow: '0 8px 24px rgba(10, 92, 184, 0.3)',
               transition: 'all 0.2s', '&:hover': { transform: 'translateY(-2px)' },
             }}
           >

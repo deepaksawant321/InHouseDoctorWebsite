@@ -56,7 +56,7 @@ export const AdminSidebar = ({ mobileOpen, onClose }: AdminSidebarProps) => {
   const drawerContent = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.paper', borderRight: '1px solid', borderColor: 'divider' }}>
       <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <Box sx={{ width: 40, height: 40, borderRadius: 2, background: 'linear-gradient(135deg, #4F46E5, #0D9488)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+        <Box sx={{ width: 40, height: 40, borderRadius: 2, background: 'linear-gradient(135deg, #0A5CB8, #14B5A5)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
           <MedicalServicesIcon />
         </Box>
         <Typography variant="h6" sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: 'text.primary' }}>
