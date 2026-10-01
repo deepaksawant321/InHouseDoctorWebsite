@@ -50,7 +50,7 @@ export const Header = () => {
     if (t) {
       setToken(t);
       // Patient notifications are not shown on admin routes
-      if (pathname?.startsWith('/admin')) return;
+      if (pathname?.startsWith('/admin') || pathname?.startsWith('/dashboard')) return;
       import('@/services/api').then(({ notificationsApi }) => {
         notificationsApi.getAll().then(res => {
           setNotifications(Array.isArray(res.data) ? res.data : (res.data?.data || []));
@@ -73,7 +73,7 @@ export const Header = () => {
     router.push('/login');
   };
 
-  if (pathname?.startsWith('/admin')) {
+  if (pathname?.startsWith('/admin') || pathname?.startsWith('/dashboard')) {
     return null;
   }
 
@@ -81,7 +81,7 @@ export const Header = () => {
     <Box sx={{ width: 280, height: '100%', bgcolor: 'background.paper', display: 'flex', flexDirection: 'column', p: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
         <Typography variant="h6" sx={{ fontWeight: 800, color: 'primary.main' }}>
-          InHouse Doctor
+          Doctor Doorstep
         </Typography>
         <IconButton onClick={handleDrawerToggle} size="small" aria-label="Close menu">
           <CloseIcon />
@@ -179,19 +179,19 @@ export const Header = () => {
                 variant="h6"
                 sx={{ textDecoration: 'none', fontWeight: 800, color: 'primary.main', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}
               >
-                InHouse Doctor
+                Doctor Doorstep
               </Typography>
             </Box>
 
             {/* Desktop Nav */}
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', justifyContent: 'center', flexGrow: 1, gap: { md: 0.25, lg: 0.5 } }}>
+            <Box sx={{ display: 'none', '@media (min-width:1150px)': { display: 'flex' }, alignItems: 'center', justifyContent: 'center', flexGrow: 1, gap: { md: 0.25, lg: 0.5 } }}>
               {navItems.map((item) => (
                 <Box
                   key={item.label}
                   component={Link}
                   href={item.href}
                   sx={{
-                    px: { md: 1.25, lg: 2 }, py: 1, borderRadius: '999px', textDecoration: 'none', position: 'relative', whiteSpace: 'nowrap',
+                    px: 2, py: 1, borderRadius: '999px', textDecoration: 'none', position: 'relative', whiteSpace: 'nowrap',
                     color: pathname === item.href ? 'primary.main' : 'text.primary', fontWeight: pathname === item.href ? 700 : 500, fontSize: '0.9rem',
                     transition: 'all 0.2s',
                     '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.08), color: 'primary.main' },
@@ -203,7 +203,7 @@ export const Header = () => {
             </Box>
 
             {/* Right Actions */}
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: { md: 1, lg: 1.5 }, flexShrink: 0 }}>
+            <Box sx={{ display: 'none', '@media (min-width:1150px)': { display: 'flex' }, alignItems: 'center', gap: { md: 1, lg: 1.5 }, flexShrink: 0 }}>
               <ThemeToggle />
               
               {!token ? (
@@ -311,7 +311,7 @@ export const Header = () => {
             </Box>
 
             {/* Mobile */}
-            <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', gap: 1 }}>
+            <Box sx={{ display: 'flex', '@media (min-width:1150px)': { display: 'none' }, alignItems: 'center', gap: 1, ml: 'auto' }}>
               <ThemeToggle />
               <IconButton onClick={handleDrawerToggle} edge="end" aria-label="Open mobile menu" sx={{ color: "text.primary" }}>
                 <MenuIcon />

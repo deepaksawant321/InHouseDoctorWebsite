@@ -11,7 +11,7 @@ export default function AuthSettingsPage() {
       <h1 style={{ marginBottom: '16px', fontSize: '24px', fontWeight: 'bold' }}>
         Authentication Settings
       </h1>
-      <div style={{ padding: '24px', marginTop: '24px', backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+      <div style={{ padding: '24px', marginTop: '24px', backgroundColor: 'transparent', border: '1px solid rgba(128,128,128,0.35)', borderRadius: '8px' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px' }}>
           
           <div style={{ flex: '1 1 300px' }}>
@@ -19,7 +19,7 @@ export default function AuthSettingsPage() {
             <select
               value={loginMethod}
               onChange={(e) => setLoginMethod(e.target.value)}
-              style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
+              style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid rgba(128,128,128,0.5)', background: 'transparent', color: 'inherit' }}
             >
               <option value="password">Password Only</option>
               <option value="password_otp">Password + OTP</option>
@@ -32,7 +32,7 @@ export default function AuthSettingsPage() {
             <select
               value={otpChannel}
               onChange={(e) => setOtpChannel(e.target.value)}
-              style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
+              style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid rgba(128,128,128,0.5)', background: 'transparent', color: 'inherit' }}
             >
               <option value="email">Email Only</option>
               <option value="sms">SMS Only</option>
@@ -45,7 +45,7 @@ export default function AuthSettingsPage() {
             <input 
               defaultValue="5" 
               type="number" 
-              style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }} 
+              style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid rgba(128,128,128,0.5)', background: 'transparent', color: 'inherit' }} 
             />
           </div>
 
@@ -54,7 +54,7 @@ export default function AuthSettingsPage() {
             <input 
               defaultValue="3" 
               type="number" 
-              style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }} 
+              style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid rgba(128,128,128,0.5)', background: 'transparent', color: 'inherit' }} 
             />
           </div>
           

@@ -2,15 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Box, Container, IconButton, Drawer, useTheme, useMediaQuery, alpha } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { DashboardSidebar } from '@/components/layout/DashboardSidebar';
+import { Box, Drawer, Toolbar } from '@mui/material';
+import { DashboardSidebar, DASHBOARD_DRAWER_WIDTH } from '@/components/layout/DashboardSidebar';
+import { DashboardHeader } from '@/components/layout/DashboardHeader';
 
 export default function DashboardShell({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const theme = useTheme();
   const router = useRouter();
-  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -30,74 +28,44 @@ export default function DashboardShell({ children }: { children: React.ReactNode
     return null;
   }
 
-  const SIDEBAR_WIDTH = 280;
-
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', pt: { xs: 8, md: 10 }, bgcolor: alpha(theme.palette.primary.main, 0.02) }}>
-      
-      {/* Mobile Drawer */}
-      <Drawer
-        variant="temporary"
-        open={mobileOpen}
-        onClose={handleDrawerToggle}
-        ModalProps={{ keepMounted: true }}
-        sx={{
-          display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: SIDEBAR_WIDTH },
-        }}
-      >
-        <DashboardSidebar onClick={handleDrawerToggle} />
-      </Drawer>
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
+      <DashboardHeader onDrawerToggle={handleDrawerToggle} />
 
-      {/* Desktop Sidebar */}
-      <Box
-        component="nav"
-        sx={{
-          width: { md: SIDEBAR_WIDTH },
-          flexShrink: { md: 0 },
-          display: { xs: 'none', md: 'block' },
-          borderRight: '1px solid',
-          borderColor: 'divider',
-          position: 'fixed',
-          top: 80, // Accounts for root header
-          bottom: 0,
-          bgcolor: 'background.paper',
-          zIndex: 10,
-        }}
-      >
-        <DashboardSidebar />
+      <Box component="nav" sx={{ width: { lg: DASHBOARD_DRAWER_WIDTH }, flexShrink: { lg: 0 } }}>
+        {/* Mobile / tablet drawer */}
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{ keepMounted: true }}
+          sx={{ display: { xs: 'block', lg: 'none' }, '& .MuiDrawer-paper': { boxSizing: 'border-box', width: DASHBOARD_DRAWER_WIDTH } }}
+        >
+          <DashboardSidebar onClick={handleDrawerToggle} />
+        </Drawer>
+
+        {/* Desktop sidebar */}
+        <Drawer
+          variant="permanent"
+          open
+          sx={{ display: { xs: 'none', lg: 'block' }, '& .MuiDrawer-paper': { boxSizing: 'border-box', width: DASHBOARD_DRAWER_WIDTH } }}
+        >
+          <DashboardSidebar />
+        </Drawer>
       </Box>
 
-      {/* Main Content */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           minWidth: 0,
           overflowWrap: 'anywhere',
-          p: { xs: 2, md: 4 },
-          width: { md: `calc(100% - ${SIDEBAR_WIDTH}px)` },
-          ml: { md: `${SIDEBAR_WIDTH}px` },
+          p: { xs: 2, sm: 3, md: 4 },
+          width: { lg: `calc(100% - ${DASHBOARD_DRAWER_WIDTH}px)` },
         }}
       >
-        {/* Mobile Header Toggle */}
-        {!isMdUp && (
-          <Box sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, bgcolor: 'background.paper', boxShadow: 1 }}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Box>
-        )}
-
-        <Container maxWidth="lg" disableGutters>
-          {children}
-        </Container>
+        <Toolbar /> {/* spacing below the fixed header */}
+        <Box sx={{ maxWidth: 1100, mx: 'auto' }}>{children}</Box>
       </Box>
     </Box>
   );

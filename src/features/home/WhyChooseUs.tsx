@@ -3,6 +3,7 @@
 import { Box, Container, Typography, Grid, alpha, useTheme } from '@mui/material';
 import { m as motion } from 'framer-motion';
 import { staggerContainer, fadeInUp } from '@/constants/animations';
+import { accent } from '@/theme/accent';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import BoltIcon from '@mui/icons-material/Bolt';
 import LockIcon from '@mui/icons-material/Lock';
@@ -55,7 +56,7 @@ export const WhyChooseUs = () => {
   return (
     <Box
       component="section"
-      sx={{ py: { xs: 7, md: 10 }, bgcolor: isDark ? alpha('#0F2036', 0.6) : '#EAF5FD' }}
+      sx={{ py: { xs: 7, md: 10 }, bgcolor: isDark ? '#10284A' : '#EAF5FD', borderTop: isDark ? '1px solid rgba(255,255,255,0.08)' : 'none', borderBottom: isDark ? '1px solid rgba(255,255,255,0.08)' : 'none' }}
     >
       <Container maxWidth="lg">
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
@@ -79,8 +80,8 @@ export const WhyChooseUs = () => {
                       sx={{
                         width: 52, height: 52, borderRadius: '50%', mb: 0.5, flexShrink: 0,
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        bgcolor: 'background.paper', color: feature.color,
-                        boxShadow: '0 6px 18px rgba(10, 92, 184, 0.12)',
+                        bgcolor: isDark ? alpha(accent(feature.color, true), 0.2) : 'background.paper', color: accent(feature.color, isDark),
+                        boxShadow: isDark ? 'none' : '0 6px 18px rgba(10, 92, 184, 0.12)',
                       }}
                     >
                       {feature.icon}

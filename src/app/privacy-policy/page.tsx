@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'InHouse Doctor Privacy Policy. Learn how we handle and protect your data.',
+  description: 'Doctor Doorstep Privacy Policy. Learn how we handle and protect your data.',
 };
 
 export default function PrivacyPolicyPage() {

@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Refund & Cancellation Policy',
-  description: 'InHouse Doctor Refund and Cancellation Policy.',
+  description: 'Doctor Doorstep Refund and Cancellation Policy.',
 };
 
 export default function RefundPolicyPage() {

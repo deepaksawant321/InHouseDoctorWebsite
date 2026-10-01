@@ -33,7 +33,7 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
-        title="About InHouse Doctor"
+        title="About Doctor Doorstep"
         subtitle="Professional healthcare at your doorstep. We are revolutionizing home healthcare in Mumbai."
       />
 
@@ -69,7 +69,7 @@ export default function AboutPage() {
         </Container>
       </Box>
 
-      <Box component="section" sx={{ py: { xs: 7, md: 10 }, bgcolor: '#EAF5FD' }}>
+      <Box component="section" sx={{ py: { xs: 7, md: 10 }, bgcolor: 'background.default', borderTop: '1px solid', borderBottom: '1px solid', borderColor: 'divider' }}>
         <Container maxWidth="lg">
           <Typography variant="h2" sx={{ mb: { xs: 4, md: 6 }, fontSize: { xs: '1.75rem', md: '2.4rem' } }}>
             Our Core Values

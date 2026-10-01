@@ -3,13 +3,27 @@
 import { Box, Toolbar } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { AdminSidebar, drawerWidth } from '@/features/admin/AdminSidebar';
+import { AdminSidebar, collapsedDrawerWidth, drawerWidth } from '@/features/admin/AdminSidebar';
 import { AdminHeader } from '@/features/admin/AdminHeader';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    try {
+      setCollapsed(localStorage.getItem('adminSidebarCollapsed') === '1');
+    } catch { /* storage unavailable */ }
+  }, []);
+
+  const handleToggleCollapsed = () => {
+    setCollapsed((c) => {
+      try { localStorage.setItem('adminSidebarCollapsed', c ? '0' : '1'); } catch { /* ignore */ }
+      return !c;
+    });
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
@@ -39,11 +53,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
-      <AdminHeader onDrawerToggle={handleDrawerToggle} />
-      <AdminSidebar mobileOpen={mobileOpen} onClose={handleDrawerToggle} />
+      <AdminHeader onDrawerToggle={handleDrawerToggle} collapsed={collapsed} onToggleCollapsed={handleToggleCollapsed} />
+      <AdminSidebar mobileOpen={mobileOpen} onClose={handleDrawerToggle} collapsed={collapsed} onToggleCollapsed={handleToggleCollapsed} />
       <Box
         component="main"
-        sx={{ flexGrow: 1, minWidth: 0, p: { xs: 2, sm: 3, md: 4 }, width: { md: `calc(100% - ${drawerWidth}px)` } }}
+        sx={{ flexGrow: 1, minWidth: 0, p: { xs: 2, sm: 3, md: 4 }, width: { lg: `calc(100% - ${collapsed ? collapsedDrawerWidth : drawerWidth}px)` }, transition: 'width 200ms ease',
+          // Admin-only type scale: readable body text, compact page titles (public site keeps theme defaults).
+          '& .MuiTypography-h4': { fontSize: { xs: '1.5rem', md: '1.75rem' } },
+          '& .MuiTypography-body1': { fontSize: '1rem' },
+          '& .MuiTypography-body2': { fontSize: '0.95rem' },
+          '& .MuiTypography-caption': { fontSize: '0.85rem' },
+          '& .MuiButton-sizeSmall': { fontSize: '0.875rem', py: 0.5, px: 1.75 },
+          '& .MuiInputBase-input, & .MuiInputLabel-root': { fontSize: '1rem' },
+        }}
       >
         <Toolbar /> {/* For spacing below header */}
         {children}

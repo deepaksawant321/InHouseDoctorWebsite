@@ -1,12 +1,26 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { formatDoctorName } from '@/utils/doctorName';
-import { Box, Typography, Button, TextField, MenuItem, Stack, CircularProgress, Snackbar, Alert } from '@mui/material';
+import { Box, Typography, Button, TextField, MenuItem, Stack, Snackbar, Alert } from '@mui/material';
 import { DataTable } from '@/features/admin/DataTable';
+import { DateRangeFilter, useInitialDateRange } from '@/features/admin/DateRangeFilter';
 import { StatusBadge, StatusType } from '@/features/admin/StatusBadge';
 import { adminApi } from '@/services/api';
-import Link from 'next/link';
+import { ActionIcon } from '@/features/admin/ActionIcon';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutlined';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import { formatDate } from '@/utils/date';
+
+const BOOKING_STATUSES = ['Created', 'Pending', 'PaymentPending', 'PaymentVerified', 'Confirmed', 'DoctorAssigned', 'VisitStarted', 'VisitCompleted', 'Completed', 'Cancelled'];
+
+// Same status set the dashboard's "Completed Visits" card counts
+const COMPLETED_VISITS = 'Completed,VisitCompleted';
 
 export default function BookingsManagementPage() {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -14,12 +28,23 @@ export default function BookingsManagementPage() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [total, setTotal] = useState(0);
-  const [statusFilter, setStatusFilter] = useState('All');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  // Initial filters can come from the URL (e.g. dashboard cards link here with ?status=Pending&startDate=...).
+  const range = useInitialDateRange(); // defaults to today unless the URL carries a range
+  const [initial] = useState(() => {
+    const q = new URLSearchParams(typeof window === 'undefined' ? '' : window.location.search);
+    const status = q.get('status') ?? 'All';
+    return { status: ['All', COMPLETED_VISITS, 'Created', 'Pending', 'PaymentPending', 'PaymentVerified', 'Confirmed', 'DoctorAssigned', 'VisitStarted', 'VisitCompleted', 'Completed', 'Cancelled'].includes(status) ? status : 'All' };
+  });
+  const [statusFilter, setStatusFilter] = useState(initial.status);
+  const [startDate, setStartDate] = useState(range.start);
+  const [endDate, setEndDate] = useState(range.end);
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
 
+  const requestSeq = useRef(0);
+
   const fetchBookings = (showLoading = true) => {
+    if (startDate && endDate && startDate > endDate) return; // invalid range: wait for the user to fix it
+    const seq = ++requestSeq.current;
     if (showLoading) setLoading(true);
     adminApi.getBookings({
       status: statusFilter === 'All' ? undefined : statusFilter,
@@ -28,9 +53,12 @@ export default function BookingsManagementPage() {
       page: page + 1,
       pageSize: rowsPerPage,
     }).then(res => {
+      if (seq !== requestSeq.current) return; // a newer request superseded this one
       setBookings(res.data.data || []);
       setTotal(res.data.total ?? 0);
-    }).catch(console.error).finally(() => { if (showLoading) setLoading(false); });
+    }).catch(() => {
+      if (seq === requestSeq.current) setSnackbar({ open: true, message: 'Could not load bookings', severity: 'error' });
+    }).finally(() => { if (seq === requestSeq.current) setLoading(false); });
   };
 
   useEffect(() => {
@@ -66,88 +94,62 @@ export default function BookingsManagementPage() {
     },
     { id: 'doctor' as const, label: 'Doctor', minWidth: 150, format: (_: any, row: any) => row.doctor ? formatDoctorName(row.doctor.name) : 'Unassigned' },
     { id: 'symptoms' as const, label: 'Symptoms', minWidth: 150, format: (v: string) => v || '—' },
-    { id: 'scheduledDate' as const, label: 'Date', minWidth: 120, format: (v: string) => v ? new Date(v).toLocaleDateString() : '—' },
-    { id: 'paymentStatus' as const, label: 'Payment', minWidth: 120, format: (value: StatusType) => <StatusBadge status={value} /> },
-    { id: 'status' as const, label: 'Status', minWidth: 120, format: (value: StatusType) => <StatusBadge status={value} /> },
+    { id: 'scheduledDate' as const, label: 'Date', minWidth: 120, format: (v: string) => formatDate(v, { utc: true }) },
+    { id: 'paymentStatus' as const, label: 'Payment', minWidth: 120, align: 'center' as const, format: (value: StatusType) => <StatusBadge iconOnly status={value} /> },
+    { id: 'status' as const, label: 'Status', minWidth: 120, align: 'center' as const, format: (value: StatusType) => <StatusBadge iconOnly status={value} /> },
     {
-      id: 'actions' as const, label: 'Actions', minWidth: 350, align: 'center' as const,
+      id: 'actions' as const, label: 'Actions', minWidth: 300, align: 'left' as const,
       format: (_: any, row: any) => (
-        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', minWidth: 'max-content' }}>
+        <Box sx={{ display: 'flex', gap: 0.75, flexWrap: 'nowrap' }}>
+          <ActionIcon title="View details" icon={<VisibilityIcon fontSize="small" />} color="inherit" href={`/admin/bookings/${row.id}`} />
           {(row.status === 'Pending' || row.status === 'Created') && (
-            <Button variant="contained" size="small" sx={{ borderRadius: 2, whiteSpace: 'nowrap' }} onClick={() => handleUpdateStatus(row.id, 'Confirmed')}>
-              Confirm
-            </Button>
+            <ActionIcon title="Confirm booking" icon={<CheckCircleOutlineIcon fontSize="small" />} onClick={() => handleUpdateStatus(row.id, 'Confirmed')} />
           )}
           {row.status === 'Confirmed' && (
-            <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 2, whiteSpace: 'nowrap' }} component={Link} href="/admin/assignments">
-              Assign Dr
-            </Button>
+            <ActionIcon title="Assign doctor" icon={<PersonAddAltIcon fontSize="small" />} color="secondary" href="/admin/assignments" />
           )}
           {row.status === 'DoctorAssigned' && (
-            <Button variant="contained" color="info" size="small" sx={{ borderRadius: 2, whiteSpace: 'nowrap' }} onClick={() => handleUpdateStatus(row.id, 'VisitStarted')}>
-              Start Visit
-            </Button>
+            <ActionIcon title="Start visit" icon={<PlayArrowIcon fontSize="small" />} color="info" onClick={() => handleUpdateStatus(row.id, 'VisitStarted')} />
           )}
           {row.status === 'VisitStarted' && (
-            <Button variant="contained" color="warning" size="small" sx={{ borderRadius: 2, whiteSpace: 'nowrap' }} onClick={() => handleUpdateStatus(row.id, 'VisitCompleted')}>
-              End Visit
-            </Button>
+            <ActionIcon title="End visit" icon={<StopIcon fontSize="small" />} color="warning" onClick={() => handleUpdateStatus(row.id, 'VisitCompleted')} />
           )}
           {(row.status === 'VisitCompleted' || row.status === 'Confirmed' || row.status === 'DoctorAssigned') && (
-            <Button variant="outlined" color="success" size="small" sx={{ borderRadius: 2, whiteSpace: 'nowrap' }} onClick={() => handleUpdateStatus(row.id, 'Completed')}>
-              Complete
-            </Button>
+            <ActionIcon title="Mark completed" icon={<DoneAllIcon fontSize="small" />} color="success" onClick={() => handleUpdateStatus(row.id, 'Completed')} />
           )}
           {row.status !== 'Cancelled' && row.status !== 'Completed' && (
-            <Button variant="outlined" color="error" size="small" sx={{ borderRadius: 2, whiteSpace: 'nowrap' }} onClick={() => handleUpdateStatus(row.id, 'Cancelled')}>
-              Cancel
-            </Button>
+            <ActionIcon title="Cancel booking" icon={<CancelOutlinedIcon fontSize="small" />} color="error" onClick={() => { if (confirm('Cancel this booking?')) handleUpdateStatus(row.id, 'Cancelled'); }} />
           )}
         </Box>
       )
     },
   ];
 
-  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}><CircularProgress /></Box>;
+  const dateRangeInvalid = !!startDate && !!endDate && startDate > endDate;
+  const hasFilters = statusFilter !== 'All' || !!startDate || !!endDate;
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
-        <Typography variant="h4" sx={{ fontWeight: 800 }}>Bookings Management</Typography>
-        <Stack direction="row" spacing={2} sx={{ alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-          <TextField
-            type="date"
-            size="small"
-            label="Start Date"
-            slotProps={{ inputLabel: { shrink: true } }}
-            value={startDate}
-            onChange={e => { setStartDate(e.target.value); setPage(0); }}
-          />
-          <TextField
-            type="date"
-            size="small"
-            label="End Date"
-            slotProps={{ inputLabel: { shrink: true } }}
-            value={endDate}
-            onChange={e => { setEndDate(e.target.value); setPage(0); }}
-          />
-          <Button variant="contained" onClick={() => fetchBookings()} sx={{ borderRadius: 2 }}>
-            Apply Filter
-          </Button>
-
-          <TextField select size="small" label="Status" value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(0); }} sx={{ width: 160 }}>
-            <MenuItem value="All">All Statuses</MenuItem>
-            <MenuItem value="Pending">Pending</MenuItem>
-            <MenuItem value="Confirmed">Confirmed</MenuItem>
-            <MenuItem value="Completed">Completed</MenuItem>
-            <MenuItem value="Cancelled">Cancelled</MenuItem>
-          </TextField>
-        </Stack>
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h4" component="h1" sx={{ fontWeight: 800 }}>Bookings Management</Typography>
+        <Typography color="text.secondary">{total} booking{total === 1 ? '' : 's'}{hasFilters ? ' match your filters' : ''}</Typography>
       </Box>
+
+      <Stack direction="row" sx={{ alignItems: 'center', flexWrap: 'wrap', gap: 2, mb: 3 }}>
+        <TextField select size="small" label="Status" value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(0); }} sx={{ width: 200 }}>
+          <MenuItem value="All">All Statuses</MenuItem>
+          {BOOKING_STATUSES.map(s => <MenuItem key={s} value={s}>{s.replace(/([a-z])([A-Z])/g, '$1 $2')}</MenuItem>)}
+          <MenuItem value={COMPLETED_VISITS}>Completed Visits (Completed + Visit Completed)</MenuItem>
+        </TextField>
+        <DateRangeFilter startDate={startDate} endDate={endDate} fromLabel="From" onChange={(s, e) => { setStartDate(s); setEndDate(e); setPage(0); }} />
+      </Stack>
 
       <DataTable
         columns={columns}
         rows={bookings}
+        loading={loading}
+        searchable
+        emptyMessage={hasFilters ? 'No bookings match these filters.' : 'No bookings yet.'}
         serverPagination={{ total, page, rowsPerPage, onPageChange: setPage, onRowsPerPageChange: (n) => { setRowsPerPage(n); setPage(0); } }}
       />
 

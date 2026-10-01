@@ -1,8 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Box, Typography, Button, CircularProgress, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Switch, FormControlLabel, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Box, Typography, Button, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Switch, FormControlLabel, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { DataTable } from '@/features/admin/DataTable';
+import { ActionIcon } from '@/features/admin/ActionIcon';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
 import { StatusBadge } from '@/features/admin/StatusBadge';
 import AddIcon from '@mui/icons-material/Add';
 import { cmsBlocksApi } from '@/services/api';
@@ -83,26 +88,18 @@ export default function BlocksManagementPage() {
     { id: 'title' as const, label: 'Title', minWidth: 200 },
     { id: 'blockType' as const, label: 'Type', minWidth: 100 },
     { id: 'sortOrder' as const, label: 'Order', minWidth: 80 },
-    { id: 'isActive' as const, label: 'Status', minWidth: 100, format: (v: boolean) => <StatusBadge status={v ? 'Active' : 'Inactive'} /> },
+    { id: 'isActive' as const, label: 'Status', minWidth: 100, align: 'center' as const, format: (v: boolean) => <StatusBadge iconOnly status={v ? 'Active' : 'Inactive'} /> },
     {
       id: 'actions' as const, label: 'Actions', minWidth: 200, align: 'center' as const,
       format: (_: any, row: any) => (
         <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-          <Button variant="outlined" size="small" sx={{ borderRadius: 2 }} onClick={() => openEdit(row)}>
-            Edit
-          </Button>
-          <Button variant="outlined" size="small" color={row.isActive ? 'warning' : 'success'} sx={{ borderRadius: 2 }} onClick={() => handleToggleStatus(row)}>
-            {row.isActive ? 'Hide' : 'Show'}
-          </Button>
-          <Button variant="outlined" size="small" color="error" sx={{ borderRadius: 2 }} onClick={() => handleDelete(row.id)}>
-            Delete
-          </Button>
+          <ActionIcon title="Edit" icon={<EditIcon fontSize="small" />} color="info" onClick={() => openEdit(row)} />
+          <ActionIcon title={row.isActive ? 'Hide' : 'Show'} icon={row.isActive ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />} color={row.isActive ? 'warning' : 'success'} onClick={() => handleToggleStatus(row)} />
+          <ActionIcon title="Delete" icon={<DeleteOutlineIcon fontSize="small" />} color="error" onClick={() => handleDelete(row.id)} />
         </Box>
       )
     },
   ];
-
-  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}><CircularProgress /></Box>;
 
   return (
     <Box>
@@ -115,7 +112,7 @@ export default function BlocksManagementPage() {
         }}>Add Block</Button>
       </Box>
 
-      <DataTable columns={columns} rows={blocks} />
+      <DataTable columns={columns} rows={blocks} loading={loading} searchable emptyMessage="No blocks yet." />
 
       {/* Add/Edit Dialog */}
       <Dialog open={addDialog} onClose={() => setAddDialog(false)} maxWidth="md" fullWidth>

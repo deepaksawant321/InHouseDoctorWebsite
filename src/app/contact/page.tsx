@@ -26,7 +26,7 @@ export default function ContactPage() {
   return (
     <>
       <PageHero
-        title="Contact InHouse Doctor"
+        title="Contact Doctor Doorstep"
         subtitle="We're here to help. Reach out to us for any medical assistance or queries."
       />
 

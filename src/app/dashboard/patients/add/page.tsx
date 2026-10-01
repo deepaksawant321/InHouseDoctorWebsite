@@ -1,8 +1,7 @@
 'use client';
 
-import { Box, Typography, Button, TextField, Grid, Card, CardContent, MenuItem, CircularProgress } from '@mui/material';
+import { Alert, Box, Typography, Button, TextField, Grid, Card, CardContent, MenuItem, CircularProgress } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { useState } from 'react';
@@ -19,9 +18,17 @@ interface PatientForm {
   medicalNotes: string;
 }
 
+/** Booking-wizard step to return to after saving (only internal /book/* pages are accepted). */
+function getReturnTo(): string | null {
+  if (typeof window === 'undefined') return null;
+  const value = new URLSearchParams(window.location.search).get('returnTo');
+  return value && /^\/book\/[a-z-]+$/.test(value) ? value : null;
+}
+
 export default function AddPatient() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const { control, handleSubmit, formState: { errors } } = useForm<PatientForm>({
     defaultValues: {
       fullName: '',
@@ -36,6 +43,7 @@ export default function AddPatient() {
   });
 
   const onSubmit = async (data: PatientForm) => {
+    setSubmitError(null);
     setIsSubmitting(true);
     try {
       await patientsApi.create({
@@ -48,10 +56,10 @@ export default function AddPatient() {
         emergencyContact: data.emergencyContact,
         medicalNotes: data.medicalNotes,
       });
-      router.push('/dashboard/patients');
+      router.push(getReturnTo() ?? '/dashboard/patients');
     } catch (err) {
       console.error(err);
-      alert('Failed to add patient. Please try again.');
+      setSubmitError('We could not save this patient. Please check the details and try again.');
       setIsSubmitting(false);
     }
   };
@@ -59,12 +67,11 @@ export default function AddPatient() {
   return (
     <Box sx={{ maxWidth: 800 }}>
       <Button
-        component={Link}
-        href="/dashboard/patients"
         startIcon={<ArrowBackIcon />}
+        onClick={() => router.push(getReturnTo() ?? '/dashboard/patients')}
         sx={{ mb: 3, textTransform: 'none', color: 'text.secondary' }}
       >
-        Back to Patients
+        Back
       </Button>
 
       <Typography variant="h4" sx={{ fontWeight: 800, mb: 4 }}>
@@ -134,6 +141,11 @@ export default function AddPatient() {
                   <TextField {...field} fullWidth label="Medical Notes (Allergies, chronic conditions, etc.)" multiline rows={4} />
                 )} />
               </Grid>
+              {submitError && (
+                <Grid size={{ xs: 12 }}>
+                  <Alert severity="error" role="alert">{submitError}</Alert>
+                </Grid>
+              )}
               <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
                 <Button type="submit" variant="contained" size="large" disabled={isSubmitting} sx={{ borderRadius: 2, px: 4, py: 1.5, textTransform: 'none', fontWeight: 600 }}>
                   {isSubmitting ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Save Patient'}

@@ -1,10 +1,15 @@
 'use client';
 
-import { Box, Typography, TextField, alpha, RadioGroup, FormControlLabel, Radio, CircularProgress } from '@mui/material';
+import { Alert, Box, Typography, TextField, alpha, RadioGroup, FormControlLabel, Radio, CircularProgress } from '@mui/material';
+import { WizardNav } from '@/features/booking/WizardNav';
 import Grid from '@mui/material/Grid';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import HomeIcon from '@mui/icons-material/Home';
+import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
+import { StepHeader, SectionTitle } from '@/features/booking/StepHeader';
 import { useEffect, useState } from 'react';
 import { usersApi } from '@/services/api';
 import { useBooking } from '@/providers/BookingProvider';
@@ -26,7 +31,9 @@ export default function AddressDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [selectedAddressId, setSelectedAddressId] = useState<string | 'new'>('new');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+  const [formError, setFormError] = useState<string | null>(null);
+  const [locationError, setLocationError] = useState<string | null>(null);
+
   const { control, handleSubmit, formState: { errors }, setValue } = useForm<AddressForm>({
     defaultValues: { addressLine1: '', addressLine2: '', area: '', city: 'Mumbai', state: 'Maharashtra', pincode: '', landmark: '' }
   });
@@ -52,6 +59,7 @@ export default function AddressDetailsPage() {
       return;
     }
 
+    setFormError(null);
     setIsSubmitting(true);
     try {
       const res = await usersApi.addAddress(data);
@@ -60,7 +68,7 @@ export default function AddressDetailsPage() {
       router.push('/book/schedule');
     } catch (err) {
       console.error(err);
-      alert('Failed to save address. Please try again.');
+      setFormError('We could not save your address. Please check the details and try again.');
       setIsSubmitting(false);
     }
   };
@@ -68,11 +76,12 @@ export default function AddressDetailsPage() {
   const [gettingLocation, setGettingLocation] = useState(false);
 
   const handleCurrentLocation = () => {
+    setLocationError(null);
     if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser');
+      setLocationError('Location is not supported by your browser. Please fill in the address manually.');
       return;
     }
-    
+
     setGettingLocation(true);
     navigator.geolocation.getCurrentPosition(async (position) => {
       try {
@@ -92,54 +101,54 @@ export default function AddressDetailsPage() {
         }
       } catch (err) {
         console.error('Failed to fetch address from coordinates:', err);
-        alert('Could not determine exact address from your location. Please fill it manually.');
+        setLocationError('We could not work out your address from your location. Please fill it in manually.');
       } finally {
         setGettingLocation(false);
       }
     }, (error) => {
       console.error(error);
-      alert('Failed to get your location. Please check your browser permissions.');
+      setLocationError('We could not get your location. Please allow location access in your browser, or fill in the address manually.');
       setGettingLocation(false);
     });
   };
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1, flexWrap: 'wrap', gap: 2 }}>
-        <Box>
-          <Typography variant="h3" sx={{ fontWeight: 700 }}>
-            Address Details
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Where should the medical professional arrive?
-          </Typography>
-        </Box>
-      </Box>
+      <StepHeader icon={<LocationOnIcon />} title="Address Details" subtitle="Where should the medical professional arrive?" />
 
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}><CircularProgress /></Box>
       ) : (
-        <Box sx={{ mt: 4, mb: 4 }}>
+        <Box sx={{ mb: 4 }}>
           {addresses.length > 0 && (
-            <Box sx={{ mb: 4 }}>
-              <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>Select an Address</Typography>
+            <Box sx={{ mb: 3 }}>
+              <SectionTitle icon={<HomeIcon />}>Saved addresses</SectionTitle>
               <RadioGroup value={selectedAddressId} onChange={(e) => setSelectedAddressId(e.target.value)}>
                 {addresses.map(addr => (
-                  <Box key={addr.id} sx={{ p: 2, mb: 2, border: '1px solid', borderColor: selectedAddressId === addr.id ? 'primary.main' : 'divider', borderRadius: 2, bgcolor: selectedAddressId === addr.id ? alpha('#0A5CB8', 0.05) : 'background.paper' }}>
-                    <FormControlLabel 
-                      value={addr.id} 
-                      control={<Radio />} 
+                  <Box key={addr.id} sx={{ px: 2, py: 1, mb: 1.5, border: '2px solid', borderColor: selectedAddressId === addr.id ? 'primary.main' : 'divider', borderRadius: '16px', bgcolor: selectedAddressId === addr.id ? alpha('#0A5CB8', 0.05) : 'background.paper' }}>
+                    <FormControlLabel
+                      value={addr.id}
+                      control={<Radio />}
+                      sx={{ width: '100%', m: 0 }}
                       label={
-                        <Box>
-                          <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>{addr.addressLine1}</Typography>
-                          <Typography variant="body2" color="text.secondary">{addr.area}, {addr.city}, {addr.state} - {addr.pincode}</Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, py: 0.5 }}>
+                          <HomeIcon sx={{ color: 'primary.main', fontSize: 22 }} />
+                          <Box>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 700, overflowWrap: 'anywhere' }}>{addr.addressLine1}</Typography>
+                            <Typography variant="body2" color="text.secondary">{addr.area}, {addr.city}, {addr.state} - {addr.pincode}</Typography>
+                          </Box>
                         </Box>
-                      } 
+                      }
                     />
                   </Box>
                 ))}
-                <Box sx={{ p: 2, border: '1px solid', borderColor: selectedAddressId === 'new' ? 'primary.main' : 'divider', borderRadius: 2, bgcolor: selectedAddressId === 'new' ? alpha('#0A5CB8', 0.05) : 'background.paper' }}>
-                  <FormControlLabel value="new" control={<Radio />} label={<Typography sx={{ fontWeight: 600 }}>Add a New Address</Typography>} />
+                <Box sx={{ px: 2, py: 1, border: '2px solid', borderColor: selectedAddressId === 'new' ? 'primary.main' : 'divider', borderRadius: '16px', bgcolor: selectedAddressId === 'new' ? alpha('#0A5CB8', 0.05) : 'background.paper' }}>
+                  <FormControlLabel value="new" control={<Radio />} sx={{ width: '100%', m: 0 }} label={
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, py: 0.5 }}>
+                      <AddLocationAltIcon sx={{ color: 'primary.main', fontSize: 22 }} />
+                      <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Add a new address</Typography>
+                    </Box>
+                  } />
                 </Box>
               </RadioGroup>
             </Box>
@@ -153,35 +162,36 @@ export default function AddressDetailsPage() {
                   {gettingLocation ? 'Locating...' : 'Use Current Location'}
                 </Box>
               </Box>
-              <Grid container spacing={3}>
+              {locationError && <Alert severity="warning" role="alert" onClose={() => setLocationError(null)} sx={{ mb: 2 }}>{locationError}</Alert>}
+              <Grid container spacing={2}>
                 <Grid size={{ xs: 12 }}>
                   <Controller name="addressLine1" control={control} rules={{ required: 'Address Line 1 is required' }} render={({ field }) => (
-                    <TextField {...field} fullWidth label="House / Flat / Block No." variant="outlined" error={!!errors.addressLine1} helperText={errors.addressLine1?.message} />
+                    <TextField {...field} fullWidth size="small" label="House / Flat / Block No." variant="outlined" error={!!errors.addressLine1} helperText={errors.addressLine1?.message} />
                   )} />
                 </Grid>
                 <Grid size={{ xs: 12 }}>
                   <Controller name="addressLine2" control={control} render={({ field }) => (
-                    <TextField {...field} fullWidth label="Apartment / Building Name" variant="outlined" />
+                    <TextField {...field} fullWidth size="small" label="Apartment / Building Name" variant="outlined" />
                   )} />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <Controller name="area" control={control} rules={{ required: 'Area is required' }} render={({ field }) => (
-                    <TextField {...field} fullWidth label="Area / Locality" variant="outlined" error={!!errors.area} helperText={errors.area?.message} />
+                    <TextField {...field} fullWidth size="small" label="Area / Locality" variant="outlined" error={!!errors.area} helperText={errors.area?.message} />
                   )} />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <Controller name="landmark" control={control} render={({ field }) => (
-                    <TextField {...field} fullWidth label="Landmark (Optional)" variant="outlined" />
+                    <TextField {...field} fullWidth size="small" label="Landmark (Optional)" variant="outlined" />
                   )} />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <Controller name="city" control={control} rules={{ required: 'City is required' }} render={({ field }) => (
-                    <TextField {...field} fullWidth label="City" variant="outlined" error={!!errors.city} helperText={errors.city?.message} />
+                    <TextField {...field} fullWidth size="small" label="City" variant="outlined" error={!!errors.city} helperText={errors.city?.message} />
                   )} />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <Controller name="pincode" control={control} rules={{ required: 'Pincode is required', pattern: { value: /^[0-9]{6}$/, message: 'Valid 6 digit pincode required' } }} render={({ field }) => (
-                    <TextField {...field} fullWidth label="Pincode" variant="outlined" slotProps={{ htmlInput: { maxLength: 6 } }} error={!!errors.pincode} helperText={errors.pincode?.message} />
+                    <TextField {...field} fullWidth size="small" label="Pincode" variant="outlined" slotProps={{ htmlInput: { maxLength: 6 } }} error={!!errors.pincode} helperText={errors.pincode?.message} />
                   )} />
                 </Grid>
               </Grid>
@@ -190,14 +200,9 @@ export default function AddressDetailsPage() {
         </Box>
       )}
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Box component="button" type="button" onClick={() => router.back()} sx={{ py: 1.5, px: 4, borderRadius: '999px', border: '1px solid', borderColor: 'divider', cursor: 'pointer', bgcolor: 'transparent', color: 'text.primary', fontWeight: 600, fontSize: '1rem', transition: 'all 0.2s', '&:hover': { bgcolor: 'action.hover' } }}>
-          Back
-        </Box>
-        <Box component="button" type="submit" disabled={isSubmitting} sx={{ py: 1.5, px: 6, borderRadius: '999px', border: 'none', cursor: isSubmitting ? 'not-allowed' : 'pointer', background: isSubmitting ? 'action.disabledBackground' : '#0A5CB8', color: 'white', fontWeight: 700, fontSize: '1rem', boxShadow: isSubmitting ? 'none' : '0 8px 24px rgba(10, 92, 184, 0.3)', transition: 'all 0.2s', '&:hover': { transform: isSubmitting ? 'none' : 'translateY(-2px)' } }}>
-          {isSubmitting ? 'Saving...' : 'Continue to Schedule'}
-        </Box>
-      </Box>
+      {formError && <Alert severity="error" role="alert" sx={{ mb: 3 }}>{formError}</Alert>}
+
+      <WizardNav onBack={() => router.back()} submit loading={isSubmitting} nextLabel={isSubmitting ? 'Saving...' : 'Continue to Schedule'} />
     </Box>
   );
 }

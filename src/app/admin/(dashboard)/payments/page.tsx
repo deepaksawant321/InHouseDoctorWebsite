@@ -1,10 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Box, Typography, Button, CircularProgress, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
+import { Box, Typography, Button, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem } from '@mui/material';
 import { DataTable } from '@/features/admin/DataTable';
+import { DateRangeFilter, useInitialDateRange } from '@/features/admin/DateRangeFilter';
 import { StatusBadge, StatusType } from '@/features/admin/StatusBadge';
 import { adminApi } from '@/services/api';
+import { ActionIcon } from '@/features/admin/ActionIcon';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 export default function PaymentsManagementPage() {
   const [payments, setPayments] = useState<any[]>([]);
@@ -12,15 +16,26 @@ export default function PaymentsManagementPage() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [total, setTotal] = useState(0);
-  const [statusFilter, setStatusFilter] = useState('All');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  // Initial filters can come from the URL (e.g. dashboard cards link here with ?status=Pending&startDate=...).
+  const range = useInitialDateRange(); // defaults to today unless the URL carries a range
+  const [initial] = useState(() => {
+    const q = new URLSearchParams(typeof window === 'undefined' ? '' : window.location.search);
+    const status = q.get('status') ?? 'All';
+    return { status: ['All', 'Pending', 'Success', 'Rejected'].includes(status) ? status : 'All' };
+  });
+  const [statusFilter, setStatusFilter] = useState(initial.status);
+  const [startDate, setStartDate] = useState(range.start);
+  const [endDate, setEndDate] = useState(range.end);
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
   const [verifyDialog, setVerifyDialog] = useState<{ open: boolean; paymentId: string | null }>({ open: false, paymentId: null });
   const [verifyStatus, setVerifyStatus] = useState<'Success' | 'Rejected'>('Success');
   const [verifyRemarks, setVerifyRemarks] = useState('');
 
+  const requestSeq = useRef(0);
+
   const fetchPayments = () => {
+    if (startDate && endDate && startDate > endDate) return; // invalid range: wait for the user to fix it
+    const seq = ++requestSeq.current;
     setLoading(true);
     adminApi.getPayments({
       status: statusFilter === 'All' ? undefined : statusFilter,
@@ -29,14 +44,20 @@ export default function PaymentsManagementPage() {
       page: page + 1,
       pageSize: rowsPerPage,
     }).then(res => {
+      if (seq !== requestSeq.current) return;
       setPayments(res.data.data || []);
       setTotal(res.data.total ?? 0);
-    }).catch(console.error).finally(() => setLoading(false));
+    }).catch(() => {
+      if (seq === requestSeq.current) setSnackbar({ open: true, message: 'Could not load payments', severity: 'error' });
+    }).finally(() => { if (seq === requestSeq.current) setLoading(false); });
   };
 
   useEffect(() => {
     fetchPayments();
-  }, [statusFilter, page, rowsPerPage]);
+  }, [statusFilter, startDate, endDate, page, rowsPerPage]);
+
+  const dateRangeInvalid = !!startDate && !!endDate && startDate > endDate;
+  const hasFilters = statusFilter !== 'All' || !!startDate || !!endDate;
 
   const openVerify = (id: string) => {
     setVerifyDialog({ open: true, paymentId: id });
@@ -63,15 +84,16 @@ export default function PaymentsManagementPage() {
     { id: 'patient' as const, label: 'Patient', minWidth: 150, format: (_: any, row: any) => row.booking?.patient?.fullName || '—' },
     { id: 'amount' as const, label: 'Amount', minWidth: 100, format: (value: number) => `₹${value ?? 0}` },
     { id: 'transactionId' as const, label: 'UPI Ref', minWidth: 150, format: (v: string) => v || '—' },
-    { id: 'status' as const, label: 'Status', minWidth: 120, format: (value: StatusType) => <StatusBadge status={value} /> },
+    { id: 'status' as const, label: 'Status', minWidth: 120, align: 'center' as const, format: (value: StatusType) => <StatusBadge iconOnly status={value} /> },
     {
-      id: 'actions' as const, label: 'Actions', minWidth: 150, align: 'center' as const,
+      id: 'actions' as const, label: 'Actions', minWidth: 180, align: 'left' as const,
       format: (_: any, row: any) => (
-        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          {row.booking?.id && (
+            <ActionIcon title="View booking" icon={<VisibilityIcon fontSize="small" />} color="inherit" href={`/admin/bookings/${row.booking.id}`} />
+          )}
           {row.status !== 'Success' && row.status !== 'Rejected' && (
-            <Button variant="contained" size="small" sx={{ borderRadius: 2 }} onClick={() => openVerify(row.id)}>
-              Verify
-            </Button>
+            <ActionIcon title="Verify payment" icon={<VerifiedIcon fontSize="small" />} onClick={() => openVerify(row.id)} />
           )}
           {row.status === 'Success' && <Typography variant="caption" color="success.main" sx={{ fontWeight: 700 }}>✓ Verified</Typography>}
           {row.status === 'Rejected' && <Typography variant="caption" color="error.main" sx={{ fontWeight: 700 }}>✗ Rejected</Typography>}
@@ -80,43 +102,31 @@ export default function PaymentsManagementPage() {
     },
   ];
 
-  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}><CircularProgress /></Box>;
-
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
-        <Typography variant="h4" sx={{ fontWeight: 800 }}>Payment Verification</Typography>
-        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
-          <TextField
-            type="date"
-            size="small"
-            label="Start Date"
-            slotProps={{ inputLabel: { shrink: true } }}
-            value={startDate}
-            onChange={e => setStartDate(e.target.value)}
-          />
-          <TextField
-            type="date"
-            size="small"
-            label="End Date"
-            slotProps={{ inputLabel: { shrink: true } }}
-            value={endDate}
-            onChange={e => setEndDate(e.target.value)}
-          />
-          <Button variant="contained" onClick={fetchPayments} sx={{ borderRadius: 2 }}>
-            Apply Filter
-          </Button>
-
-          <TextField select size="small" label="Status" value={statusFilter} onChange={e => setStatusFilter(e.target.value)} sx={{ width: 160 }}>
-            <MenuItem value="All">All Statuses</MenuItem>
-            <MenuItem value="Pending">Pending</MenuItem>
-            <MenuItem value="Success">Success</MenuItem>
-            <MenuItem value="Rejected">Rejected</MenuItem>
-          </TextField>
-        </Box>
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h4" component="h1" sx={{ fontWeight: 800 }}>Payment Verification</Typography>
+        <Typography color="text.secondary">{total} payment{total === 1 ? '' : 's'}{hasFilters ? ' match your filters' : ''}</Typography>
       </Box>
 
-      <DataTable columns={columns} rows={payments} />
+      <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center', mb: 3 }}>
+        <TextField select size="small" label="Status" value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(0); }} sx={{ width: 200 }}>
+          <MenuItem value="All">All Statuses</MenuItem>
+          <MenuItem value="Pending">Pending</MenuItem>
+          <MenuItem value="Success">Success</MenuItem>
+          <MenuItem value="Rejected">Rejected</MenuItem>
+        </TextField>
+        <DateRangeFilter startDate={startDate} endDate={endDate} fromLabel="From" onChange={(s, e) => { setStartDate(s); setEndDate(e); setPage(0); }} />
+      </Box>
+
+      <DataTable
+        columns={columns}
+        rows={payments}
+        loading={loading}
+        searchable
+        emptyMessage={hasFilters ? 'No payments match these filters.' : 'No payments yet.'}
+        serverPagination={{ total, page, rowsPerPage, onPageChange: setPage, onRowsPerPageChange: (n) => { setRowsPerPage(n); setPage(0); } }}
+      />
 
       {/* Verify Dialog */}
       <Dialog open={verifyDialog.open} onClose={() => setVerifyDialog({ open: false, paymentId: null })} maxWidth="xs" fullWidth>

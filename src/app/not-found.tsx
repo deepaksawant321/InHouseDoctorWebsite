@@ -53,9 +53,7 @@ export default function NotFound() {
               fontWeight: 900,
               fontSize: { xs: '5rem', md: '7rem' },
               lineHeight: 1,
-              background: '#0A5CB8',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
+              color: "primary.main",
               mb: 2,
             }}
           >

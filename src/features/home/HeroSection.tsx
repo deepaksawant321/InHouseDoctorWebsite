@@ -12,6 +12,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import PhoneIcon from '@mui/icons-material/Phone';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { scriptFont } from '@/theme/fonts';
 
 const stats = [
   { icon: <VerifiedIcon />, value: '500+', label: 'Verified Doctors' },
@@ -64,12 +65,10 @@ export const HeroSection = () => {
                   variant="h1"
                   sx={{ fontSize: { xs: '2.4rem', sm: '3.4rem', md: '3.4rem', lg: '4rem' }, mb: 2.5, color: 'text.primary' }}
                 >
-                  Doctor At Your{' '}
-                  <Box component="span" sx={{ background: 'linear-gradient(90deg, #0A5CB8 0%, #14B5A5 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                    Doorstep
+                  Doctor At Your<br />Doorstep<br />
+                  <Box component="span" sx={{ background: isDark ? "linear-gradient(90deg, #6DB6F5 0%, #2DD4BF 100%)" : "linear-gradient(90deg, #0A5CB8 0%, #14B5A5 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                    In Minutes.
                   </Box>
-                  <br />
-                  In Minutes.
                 </Typography>
               </motion.div>
 
@@ -130,8 +129,10 @@ export const HeroSection = () => {
           <Grid size={{ xs: 12, md: 6 }}>
             <motion.div variants={slideInRight} initial="hidden" animate="visible" style={{ position: 'relative' }}>
               <Box sx={{ position: 'relative', maxWidth: 520, mx: 'auto', aspectRatio: '4 / 4.6' }}>
-                <Box sx={{ position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: '200px 40px 160px 40px', boxShadow: '0 24px 60px rgba(10, 92, 184, 0.22)' }}>
-                <Image src="/images/7345465.jpg" alt="A nurse smiling while checking a patient with a stethoscope during a home visit" fill priority sizes="(max-width: 900px) 90vw, 520px" style={{ objectFit: "cover", objectPosition: "45% 50%" }} />
+                <Box aria-hidden sx={{ position: 'absolute', inset: '-6% -10% -4% 8%', borderRadius: '58% 42% 55% 45% / 48% 55% 45% 52%', background: isDark ? 'linear-gradient(145deg, rgba(45,212,191,0.28), rgba(91,168,240,0.22))' : 'linear-gradient(145deg, rgba(20,181,165,0.35), rgba(43,140,230,0.25))' }} />
+                <Typography aria-hidden className={scriptFont.className} sx={{ display: { xs: 'none', lg: 'block' }, position: 'absolute', top: '-2%', right: '-18%', zIndex: 3, color: 'primary.main', fontSize: '1.9rem', lineHeight: 1.05, transform: 'rotate(-7deg)', textAlign: 'center' }}>Healthy People<br />Happier<br />Tomorrows</Typography>
+                <Box sx={{ position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: '46% 54% 44% 56% / 38% 40% 60% 62%', boxShadow: isDark ? '0 24px 60px rgba(91, 168, 240, 0.2)' : '0 24px 60px rgba(10, 92, 184, 0.22)', border: isDark ? '1px solid rgba(255,255,255,0.14)' : 'none' }}>
+                <Image src="/images/7345465.jpg" alt="A nurse smiling while checking a patient with a stethoscope during a home visit" fill priority sizes="(max-width: 900px) 90vw, 520px" style={{ objectFit: "cover", objectPosition: "45% 50%", filter: isDark ? "brightness(0.88)" : "none" }} />
                 </Box>
 
                 <motion.div animate={floatAnimation} style={{ position: 'absolute', top: '14%', left: '-4%', zIndex: 3 }}>

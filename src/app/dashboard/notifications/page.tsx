@@ -6,6 +6,8 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useState, useEffect } from 'react';
 import { notificationsApi } from '@/services/api';
+import EmptyState from '@/components/EmptyState';
+import { formatDate } from '@/utils/date';
 
 export default function Notifications() {
   const theme = useTheme();
@@ -33,9 +35,11 @@ export default function Notifications() {
             <CircularProgress />
           </Box>
         ) : notifications.length === 0 ? (
-          <Box sx={{ p: 4, textAlign: 'center' }}>
-            <Typography variant="body1" color="text.secondary">No notifications found.</Typography>
-          </Box>
+          <EmptyState
+            title="No Notifications"
+            description="You are all caught up. Booking and payment updates will appear here."
+            icon={<NotificationsActiveIcon />}
+          />
         ) : (
           <List disablePadding>
             {notifications.map((notif, index) => {
@@ -73,7 +77,7 @@ export default function Notifications() {
                             {notif.message.split('.')[0] || 'Notification'}
                           </Typography>
                           <Typography variant="caption" color="text.secondary" sx={{ whiteSpace: 'nowrap', ml: 2 }}>
-                            {notif.sentDate ? new Date(notif.sentDate).toLocaleDateString() : ''}
+                            {notif.sentDate ? formatDate(notif.sentDate) : ''}
                           </Typography>
                         </Box>
                       }

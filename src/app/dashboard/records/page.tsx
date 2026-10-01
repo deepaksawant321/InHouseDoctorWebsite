@@ -9,6 +9,7 @@ import AssessmentIcon from '@mui/icons-material/Assessment';
 import { recordsApi } from '@/services/api';
 import EmptyState from '@/components/EmptyState';
 import { openPrivateFile } from '@/utils/files';
+import { formatDate } from '@/utils/date';
 
 export default function MedicalRecords() {
   const [recordsGroups, setRecordsGroups] = useState<any[]>([]);
@@ -29,7 +30,7 @@ export default function MedicalRecords() {
         acc[pName].push({
           id: record.id,
           title: record.recordType || 'Document',
-          date: new Date(record.createdDate).toLocaleDateString(),
+          date: formatDate(record.createdDate),
           type: record.recordType,
           fileUrl: record.fileUrl,
           icon: record.recordType?.includes('Prescription') ? <DescriptionIcon color="primary" /> : <AssessmentIcon color="secondary" />,

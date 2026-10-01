@@ -31,23 +31,27 @@ export const authApi = {
 export const adminAuthApi = {
   login: (email: string, password: string) =>
     apiClient.post('/admin/login', { email, password }),
+  forgotPassword: (email: string) =>
+    apiClient.post('/admin/forgot-password', { email }),
+  resetPassword: (email: string, otp: string, newPassword: string) =>
+    apiClient.post('/admin/reset-password', { email, otp, newPassword }),
 };
 
 // ─── Admin Dashboard ─────────────────────────────────────────────────────────
 
 export const adminApi = {
-  getDashboardStats: () =>
-    apiClient.get('/admin/dashboard/stats'),
+  getDashboardStats: (params?: { startDate?: string; endDate?: string }) =>
+    apiClient.get('/admin/dashboard/stats', { params }),
 
   getDashboardTrends: () =>
     apiClient.get('/admin/dashboard/trends'),
 
   // Users
-  getUsers: () =>
-    apiClient.get('/admin/users'),
+  getUsers: (params?: { startDate?: string; endDate?: string; page?: number; pageSize?: number }) =>
+    apiClient.get('/admin/users', { params }),
 
   // Doctors
-  getDoctors: (params?: { status?: string }) =>
+  getDoctors: (params?: { status?: string; startDate?: string; endDate?: string }) =>
     apiClient.get('/admin/doctors', { params }),
 
   toggleDoctorStatus: (id: string) =>

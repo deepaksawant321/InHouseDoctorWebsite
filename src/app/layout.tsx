@@ -14,9 +14,9 @@ export const metadata: Metadata = {
     template: '%s | Doctor Doorstep',
   },
   description: 'Book verified doctors for convenient home visits across Mumbai. Doctor Doorstep provides trusted home doctor consultations with easy booking and 24×7 support.',
-  authors: [{ name: 'InHouse Doctor' }],
-  creator: 'InHouse Doctor',
-  publisher: 'InHouse Doctor',
+  authors: [{ name: 'Doctor Doorstep' }],
+  creator: 'Doctor Doorstep',
+  publisher: 'Doctor Doorstep',
   formatDetection: {
     email: false,
     address: false,

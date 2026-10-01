@@ -55,34 +55,25 @@ export const TestimonialsSection = () => {
                 <motion.div variants={fadeInUp} style={{ height: '100%' }}>
                   <Box
                     sx={{
-                      p: 3,
-                      height: '100%',
-                      borderRadius: '20px',
-                      bgcolor: 'background.paper',
-                      border: '1px solid',
-                      borderColor: 'divider',
+                      p: 2.5, height: '100%', borderRadius: '18px',
+                      bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider',
                       boxShadow: '0 8px 28px rgba(10,92,184,0.07)',
-                      display: 'flex',
-                      flexDirection: 'column',
+                      display: 'flex', gap: 2, alignItems: 'flex-start',
                     }}
                   >
-                    <Rating value={testimonial.rating} readOnly sx={{ mb: 2, color: '#F59E0B' }} />
-                    <Typography variant="body1" color="text.secondary" sx={{ mb: 3, flexGrow: 1 }}>
-                      &quot;{testimonial.review}&quot;
-                    </Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                      <Avatar sx={{ bgcolor: alpha(theme.palette.primary.main, 0.1), color: 'primary.main' }}>
-                        {testimonial.name.charAt(0)}
-                      </Avatar>
-                      <Box>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-                          {testimonial.name}
-                        </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: 'text.secondary' }}>
-                          <LocationOnIcon sx={{ fontSize: 14 }} />
-                          <Typography variant="caption">{testimonial.location}</Typography>
-                        </Box>
+                    <Avatar sx={{ width: 56, height: 56, bgcolor: alpha(theme.palette.primary.main, 0.12), color: 'primary.main', fontWeight: 700, flexShrink: 0 }}>
+                      {testimonial.name.replace(/[^A-Za-z]/g, '').charAt(0).toUpperCase() || 'P'}
+                    </Avatar>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5, flexGrow: 1 }}>
+                        &quot;{testimonial.review}&quot;
+                      </Typography>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>{testimonial.name}</Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: 'text.secondary', mb: 0.5 }}>
+                        <LocationOnIcon sx={{ fontSize: 14 }} />
+                        <Typography variant="caption">{testimonial.location}</Typography>
                       </Box>
+                      <Rating value={testimonial.rating} readOnly size="small" sx={{ color: '#F59E0B' }} />
                     </Box>
                   </Box>
                 </motion.div>

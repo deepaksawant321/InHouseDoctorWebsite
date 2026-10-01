@@ -133,7 +133,7 @@ export const FaqSection = ({ initialFaqs = null, showHeader = true }: { initialF
           <motion.div variants={fadeInUp}>
             <Box sx={{ mb: { xs: 4, md: 5 } }}>
               <Typography variant="h2" sx={{ mb: 1, fontSize: { xs: '1.75rem', md: '2.4rem' } }}>Frequently Asked Questions</Typography>
-              <Typography color="text.secondary">Everything you need to know about InHouse Doctor.</Typography>
+              <Typography color="text.secondary">Everything you need to know about Doctor Doorstep.</Typography>
             </Box>
           </motion.div>
           )}

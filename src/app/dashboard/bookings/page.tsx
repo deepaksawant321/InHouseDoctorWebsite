@@ -6,6 +6,7 @@ import { bookingsApi, servicesApi } from '@/services/api';
 import { useRouter } from 'next/navigation';
 import EmptyState from '@/components/EmptyState';
 import { openPrivateFile } from '@/utils/files';
+import { formatDate } from '@/utils/date';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -26,12 +27,16 @@ export default function MyBookings() {
   const [tab, setTab] = useState(0);
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
   const [selected, setSelected] = useState<any | null>(null);
   const [files, setFiles] = useState<any[] | null>(null);
 
   const router = useRouter();
 
   useEffect(() => {
+    setLoadError(false);
+    setLoading(true);
     Promise.all([
       bookingsApi.getMyBookings(),
       servicesApi.findAllActive().catch(() => null),
@@ -47,12 +52,12 @@ export default function MyBookings() {
         service: serviceNames.get(String(b.serviceId)) || 'Home healthcare visit',
         patient: b.patient?.fullName || 'Self',
         // PreferredDate is a date-only column, so format it in UTC to avoid shifting the day
-        date: new Date(b.scheduledDate).toLocaleDateString('en-IN', { timeZone: 'UTC', dateStyle: 'medium' }) + (b.preferredTime ? `, ${b.preferredTime}` : ''),
+        date: formatDate(b.scheduledDate, { utc: true }) + (b.preferredTime ? `, ${b.preferredTime}` : ''),
         status: b.status,
       }));
       setBookings(mapped);
-    }).catch(console.error).finally(() => setLoading(false));
-  }, []);
+    }).catch((err) => { console.error(err); setLoadError(true); }).finally(() => setLoading(false));
+  }, [reloadKey]);
 
   const openDetails = (booking: any) => {
     setSelected(booking);
@@ -63,6 +68,20 @@ export default function MyBookings() {
   };
 
   if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}><CircularProgress /></Box>;
+
+  if (loadError) {
+    return (
+      <Box>
+        <Typography variant="h4" sx={{ fontWeight: 800, mb: 4 }}>My Bookings</Typography>
+        <EmptyState
+          title="We couldn't load your bookings"
+          description="Something went wrong while contacting the server. Your bookings are safe - please try again."
+          actionText="Try again"
+          onAction={() => setReloadKey((k) => k + 1)}
+        />
+      </Box>
+    );
+  }
 
   return (
     <Box>
@@ -91,7 +110,7 @@ export default function MyBookings() {
             {filtered.length === 0 ? (
               <EmptyState
                 title="No Bookings Found"
-                description={`You don't have any ${statuses[tabIndex].join(' or ').toLowerCase()} bookings.`}
+                description={`You don't have any ${['upcoming', 'completed', 'cancelled'][tabIndex]} bookings.`}
                 actionText={tabIndex === 0 ? "Book a Service" : undefined}
                 actionHref={tabIndex === 0 ? "/book/service" : undefined}
               />

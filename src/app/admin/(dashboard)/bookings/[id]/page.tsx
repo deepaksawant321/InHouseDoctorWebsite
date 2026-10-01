@@ -10,6 +10,7 @@ import { StatusBadge, StatusType } from '@/features/admin/StatusBadge';
 import { adminApi } from '@/services/api';
 import { formatDoctorName } from '@/utils/doctorName';
 import { openPrivateFile } from '@/utils/files';
+import { formatDate } from '@/utils/date';
 
 interface BookingDetail {
   id: string;
@@ -95,7 +96,7 @@ export default function BookingDetailsPage() {
                 <Typography variant="body2" color="text.secondary">Scheduled</Typography>
                 <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
                   {booking.scheduledDate
-                    ? new Date(booking.scheduledDate).toLocaleDateString('en-IN', { timeZone: 'UTC', dateStyle: 'medium' })
+                    ? formatDate(booking.scheduledDate, { utc: true })
                     : '—'}
                   {booking.preferredTime ? ` · ${booking.preferredTime}` : ''}
                 </Typography>

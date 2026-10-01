@@ -1,8 +1,10 @@
 'use client';
 
-import { Box, Container, Typography, Grid, alpha } from '@mui/material';
+import { Box, Container, Typography, Grid, alpha, useTheme } from '@mui/material';
 import { m as motion } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '@/constants/animations';
+import { scriptFont } from '@/theme/fonts';
+import { accent } from '@/theme/accent';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import HomeIcon from '@mui/icons-material/Home';
@@ -15,7 +17,9 @@ const items = [
   { icon: <SupportAgentIcon />, title: '24x7 Support', text: 'Help whenever you need it', color: '#14B5A5' },
 ];
 
-export const TrustBar = () => (
+export const TrustBar = () => {
+  const isDark = useTheme().palette.mode === 'dark';
+  return (
   <Box component="section" sx={{ py: { xs: 6, md: 8 }, bgcolor: 'background.paper' }}>
     <Container maxWidth="xl">
       <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }}>
@@ -28,7 +32,7 @@ export const TrustBar = () => (
                     sx={{
                       width: 72, height: 72, borderRadius: '22px', mx: 'auto', mb: 2,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      bgcolor: alpha(item.color, 0.12), color: item.color,
+                      bgcolor: alpha(accent(item.color, isDark), isDark ? 0.2 : 0.12), color: accent(item.color, isDark),
                       '& svg': { fontSize: 34 },
                     }}
                   >
@@ -54,7 +58,7 @@ export const TrustBar = () => (
                   <Typography sx={{ fontSize: '1.05rem', color: 'text.secondary', lineHeight: 1.6 }}>
                     Good health is not a luxury, it&apos;s a foundation for a brighter tomorrow.
                   </Typography>
-                  <Typography sx={{ mt: 1, color: 'secondary.dark', fontWeight: 700, fontStyle: 'italic' }}>Stay Healthy</Typography>
+                  <Typography className={scriptFont.className} sx={{ mt: 0.5, color: 'secondary.dark', fontSize: '1.8rem', lineHeight: 1 }}>Stay Healthy</Typography>
                 </Box>
               </Box>
             </motion.div>
@@ -63,4 +67,5 @@ export const TrustBar = () => (
       </motion.div>
     </Container>
   </Box>
-);
+  );
+};

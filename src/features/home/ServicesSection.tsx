@@ -5,6 +5,7 @@ import { Box, Container, Typography, Grid, useTheme, alpha } from '@mui/material
 import { m as motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
+import { accent } from '@/theme/accent';
 import { staggerContainer, fadeInUp } from '@/constants/animations';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import MasksIcon from '@mui/icons-material/Masks';
@@ -90,7 +91,7 @@ export const ServicesSection = ({ showHeader = true }: { showHeader?: boolean })
       id="services"
       sx={{
         py: { xs: 7, md: 10 },
-        bgcolor: 'background.paper',
+        bgcolor: isDark ? '#0A1626' : 'background.paper',
       }}
     >
       {services.length > 0 && (
@@ -134,7 +135,7 @@ export const ServicesSection = ({ showHeader = true }: { showHeader?: boolean })
           </motion.div>
           )}
 
-          <Grid container spacing={3}>
+          <Grid container spacing={2}>
             {loading ? (
               <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', py: 10 }}>
                 <CircularProgress />
@@ -142,78 +143,43 @@ export const ServicesSection = ({ showHeader = true }: { showHeader?: boolean })
             ) : (
               services.map((service, index) => {
                 const ui = SERVICE_UI_MAP[service.serviceName] || DEFAULT_UI;
+                const uiColor = accent(ui.color, isDark);
                 return (
-                  <Grid size={{ xs: 12, sm: 6 }} key={service.id || index}>
+                  <Grid size={{ xs: 6 }} key={service.id || index}>
                     <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} style={{ height: '100%' }}>
-                        <Box
-                          {...(service.slug ? { component: Link, href: `/services/${service.slug}` } : {})}
-                          sx={{
-                            display: 'block',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                            height: '100%',
-                            p: 3,
-                            borderRadius: '24px',
-                            bgcolor: 'background.paper',
-                            border: '1px solid',
-                            borderColor: 'divider',
-                            position: 'relative',
-                            overflow: 'hidden',
-                            cursor: 'pointer',
-                            transition: 'all 0.35s ease',
-                            '&:hover': {
-                              transform: 'translateY(-6px)',
-                              boxShadow: `0 20px 60px ${alpha(ui.color, isDark ? 0.25 : 0.15)}`,
-                              borderColor: alpha(ui.color, 0.5),
-                              '& .service-arrow': { opacity: 1, transform: 'translateX(0)' },
-                              '& .service-glow': { opacity: 1 },
-                            },
-                          }}
-                        >
-                        {/* Glow bg */}
-                        <Box
-                          className="service-glow"
-                          sx={{
-                            position: 'absolute', inset: 0,
-                            background: `radial-gradient(circle at 0% 0%, ${alpha(ui.color, 0.06)} 0%, transparent 60%)`,
-                            opacity: 0, transition: 'opacity 0.4s ease', pointerEvents: 'none',
-                          }}
-                        />
-
-                        {/* Icon */}
+                      <Box
+                        {...(service.slug ? { component: Link, href: `/services/${service.slug}` } : {})}
+                        sx={{
+                          display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
+                          color: 'inherit', textDecoration: 'none', height: '100%',
+                          p: { xs: 2, md: 2.5 }, borderRadius: '18px',
+                          bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider',
+                          boxShadow: isDark ? 'none' : '0 4px 16px rgba(10, 92, 184, 0.05)',
+                          cursor: 'pointer', transition: 'all 0.3s ease',
+                          '&:hover': {
+                            transform: 'translateY(-4px)',
+                            boxShadow: `0 14px 36px ${alpha(uiColor, isDark ? 0.25 : 0.16)}`,
+                            borderColor: alpha(uiColor, 0.5),
+                          },
+                        }}
+                      >
                         <Box
                           sx={{
-                            width: 64, height: 64, borderRadius: '18px', mb: 3,
+                            width: 52, height: 52, borderRadius: '50%', mb: 1.5,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            bgcolor: alpha(ui.color, 0.12),
-                            
-                            color: ui.color,
+                            bgcolor: alpha(uiColor, 0.12), color: uiColor,
                           }}
                         >
                           {ui.icon}
                         </Box>
-
-                        <Typography component="h3" variant="subtitle1" sx={{ fontSize: "1.15rem", fontWeight: 700, mb: 1 }}>
+                        <Typography component="h3" variant="subtitle1" sx={{ fontSize: '1rem', fontWeight: 700, mb: 0.5 }}>
                           {service.serviceName}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                        <Typography variant="caption" color="text.secondary" sx={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                           {service.description || 'Professional home healthcare service tailored to your needs.'}
                         </Typography>
-
-                        <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 2 }}>
-                          Available 24/7 across Mumbai · Pricing varies by location and service type.
-                        </Typography>
-
-                        <Box
-                          className="service-arrow"
-                          sx={{
-                            display: 'inline-flex', alignItems: 'center', gap: 0.5,
-                            color: ui.color, fontWeight: 700, fontSize: '0.875rem',
-                            opacity: 1, transform: "translateX(0)",
-                            transition: 'all 0.3s ease',
-                          }}
-                        >
-                          Learn more <ArrowForwardIcon sx={{ fontSize: 16 }} />
+                        <Box sx={{ mt: 1.25, display: 'inline-flex', alignItems: 'center', gap: 0.5, color: uiColor, fontWeight: 700, fontSize: '0.8rem' }}>
+                          Learn more <ArrowForwardIcon sx={{ fontSize: 14 }} />
                         </Box>
                       </Box>
                     </motion.div>
@@ -222,14 +188,21 @@ export const ServicesSection = ({ showHeader = true }: { showHeader?: boolean })
               })
             )}
           </Grid>
+          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 2 }}>
+            Available 24/7 across Mumbai · Pricing varies by location and service type.
+          </Typography>
           </Grid>
           <Grid size={{ xs: 12, md: 5 }}>
             <motion.div variants={fadeInUp}>
-              <Box sx={{ position: 'relative', overflow: 'hidden', borderRadius: '28px', minHeight: { xs: 260, md: 420 }, boxShadow: '0 16px 48px rgba(10, 92, 184, 0.14)' }}>
-                <Image src="/images/7653136.jpg" alt="A doctor checking a young girl while her mother looks on, at home" fill sizes="(max-width: 900px) 100vw, 40vw" style={{ objectFit: "cover", objectPosition: "40% 50%" }} />
-                <Box sx={{ position: 'absolute', left: 0, bottom: 0, right: 0, p: 3, background: 'linear-gradient(0deg, rgba(11,42,82,0.85) 0%, transparent 100%)', color: 'white' }}>
-                  <Typography component="h3" variant="subtitle1" sx={{ fontSize: "1.4rem", fontWeight: 800 }}>Care for Every Generation</Typography>
-                  <Typography variant="body2" sx={{ opacity: 0.85 }}>Because every life stage matters.</Typography>
+              <Box sx={{ position: 'relative', overflow: 'hidden', borderRadius: '28px', minHeight: { xs: 280, md: 400 }, bgcolor: '#E3F1FB', boxShadow: isDark ? '0 16px 48px rgba(91, 168, 240, 0.16)' : '0 16px 48px rgba(10, 92, 184, 0.12)', border: isDark ? '1px solid rgba(255,255,255,0.14)' : 'none' }}>
+                <Image src="/images/7653136.jpg" alt="A doctor checking a young girl while her mother looks on, at home" fill sizes="(max-width: 900px) 100vw, 40vw" style={{ objectFit: 'cover', objectPosition: '38% 50%', filter: isDark ? 'brightness(0.85)' : 'none' }} />
+                <Box sx={{ position: 'absolute', inset: 0, background: isDark ? 'linear-gradient(90deg, rgba(10,22,38,0.95) 0%, rgba(10,22,38,0.7) 45%, transparent 80%)' : 'linear-gradient(90deg, rgba(234,245,253,0.97) 0%, rgba(234,245,253,0.78) 42%, transparent 78%)' }} />
+                <Box sx={{ position: 'relative', p: { xs: 3, md: 4 }, maxWidth: { xs: '75%', md: '58%' }, display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: { xs: 280, md: 400 } }}>
+                  <Typography component="h3" variant="subtitle1" sx={{ fontSize: { xs: '1.5rem', md: '1.9rem' }, fontWeight: 800, lineHeight: 1.15, mb: 1.5 }}>
+                    Care for Every Generation
+                  </Typography>
+                  <Typography color="text.secondary" sx={{ fontSize: '0.95rem' }}>Because every life stage matters.</Typography>
+                  <Box aria-hidden sx={{ width: 36, height: 3, borderRadius: 2, mt: 2, bgcolor: 'secondary.main' }} />
                 </Box>
               </Box>
             </motion.div>

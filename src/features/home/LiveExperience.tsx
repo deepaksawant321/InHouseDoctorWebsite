@@ -77,7 +77,7 @@ export const LiveExperience = () => {
               <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '1.75rem', md: '2.4rem' } }}>
                 The{' '}
                 <Box component="span" sx={{ background: 'linear-gradient(135deg, #0A5CB8, #2B8CE6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                  InHouse Experience
+                  Doctor Doorstep Experience
                 </Box>
               </Typography>
               <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400, maxWidth: 520, mx: 'auto' }}>
@@ -110,7 +110,7 @@ export const LiveExperience = () => {
                   ))}
                 </Box>
                 <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, ml: 1 }}>
-                  InHouse Doctor — Live Booking
+                  Doctor Doorstep — Live Booking
                 </Typography>
               </Box>
 

@@ -1,6 +1,13 @@
 'use client';
 
-import { Box, Typography, alpha } from '@mui/material';
+import { Box, Typography, TextField, alpha } from '@mui/material';
+import EventIcon from '@mui/icons-material/Event';
+import HealingIcon from '@mui/icons-material/Healing';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import WbTwilightIcon from '@mui/icons-material/WbTwilight';
+import NightsStayIcon from '@mui/icons-material/NightsStay';
+import { WizardNav } from '@/features/booking/WizardNav';
+import { StepHeader, SectionTitle } from '@/features/booking/StepHeader';
 import Grid from '@mui/material/Grid';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -10,9 +17,9 @@ import { useBooking } from '@/providers/BookingProvider';
 
 const dates = ['Today', 'Tomorrow', 'Choose Date'];
 const timeSlots = [
-  { id: 'morning', label: 'Morning', time: '09:00 AM - 12:00 PM', startHour: 9 },
-  { id: 'afternoon', label: 'Afternoon', time: '12:00 PM - 04:00 PM', startHour: 12 },
-  { id: 'evening', label: 'Evening', time: '04:00 PM - 08:00 PM', startHour: 16 },
+  { id: 'morning', label: 'Morning', time: '09:00 AM - 12:00 PM', startHour: 9, icon: <WbSunnyIcon fontSize="small" /> },
+  { id: 'afternoon', label: 'Afternoon', time: '12:00 PM - 04:00 PM', startHour: 12, icon: <WbTwilightIcon fontSize="small" /> },
+  { id: 'evening', label: 'Evening', time: '04:00 PM - 08:00 PM', startHour: 16, icon: <NightsStayIcon fontSize="small" /> },
 ];
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -40,7 +47,7 @@ const optionKeyHandler = (action: () => void) => (e: React.KeyboardEvent) => {
 
 export default function SchedulePage() {
   const router = useRouter();
-  const { setScheduledDate } = useBooking();
+  const { state, setScheduledDate, setSymptoms } = useBooking();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [customDate, setCustomDate] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -58,18 +65,11 @@ export default function SchedulePage() {
 
   return (
     <Box>
-      <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
-        Schedule Visit
-      </Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ mb: 6 }}>
-        Select your preferred date and time for the doctor to arrive.
-      </Typography>
+      <StepHeader icon={<CalendarMonthIcon />} title="Schedule Visit" subtitle="Pick a date and a time window for the doctor to arrive." />
 
-      <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
-        <CalendarMonthIcon color="primary" /> Select Date
-      </Typography>
-      
-      <Grid container spacing={2} sx={{ mb: 6 }}>
+      <SectionTitle icon={<EventIcon />}>Select date</SectionTitle>
+
+      <Grid container spacing={1.5} sx={{ mb: 4 }}>
         {dates.map((date) => (
           <Grid size={{ xs: 4 }} key={date}>
             <Box
@@ -80,7 +80,7 @@ export default function SchedulePage() {
               onKeyDown={optionKeyHandler(() => setSelectedDate(date))}
               sx={{
                 '&:focus-visible': { outline: '3px solid', outlineColor: 'primary.main', outlineOffset: 2 },
-                p: 2, borderRadius: '16px', textAlign: 'center', cursor: 'pointer',
+                p: 1.5, borderRadius: '14px', textAlign: 'center', cursor: 'pointer', fontSize: '0.95rem',
                 bgcolor: selectedDate === date ? alpha('#0A5CB8', 0.1) : 'background.paper',
                 border: '2px solid', borderColor: selectedDate === date ? 'primary.main' : 'divider',
                 fontWeight: selectedDate === date ? 700 : 500,
@@ -95,28 +95,22 @@ export default function SchedulePage() {
         {selectedDate === 'Choose Date' && (
           <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
             <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: '16px', border: '1px solid', borderColor: 'divider' }}>
-              <Typography variant="body2" sx={{ mb: 1, fontWeight: 600 }}>Select Custom Date</Typography>
-              <input 
-                type="date" 
+              <TextField
+                type="date"
+                fullWidth
+                label="Select custom date"
                 value={customDate}
                 onChange={(e) => setCustomDate(e.target.value)}
-                aria-label="Custom visit date"
-                min={toLocalDateInput(new Date())}
-                style={{
-                  width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #e0e0e0',
-                  fontSize: '1rem', fontFamily: 'inherit'
-                }}
+                slotProps={{ inputLabel: { shrink: true }, htmlInput: { min: toLocalDateInput(new Date()), 'aria-label': 'Custom visit date' } }}
               />
             </Box>
           </Grid>
         )}
       </Grid>
 
-      <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
-        <AccessTimeIcon color="primary" /> Select Time Slot
-      </Typography>
+      <SectionTitle icon={<AccessTimeIcon />}>Select time slot</SectionTitle>
 
-      <Grid container spacing={2} sx={{ mb: 8 }}>
+      <Grid container spacing={1.5} sx={{ mb: 4 }}>
         {timeSlots.map((slot) => {
           const start = selectedDate ? buildSlotStart(selectedDate, customDate, slot.startHour) : null;
           const isPast = !!start && start.getTime() <= Date.now();
@@ -132,16 +126,17 @@ export default function SchedulePage() {
               sx={{
                 '&:focus-visible': { outline: '3px solid', outlineColor: 'primary.main', outlineOffset: 2 },
                 opacity: isPast ? 0.45 : 1,
-                p: 2, borderRadius: '16px', textAlign: 'center', cursor: isPast ? 'not-allowed' : 'pointer',
+                p: 1.5, borderRadius: '14px', textAlign: 'center', cursor: isPast ? 'not-allowed' : 'pointer',
                 bgcolor: selectedTime === slot.id ? alpha('#0A5CB8', 0.1) : 'background.paper',
                 border: '2px solid', borderColor: selectedTime === slot.id ? 'primary.main' : 'divider',
                 transition: 'all 0.2s', '&:hover': { borderColor: 'primary.main' }
               }}
             >
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, color: selectedTime === slot.id ? 'primary.main' : 'text.primary' }}>
+              <Box sx={{ color: selectedTime === slot.id ? 'primary.main' : 'text.secondary', display: 'flex', justifyContent: 'center', mb: 0.5 }}>{slot.icon}</Box>
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, color: selectedTime === slot.id ? 'primary.main' : 'text.primary' }}>
                 {slot.label}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="caption" color="text.secondary">
                 {isPast ? 'Not available' : slot.time}
               </Typography>
             </Box>
@@ -150,32 +145,26 @@ export default function SchedulePage() {
         })}
       </Grid>
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Box
-          component="button" type="button" onClick={() => router.back()}
-          sx={{
-            py: 1.5, px: 4, borderRadius: '999px', border: '1px solid', borderColor: 'divider', cursor: 'pointer',
-            bgcolor: 'transparent', color: 'text.primary', fontWeight: 600, fontSize: '1rem',
-            transition: 'all 0.2s', '&:hover': { bgcolor: 'action.hover' },
-          }}
-        >
-          Back
-        </Box>
-        <Box
-          component="button" type="button" onClick={handleContinue} 
-          disabled={!selectedDate || !selectedTime || chosenPast || (selectedDate === 'Choose Date' && !customDate)}
-          sx={{
-            py: 1.5, px: 6, borderRadius: '999px', border: 'none', 
-            cursor: (selectedDate && selectedTime && (selectedDate !== 'Choose Date' || customDate)) ? 'pointer' : 'not-allowed',
-            background: (selectedDate && selectedTime && (selectedDate !== 'Choose Date' || customDate)) ? '#0A5CB8' : 'action.disabledBackground', 
-            color: (selectedDate && selectedTime && (selectedDate !== 'Choose Date' || customDate)) ? 'white' : 'text.disabled',  
-            fontWeight: 700, fontSize: '1rem', boxShadow: (selectedDate && selectedTime) ? '0 8px 24px rgba(10, 92, 184, 0.3)' : 'none',
-            transition: 'all 0.2s', '&:hover': { transform: (selectedDate && selectedTime) ? 'translateY(-2px)' : 'none' },
-          }}
-        >
-          Continue to Prescription
-        </Box>
-      </Box>
+      <SectionTitle icon={<HealingIcon />} sx={{ mb: 0.5 }}>What&apos;s the problem?</SectionTitle>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
+        Optional. A few words help the doctor prepare, for example &quot;fever and cold for 2 days&quot;.
+      </Typography>
+      <TextField
+        fullWidth multiline minRows={3}
+        label="Symptoms or reason for visit (optional)"
+        value={state.symptoms}
+        onChange={(e) => setSymptoms(e.target.value)}
+        slotProps={{ htmlInput: { maxLength: 500 } }}
+        helperText={`${state.symptoms.length}/500`}
+        sx={{ mb: 4 }}
+      />
+
+      <WizardNav
+        onBack={() => router.back()}
+        onNext={handleContinue}
+        nextDisabled={!selectedDate || !selectedTime || chosenPast || (selectedDate === 'Choose Date' && !customDate)}
+        nextLabel="Continue to Prescription"
+      />
     </Box>
   );
 }

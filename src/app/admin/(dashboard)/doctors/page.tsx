@@ -2,10 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { formatDoctorName } from '@/utils/doctorName';
-import { Box, Typography, Button, CircularProgress, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem } from '@mui/material';
+import { Box, Typography, Button, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem } from '@mui/material';
 import { DataTable } from '@/features/admin/DataTable';
+import { DateRangeFilter, useInitialDateRange } from '@/features/admin/DateRangeFilter';
 import { StatusBadge, StatusType } from '@/features/admin/StatusBadge';
-import AddIcon from '@mui/icons-material/Add';
+import { ActionIcon } from '@/features/admin/ActionIcon';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
+import BlockIcon from '@mui/icons-material/Block';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutlined';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { adminApi, doctorsApi } from '@/services/api';
 import { parseValidationErrors } from '@/utils/errorParser';
@@ -13,7 +18,15 @@ import { parseValidationErrors } from '@/utils/errorParser';
 export default function DoctorsManagementPage() {
   const [doctors, setDoctors] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [statusFilter, setStatusFilter] = useState('All');
+  // Registration-date range: today by default, or whatever the URL carries (dashboard card links)
+  const initialRange = useInitialDateRange();
+  const [startDate, setStartDate] = useState(initialRange.start);
+  const [endDate, setEndDate] = useState(initialRange.end);
+  const dateRangeInvalid = !!startDate && !!endDate && startDate > endDate;
+  const [statusFilter, setStatusFilter] = useState(() => {
+    const s = typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('status');
+    return s === 'Active' || s === 'Inactive' ? s : 'All';
+  });
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
   const [addDialog, setAddDialog] = useState(false);
   const [editDialog, setEditDialog] = useState(false);
@@ -23,8 +36,9 @@ export default function DoctorsManagementPage() {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const fetchDoctors = () => {
+    if (dateRangeInvalid) return;
     setLoading(true);
-    adminApi.getDoctors({ status: statusFilter === 'All' ? undefined : statusFilter })
+    adminApi.getDoctors({ status: statusFilter === 'All' ? undefined : statusFilter, startDate: startDate || undefined, endDate: endDate || undefined })
       .then(res => {
         setDoctors(res.data.data || []);
       }).catch(console.error).finally(() => setLoading(false));
@@ -32,7 +46,7 @@ export default function DoctorsManagementPage() {
 
   useEffect(() => {
     fetchDoctors();
-  }, [statusFilter]);
+  }, [statusFilter, startDate, endDate]);
 
   const handleToggleStatus = async (id: string) => {
     try {
@@ -105,30 +119,31 @@ export default function DoctorsManagementPage() {
     { id: 'specialization' as const, label: 'Specialization', minWidth: 150 },
     { id: 'experienceYears' as const, label: 'Experience', minWidth: 100, format: (v: number) => `${v} yrs` },
     { id: 'consultationFee' as const, label: 'Fee', minWidth: 80, format: (v: number) => `₹${v}` },
-    { id: 'status' as const, label: 'Status', minWidth: 100, format: (value: StatusType) => <StatusBadge status={value} /> },
-    { id: 'isAvailable' as const, label: 'Available', minWidth: 100, format: (v: boolean) => <StatusBadge status={v ? 'Available' : 'Unavailable'} /> },
+    { id: 'status' as const, label: 'Status', minWidth: 100, align: 'center' as const, format: (value: StatusType) => <StatusBadge iconOnly status={value} /> },
+    { id: 'isAvailable' as const, label: 'Available', minWidth: 100, align: 'center' as const, format: (v: boolean) => <StatusBadge iconOnly status={v ? 'Available' : 'Unavailable'} /> },
     {
-      id: 'actions' as const, label: 'Actions', minWidth: 200, align: 'center' as const,
+      id: 'actions' as const, label: 'Actions', minWidth: 220, align: 'left' as const,
       format: (_: any, row: any) => (
-        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-          <Button variant="outlined" size="small" sx={{ borderRadius: 2 }} onClick={() => handleToggleStatus(row.id)}>
-            {row.status === 'Active' ? 'Deactivate' : 'Activate'}
-          </Button>
-          <Button variant="outlined" color="info" size="small" sx={{ borderRadius: 2 }} onClick={() => openEditDialog(row)}>
-            Edit
-          </Button>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <ActionIcon title="View profile" icon={<VisibilityIcon fontSize="small" />} color="inherit" href={`/admin/doctors/${row.id}`} />
+          <ActionIcon title="Edit" icon={<EditIcon fontSize="small" />} color="info" onClick={() => openEditDialog(row)} />
+          <ActionIcon
+            title={row.status === 'Active' ? 'Deactivate' : 'Activate'}
+            icon={row.status === 'Active' ? <BlockIcon fontSize="small" /> : <CheckCircleOutlineIcon fontSize="small" />}
+            color={row.status === 'Active' ? 'error' : 'success'}
+            onClick={() => handleToggleStatus(row.id)}
+          />
         </Box>
       )
     },
   ];
-
-  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}><CircularProgress /></Box>;
 
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
         <Typography variant="h4" sx={{ fontWeight: 800 }}>Staff & Doctor Management</Typography>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+          <DateRangeFilter startDate={startDate} endDate={endDate} fromLabel="Registered from" onChange={(s, e) => { setStartDate(s); setEndDate(e); }} />
           <TextField select size="small" label="Status" value={statusFilter} onChange={e => setStatusFilter(e.target.value)} sx={{ width: 140 }}>
             <MenuItem value="All">All Statuses</MenuItem>
             <MenuItem value="Active">Active</MenuItem>
@@ -138,7 +153,7 @@ export default function DoctorsManagementPage() {
         </Box>
       </Box>
 
-      <DataTable columns={columns} rows={doctors} />
+      <DataTable columns={columns} rows={doctors} loading={loading} searchable emptyMessage={statusFilter === 'All' && !startDate && !endDate ? 'No professionals added yet.' : `No ${statusFilter.toLowerCase()} professionals.`} />
 
       {/* Add Professional Dialog */}
       <Dialog open={addDialog} onClose={() => setAddDialog(false)} maxWidth="sm" fullWidth>

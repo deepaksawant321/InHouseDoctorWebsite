@@ -41,13 +41,13 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
     },
     background: {
       default: mode === 'light' ? '#F3F9FD' : '#0A1626',
-      paper: mode === 'light' ? '#FFFFFF' : '#0F2036',
+      paper: mode === 'light' ? '#FFFFFF' : '#14294A',
     },
     text: {
       primary: mode === 'light' ? '#0B1F3A' : '#F1F5F9',
       secondary: mode === 'light' ? '#51627A' : '#94A3B8',
     },
-    divider: mode === 'light' ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)',
+    divider: mode === 'light' ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.14)',
   },
   typography: {
     fontFamily: inter.style.fontFamily,
@@ -68,6 +68,10 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
     borderRadius: 16,
   },
   components: {
+    MuiCssBaseline: {
+      // Raw <button>, <input> and <select> elements do not inherit the page font by default.
+      styleOverrides: { html: { colorScheme: mode }, 'button, input, select, textarea': { fontFamily: 'inherit' } },
+    },
     MuiTypography: {
       // Render h6 as <h3> so heading levels never skip (h1 -> h2 -> h3); MUI's default <h6> breaks the outline
       defaultProps: { variantMapping: { h6: 'h3' } },
@@ -94,7 +98,7 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
       styleOverrides: {
         root: {
           borderRadius: '20px',
-          border: mode === 'light' ? '1px solid rgba(10,92,184,0.08)' : '1px solid rgba(255,255,255,0.06)',
+          border: mode === 'light' ? '1px solid rgba(10,92,184,0.08)' : '1px solid rgba(255,255,255,0.12)',
           boxShadow:
             mode === 'light'
               ? '0px 8px 30px rgba(10, 92, 184, 0.07)'

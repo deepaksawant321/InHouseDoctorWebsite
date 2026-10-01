@@ -3,6 +3,7 @@
 import { Box, Container, Typography, useTheme, alpha } from '@mui/material';
 import { m as motion } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '@/constants/animations';
+import { accent } from '@/theme/accent';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
@@ -101,12 +102,12 @@ export const HowItWorks = ({ showHeader = true }: { showHeader?: boolean }) => {
                       width: 72, height: 72, borderRadius: '50%',
                       bgcolor: 'background.paper',
                       border: '3px solid',
-                      borderColor: step.color,
+                      borderColor: accent(step.color, isDark),
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      boxShadow: `0 8px 24px ${alpha(step.color, 0.25)}`,
+                      boxShadow: `0 8px 24px ${alpha(accent(step.color, isDark), 0.25)}`,
                       position: 'relative',
                       mx: { md: 'auto' },
-                      color: step.color,
+                      color: accent(step.color, isDark),
                     }}
                   >
                     {step.icon}

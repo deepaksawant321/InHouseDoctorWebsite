@@ -16,7 +16,7 @@ const FALLBACK_TESTIMONIALS = [
   {
     name: 'Rahul Sharma',
     role: 'Patient, Bandra',
-    content: 'InHouse Doctor is truly incredible. When my father had a fever at midnight, they sent a verified doctor within 45 minutes. The doctor was thorough, professional, and incredibly calming. This service is a game-changer.',
+    content: 'Doctor Doorstep is truly incredible. When my father had a fever at midnight, they sent a verified doctor within 45 minutes. The doctor was thorough, professional, and incredibly calming. This service is a game-changer.',
     rating: 5,
     initials: 'RS',
     color: '#0A5CB8',
@@ -24,7 +24,7 @@ const FALLBACK_TESTIMONIALS = [
   {
     name: 'Priya Patel',
     role: 'Patient, Andheri',
-    content: 'I was sceptical about home visits but InHouse Doctor exceeded my expectations. The doctor spent 40 minutes with me, addressed all my concerns, and followed up the next day. Absolutely remarkable service.',
+    content: 'I was sceptical about home visits but Doctor Doorstep exceeded my expectations. The doctor spent 40 minutes with me, addressed all my concerns, and followed up the next day. Absolutely remarkable service.',
     rating: 5,
     initials: 'PP',
     color: '#14B5A5',

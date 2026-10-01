@@ -20,11 +20,13 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
-import InfoIcon from '@mui/icons-material/Info';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 
-const menuItems = [
+export const DASHBOARD_DRAWER_WIDTH = 260;
+
+export const dashboardMenuItems = [
   { label: 'Dashboard', href: '/dashboard', icon: <DashboardIcon /> },
   { label: 'My Patients', href: '/dashboard/patients', icon: <PeopleIcon /> },
   { label: 'My Bookings', href: '/dashboard/bookings', icon: <EventNoteIcon /> },
@@ -46,16 +48,19 @@ export const DashboardSidebar = ({ onClick }: { onClick?: () => void }) => {
   };
 
   return (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.paper' }}>
-      <Box sx={{ p: 3, pb: 1 }}>
-        <Typography variant="overline" sx={{ color: 'text.secondary', fontWeight: 600 }}>
-          Manage Account
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.paper', borderRight: '1px solid', borderColor: 'divider' }}>
+      <Box component={Link} href="/" onClick={onClick} sx={{ px: 2.5, py: 3, display: 'flex', alignItems: 'center', gap: 1.25, textDecoration: 'none' }}>
+        <Box sx={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #0A5CB8, #14B5A5)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+          <MedicalServicesIcon />
+        </Box>
+        <Typography variant="h6" noWrap sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: 'text.primary', fontSize: '1rem' }}>
+          Doctor Doorstep
         </Typography>
       </Box>
 
-      <List sx={{ flexGrow: 1, px: 2 }}>
-        {menuItems.map((item) => {
-          const isActive = pathname === item.href;
+      <List sx={{ px: 2, flex: 1 }}>
+        {dashboardMenuItems.map((item) => {
+          const isActive = item.href === '/dashboard' ? pathname === '/dashboard' : pathname === item.href || pathname.startsWith(`${item.href}/`);
 
           return (
             <ListItem key={item.label} disablePadding sx={{ mb: 0.5 }}>
@@ -64,29 +69,20 @@ export const DashboardSidebar = ({ onClick }: { onClick?: () => void }) => {
                 href={item.href}
                 onClick={onClick}
                 sx={{
-                  borderRadius: '14px',
-                  py: 1.5,
+                  borderRadius: 2,
+                  py: 1.25,
                   bgcolor: isActive ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
-                  color: isActive ? 'primary.main' : 'text.primary',
+                  color: isActive ? 'primary.main' : 'text.secondary',
                   '&:hover': {
-                    bgcolor: alpha(theme.palette.primary.main, 0.08),
+                    bgcolor: alpha(theme.palette.primary.main, 0.12),
                     color: 'primary.main',
                   },
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 40,
-                    color: isActive ? 'primary.main' : 'text.secondary',
-                  }}
-                >
-                  {item.icon}
-                </ListItemIcon>
+                <ListItemIcon sx={{ minWidth: 40, color: 'inherit' }}>{item.icon}</ListItemIcon>
                 <ListItemText
                   primary={item.label}
-                  slotProps={{
-                    primary: { sx: { fontWeight: isActive ? 600 : 500, fontSize: '0.95rem' } },
-                  }}
+                  slotProps={{ primary: { sx: { fontWeight: isActive ? 700 : 500, fontSize: '0.9rem' } } }}
                 />
               </ListItemButton>
             </ListItem>
@@ -95,24 +91,19 @@ export const DashboardSidebar = ({ onClick }: { onClick?: () => void }) => {
       </List>
 
       <Box sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider' }}>
-        <List disablePadding>
-          <ListItem disablePadding>
-            <ListItemButton
-              component={Link}
-              href="/login"
-              sx={{ borderRadius: 2, py: 1 }}
-              onClick={handleLogout}
-            >
-              <ListItemIcon sx={{ minWidth: 40, color: 'error.main' }}>
-                <LogoutIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText
-                primary="Logout"
-                slotProps={{ primary: { sx: { fontSize: '0.9rem', color: 'error.main' } } }}
-              />
-            </ListItemButton>
-          </ListItem>
-        </List>
+        <ListItem disablePadding>
+          <ListItemButton
+            component={Link}
+            href="/login"
+            onClick={handleLogout}
+            sx={{ borderRadius: 2, py: 1.25, color: 'error.main', '&:hover': { bgcolor: alpha(theme.palette.error.main, 0.08) } }}
+          >
+            <ListItemIcon sx={{ minWidth: 40, color: 'inherit' }}>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" slotProps={{ primary: { sx: { fontWeight: 600, fontSize: '0.9rem' } } }} />
+          </ListItemButton>
+        </ListItem>
       </Box>
     </Box>
   );

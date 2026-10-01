@@ -89,95 +89,100 @@ export const Footer = () => {
     <Box
       component="footer"
       sx={{
-        bgcolor: isDark ? '#0A1626' : '#FFFFFF',
-        borderTop: '1px solid',
-        borderColor: 'divider',
-        pt: { xs: 7, md: 8 },
-        pb: 4,
         position: 'relative',
         overflow: 'hidden',
+        color: 'rgba(255,255,255,0.74)',
+        background: isDark
+          ? 'linear-gradient(180deg, #08111F 0%, #060D18 100%)'
+          : 'linear-gradient(180deg, #0B2A52 0%, #081D3A 100%)',
+        pt: { xs: 6, md: 8 },
+        pb: { xs: 3, md: 3.5 },
       }}
     >
       {/* Gradient accent top bar */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 3,
-          background: 'linear-gradient(90deg, #0A5CB8, #14B5A5, #2B8CE6)',
-        }}
-      />
+      <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, #0A5CB8, #14B5A5, #2B8CE6)' }} />
+      <Box aria-hidden sx={{ position: 'absolute', top: '-30%', right: '-8%', width: 420, height: 420, borderRadius: '50%', background: 'radial-gradient(circle, rgba(20,181,165,0.16) 0%, transparent 68%)', pointerEvents: 'none' }} />
 
-      <Container maxWidth="xl">
-        <Grid container spacing={{ xs: 4, md: 5 }}>
-          {/* Brand Column */}
-          <Grid size={{ xs: 12, md: 3.5 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-              <Box
-                sx={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  width: 40, height: 40, borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #0A5CB8, #14B5A5)',
-                }}
-              >
-                <MedicalServicesIcon sx={{ fontSize: 22, color: 'white' }} />
+      <Container maxWidth="xl" sx={{ position: 'relative' }}>
+        {/* Row 1: brand + newsletter */}
+        <Grid container spacing={{ xs: 4, md: 6 }} sx={{ alignItems: 'center', pb: { xs: 4, md: 5 }, borderBottom: '1px solid rgba(255,255,255,0.12)' }}>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <Box component={Link} href="/" sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.25, textDecoration: 'none', mb: 1.75 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #0A5CB8, #14B5A5)' }}>
+                <MedicalServicesIcon sx={{ fontSize: 24, color: 'white' }} />
               </Box>
-              <Typography
-                variant="h6"
-                component="span"
-                sx={{ fontWeight: 800, color: 'primary.main' }}
-              >
-                InHouse Doctor
-              </Typography>
+              <Typography variant="h6" component="span" sx={{ fontWeight: 800, color: 'white', lineHeight: 1 }}>Doctor Doorstep</Typography>
             </Box>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3, lineHeight: 1.8, maxWidth: 300 }}>
+            <Typography sx={{ maxWidth: 420, lineHeight: 1.7, fontSize: '0.95rem' }}>
               Getting a doctor at home should be as easy as ordering a cab. Premium healthcare, delivered to your doorstep.
             </Typography>
-            {/* Contact Info */}
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-              {[
-                { icon: <PhoneIcon fontSize="small" />, text: '+91 90291 90955', link: 'tel:+919029190955' },
-                { icon: <EmailIcon fontSize="small" />, text: 'admindoctordoorstep@gmail.com', link: 'mailto:admindoctordoorstep@gmail.com' },
-                { icon: <LocationOnIcon fontSize="small" />, text: 'Mumbai, Maharashtra, India', link: null },
-              ].map((item) => (
-                <Box key={item.text} sx={{ display: 'flex', gap: 1.5, alignItems: 'center', color: 'text.secondary' }}>
-                  <Box sx={{ color: 'primary.main' }}>{item.icon}</Box>
-                  {item.link ? (
-                    <Typography variant="body2" component="a" href={item.link} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'primary.main' } }}>
-                      {item.text}
-                    </Typography>
-                  ) : (
-                    <Typography variant="body2">{item.text}</Typography>
-                  )}
-                </Box>
-              ))}
-            </Box>
           </Grid>
 
-          {/* Link Columns */}
-          {Object.entries(footerLinks).map(([title, links]) => (
-            <Grid size={{ xs: 6, sm: 4, md: 2 }} key={title}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2.5, color: 'text.primary' }}>
-                {title}
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <Box component="form" noValidate onSubmit={handleNewsletter} sx={{ maxWidth: { md: 440 }, ml: { md: 'auto' } }}>
+              <Typography sx={{ color: 'white', fontWeight: 700, mb: 0.5 }}>Get health tips and service updates</Typography>
+              <Typography variant="body2" sx={{ mb: 1.75, color: 'rgba(255,255,255,0.6)' }}>Join our newsletter. No spam, unsubscribe any time.</Typography>
+              <TextField
+                fullWidth
+                type="email"
+                placeholder="Enter your email"
+                size="small"
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
+                error={newsletter.status === 'error'}
+                helperText={newsletter.text}
+                disabled={newsletter.status === 'sending'}
+                slotProps={{
+                  htmlInput: { 'aria-label': 'Email address for newsletter' },
+                  formHelperText: { sx: { color: newsletter.status === 'error' ? '#FCA5A5' : '#86EFAC', ml: 1.5 } },
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          type="submit"
+                          size="small"
+                          aria-label="Subscribe to newsletter"
+                          sx={{ bgcolor: '#14B5A5', color: 'white', borderRadius: '50%', '&:hover': { bgcolor: '#0E9486' } }}
+                        >
+                          <ArrowForwardIcon fontSize="small" />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '999px', color: 'white', bgcolor: 'rgba(255,255,255,0.08)',
+                    '& fieldset': { borderColor: 'rgba(255,255,255,0.25)' },
+                    '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.5)' },
+                    '&.Mui-focused fieldset': { borderColor: '#5FD9CB' },
+                  },
+                  '& input::placeholder': { color: 'rgba(255,255,255,0.55)', opacity: 1 },
+                }}
+              />
+            </Box>
+          </Grid>
+        </Grid>
+
+        {/* Row 2: link columns (2x2 on phones, 4 across on desktop) */}
+        <Grid container spacing={{ xs: 4, md: 5 }} sx={{ py: { xs: 4, md: 5 } }}>
+          {[
+            { title: 'Company', links: [...footerLinks.Company, { label: 'How It Works', href: '/how-it-works' }] },
+            { title: 'Services', links: footerLinks.Services },
+            { title: 'Support', links: footerLinks.Support },
+          ].map((col) => (
+            <Grid size={{ xs: col.title === 'Support' ? 12 : 6, sm: 4, md: 2.5 }} key={col.title}>
+              <Typography component="h3" sx={{ color: 'white', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.12em', textTransform: 'uppercase', mb: 2 }}>
+                {col.title}
               </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                {links.map((link) => (
+              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: col.title === 'Support' ? '1fr 1fr' : '1fr', sm: '1fr' }, columnGap: 2, rowGap: 0.5 }}>
+                {col.links.map((link) => (
                   <Typography
                     key={link.label}
                     component={Link}
                     href={link.href}
                     variant="body2"
-                    sx={{
-                      display: 'inline-block',
-                      py: 0.5,
-                      textDecoration: 'none',
-                      color: 'text.secondary',
-                      cursor: 'pointer',
-                      transition: 'color 0.2s',
-                      '&:hover': { color: 'primary.main' },
-                    }}
+                    sx={{ py: 0.5, textDecoration: 'none', color: 'inherit', transition: 'color 0.2s, transform 0.2s', '&:hover': { color: '#5FD9CB', transform: 'translateX(3px)' } }}
                   >
                     {link.label}
                   </Typography>
@@ -186,72 +191,46 @@ export const Footer = () => {
             </Grid>
           ))}
 
-          {/* Newsletter */}
-          <Grid size={{ xs: 12, sm: 6, md: 2.5 }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2.5 }}>
-              Newsletter
+          <Grid size={{ xs: 12, md: 4.5 }}>
+            <Typography component="h3" sx={{ color: 'white', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.12em', textTransform: 'uppercase', mb: 2 }}>
+              Contact
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Get health tips and service updates.
-            </Typography>
-            <Box component="form" noValidate onSubmit={handleNewsletter}>
-            <TextField
-              fullWidth
-              type="email"
-              placeholder="Enter email"
-              size="small"
-              value={newsletterEmail}
-              onChange={(e) => setNewsletterEmail(e.target.value)}
-              error={newsletter.status === 'error'}
-              helperText={newsletter.text}
-              disabled={newsletter.status === 'sending'}
-              slotProps={{
-                htmlInput: { 'aria-label': 'Email address for newsletter' },
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        type="submit"
-                        size="small"
-                        aria-label="Subscribe to newsletter"
-                        sx={{
-                          bgcolor: '#0A5CB8',
-                          color: 'white',
-                          borderRadius: '50%',
-                          '&:hover': { bgcolor: 'primary.dark' },
-                        }}
-                      >
-                        <ArrowForwardIcon fontSize="small" />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-              }}
-              sx={{ '& .MuiOutlinedInput-root': { borderRadius: '999px' } }}
-            />
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+              {[
+                { icon: <PhoneIcon sx={{ fontSize: 18 }} />, text: '+91 90291 90955', link: 'tel:+919029190955' },
+                { icon: <EmailIcon sx={{ fontSize: 18 }} />, text: 'admindoctordoorstep@gmail.com', link: 'mailto:admindoctordoorstep@gmail.com' },
+                { icon: <LocationOnIcon sx={{ fontSize: 18 }} />, text: 'Mumbai, Maharashtra, India', link: null },
+              ].map((item) => (
+                <Box key={item.text} sx={{ display: 'flex', gap: 1.25, alignItems: 'flex-start' }}>
+                  <Box sx={{ flexShrink: 0, width: 32, height: 32, borderRadius: '50%', bgcolor: 'rgba(255,255,255,0.1)', color: '#5FD9CB', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {item.icon}
+                  </Box>
+                  {item.link ? (
+                    <Typography variant="body2" component="a" href={item.link} sx={{ pt: 0.6, color: 'inherit', textDecoration: 'none', wordBreak: 'break-word', '&:hover': { color: '#5FD9CB' } }}>
+                      {item.text}
+                    </Typography>
+                  ) : (
+                    <Typography variant="body2" sx={{ pt: 0.6 }}>{item.text}</Typography>
+                  )}
+                </Box>
+              ))}
             </Box>
           </Grid>
         </Grid>
 
-        {/* Bottom Bar */}
+        {/* Row 3: bottom bar */}
         <Box
           sx={{
-            mt: 8,
-            pt: 3,
-            borderTop: '1px solid',
-            borderColor: 'divider',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: 2,
+            pt: 3, borderTop: '1px solid rgba(255,255,255,0.12)',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            flexDirection: { xs: 'column', sm: 'row' }, gap: 2, textAlign: { xs: 'center', sm: 'left' },
           }}
         >
-          <Typography variant="body2" color="text.secondary">
-            &copy; {new Date().getFullYear()} InHouse Doctor. All rights reserved. Made with ❤️ in Mumbai.
+          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)' }}>
+            &copy; {new Date().getFullYear()} Doctor Doorstep. All rights reserved. Made with ❤️ in Mumbai.
           </Typography>
           {socialLinks.length > 0 && (
-            <Box sx={{ display: 'flex', gap: 0.5 }}>
+            <Box sx={{ display: 'flex', gap: 1 }}>
               {socialLinks.map((social) => (
                 <IconButton
                   key={social.label}
@@ -260,15 +239,7 @@ export const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Visit our ${social.label} page`}
-                  sx={{
-                    color: 'text.secondary',
-                    transition: 'all 0.2s',
-                    '&:hover': {
-                      color: 'primary.main',
-                      bgcolor: alpha('#0A5CB8', 0.08),
-                      transform: 'translateY(-2px)',
-                    },
-                  }}
+                  sx={{ color: 'white', border: '1px solid rgba(255,255,255,0.25)', width: 38, height: 38, transition: 'all 0.2s', '&:hover': { bgcolor: '#14B5A5', borderColor: '#14B5A5', transform: 'translateY(-2px)' } }}
                 >
                   <social.icon fontSize="small" />
                 </IconButton>

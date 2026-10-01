@@ -1,10 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Box, Typography, Button, CircularProgress, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Switch, FormControlLabel } from '@mui/material';
+import { Box, Typography, Button, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Switch, FormControlLabel } from '@mui/material';
 import { DataTable } from '@/features/admin/DataTable';
 import { StatusBadge, StatusType } from '@/features/admin/StatusBadge';
 import AddIcon from '@mui/icons-material/Add';
+import { ActionIcon } from '@/features/admin/ActionIcon';
+import EditIcon from '@mui/icons-material/Edit';
+import BlockIcon from '@mui/icons-material/Block';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutlined';
 import { servicesApi } from '@/services/api';
 
 export default function ServicesManagementPage() {
@@ -76,23 +80,22 @@ export default function ServicesManagementPage() {
     { id: 'serviceName' as const, label: 'Name', minWidth: 150 },
     { id: 'slug' as const, label: 'Slug', minWidth: 120 },
     { id: 'basePrice' as const, label: 'Base Price', minWidth: 100, format: (v: number) => `₹${v}` },
-    { id: 'isActive' as const, label: 'Status', minWidth: 100, format: (v: boolean) => <StatusBadge status={v ? 'Active' : 'Inactive'} /> },
+    { id: 'isActive' as const, label: 'Status', minWidth: 100, align: 'center' as const, format: (v: boolean) => <StatusBadge iconOnly status={v ? 'Active' : 'Inactive'} /> },
     {
-      id: 'actions' as const, label: 'Actions', minWidth: 200, align: 'center' as const,
+      id: 'actions' as const, label: 'Actions', minWidth: 220, align: 'left' as const,
       format: (_: any, row: any) => (
-        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-          <Button variant="outlined" size="small" sx={{ borderRadius: 2 }} onClick={() => openEdit(row)}>
-            Edit
-          </Button>
-          <Button variant="outlined" size="small" color={row.isActive ? 'error' : 'success'} sx={{ borderRadius: 2 }} onClick={() => handleToggleStatus(row.id)}>
-            {row.isActive ? 'Deactivate' : 'Activate'}
-          </Button>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <ActionIcon title="Edit" icon={<EditIcon fontSize="small" />} color="info" onClick={() => openEdit(row)} />
+          <ActionIcon
+            title={row.isActive ? 'Deactivate' : 'Activate'}
+            icon={row.isActive ? <BlockIcon fontSize="small" /> : <CheckCircleOutlineIcon fontSize="small" />}
+            color={row.isActive ? 'error' : 'success'}
+            onClick={() => handleToggleStatus(row.id)}
+          />
         </Box>
       )
     },
   ];
-
-  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}><CircularProgress /></Box>;
 
   return (
     <Box>
@@ -105,7 +108,7 @@ export default function ServicesManagementPage() {
         }}>Add Service</Button>
       </Box>
 
-      <DataTable columns={columns} rows={services} />
+      <DataTable columns={columns} rows={services} loading={loading} searchable emptyMessage="No services yet." />
 
       {/* Add/Edit Dialog */}
       <Dialog open={addDialog} onClose={() => setAddDialog(false)} maxWidth="md" fullWidth>

@@ -3,12 +3,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { Box, Container, Typography, alpha } from '@mui/material';
+import { Box, Container, Typography, alpha, useTheme } from '@mui/material';
 import { m as motion } from 'framer-motion';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import PhoneIcon from '@mui/icons-material/Phone';
+import { scriptFont } from '@/theme/fonts';
 
-export const CtaBanner = () => (
+export const CtaBanner = () => {
+  const isDark = useTheme().palette.mode === 'dark';
+  return (
   <Box component="section" sx={{ py: { xs: 6, md: 9 } }}>
     <Container maxWidth="lg">
       <motion.div
@@ -21,12 +24,13 @@ export const CtaBanner = () => (
           sx={{
             position: 'relative', overflow: 'hidden', borderRadius: { xs: '24px', md: '32px' },
             px: { xs: 3, md: 7 }, py: { xs: 5, md: 7 },
-            background: 'linear-gradient(120deg, #0B2A52 0%, #0A4C96 60%, #0E8A9A 100%)',
+            background: isDark ? 'linear-gradient(120deg, #12457F 0%, #0F6AA8 60%, #14A89E 100%)' : 'linear-gradient(120deg, #0B2A52 0%, #0A4C96 60%, #0E8A9A 100%)',
+            border: isDark ? '1px solid rgba(255,255,255,0.18)' : 'none',
             display: 'flex', flexDirection: { xs: 'column', md: 'row' },
             alignItems: { xs: 'flex-start', md: 'center' }, justifyContent: 'space-between', gap: 4,
           }}
         >
-          <Image src="/images/39192361.jpg" alt="" fill sizes="(max-width: 1200px) 100vw, 1200px" style={{ objectFit: 'cover', opacity: 0.22 }} />
+          <Image src="/images/39192361.jpg" alt="" fill sizes="(max-width: 1200px) 100vw, 1200px" style={{ objectFit: 'cover', opacity: isDark ? 0.16 : 0.22 }} />
           <Box aria-hidden sx={{ position: 'absolute', top: '-40%', right: '-6%', width: 380, height: 380, borderRadius: '50%', border: `1px solid ${alpha('#ffffff', 0.14)}` }} />
           <Box aria-hidden sx={{ position: 'absolute', bottom: '-50%', right: '22%', width: 300, height: 300, borderRadius: '50%', bgcolor: alpha('#ffffff', 0.05) }} />
 
@@ -75,4 +79,5 @@ export const CtaBanner = () => (
       </motion.div>
     </Container>
   </Box>
-);
+  );
+};

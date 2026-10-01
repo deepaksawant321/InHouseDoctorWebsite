@@ -16,6 +16,14 @@ import Link from 'next/link';
 // Must match the API's OTP resend cooldown (60s) so "Resend" isn't offered before the API will accept it.
 const RESEND_COOLDOWN_SECONDS = 60;
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.doctordoorstep.com/api';
+
+// fetch() rejects with a bare TypeError ("Failed to fetch") when the server is unreachable.
+function friendlyError(err: any, fallback: string) {
+  if (err instanceof TypeError) return "We couldn't reach the server. Please check your connection and try again.";
+  return err?.message || fallback;
+}
+
 export default function LoginPage() {
   const [loginId, setLoginId] = useState('');
   const [otpSent, setOtpSent] = useState(false);
@@ -66,7 +74,7 @@ export default function LoginPage() {
     if (isEmail || isMobile) {
       setLoading(true);
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/auth/send-otp', {
+        const response = await fetch(API_BASE + '/auth/send-otp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -84,7 +92,7 @@ export default function LoginPage() {
         setOtpSent(true);
         setTimer(RESEND_COOLDOWN_SECONDS);
       } catch (err: any) {
-        setError(err.message || 'Something went wrong');
+        setError(friendlyError(err, 'Something went wrong'));
       } finally {
         setLoading(false);
       }
@@ -99,7 +107,7 @@ export default function LoginPage() {
     if (otp.length > 3) {
       setLoading(true);
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/auth/login-with-otp', {
+        const response = await fetch(API_BASE + '/auth/login-with-otp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -125,7 +133,7 @@ export default function LoginPage() {
           throw new Error('No token received from server');
         }
       } catch (err: any) {
-        setError(err.message || 'Failed to verify OTP');
+        setError(friendlyError(err, 'Failed to verify OTP'));
       } finally {
         setLoading(false);
       }
@@ -183,9 +191,7 @@ export default function LoginPage() {
               variant="h5"
               sx={{
                 fontWeight: 800,
-                background: gradientBg,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
+                color: "primary.main",
                 letterSpacing: '-0.02em',
                 mb: 0.5,
               }}
