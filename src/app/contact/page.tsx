@@ -72,7 +72,7 @@ export default function ContactPage() {
                   </Box>
                   <Box sx={{ minWidth: 0 }}>
                     <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>Email</Typography>
-                    <Typography variant="body1" color="text.secondary" sx={{ overflowWrap: 'anywhere' }}>admindoctordoorstep@gmail.com</Typography>
+                    <Typography variant="body1" color="text.secondary" sx={{ overflowWrap: 'anywhere' }}>support@doctordoorstep.com</Typography>
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>

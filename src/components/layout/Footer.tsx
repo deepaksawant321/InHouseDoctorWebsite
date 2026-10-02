@@ -198,7 +198,7 @@ export const Footer = () => {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
               {[
                 { icon: <PhoneIcon sx={{ fontSize: 18 }} />, text: '+91 90291 90955', link: 'tel:+919029190955' },
-                { icon: <EmailIcon sx={{ fontSize: 18 }} />, text: 'admindoctordoorstep@gmail.com', link: 'mailto:admindoctordoorstep@gmail.com' },
+                { icon: <EmailIcon sx={{ fontSize: 18 }} />, text: 'support@doctordoorstep.com', link: 'mailto:support@doctordoorstep.com' },
                 { icon: <LocationOnIcon sx={{ fontSize: 18 }} />, text: 'Mumbai, Maharashtra, India', link: null },
               ].map((item) => (
                 <Box key={item.text} sx={{ display: 'flex', gap: 1.25, alignItems: 'flex-start' }}>
