@@ -1,6 +1,7 @@
 import { PageHero } from '@/components/ui/PageHero';
 import { Box, Container, Typography, TextField, alpha, Grid } from '@mui/material';
 import { Metadata } from 'next';
+import { SEO } from '@/constants/seo';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -9,14 +10,14 @@ import { ContactForm } from '@/components/ContactForm';
 import { MapEmbed } from '@/components/MapEmbed';
 
 export const metadata: Metadata = {
-  title: 'Contact Us | Book a Home Doctor in Mumbai',
-  description: 'Get in touch with Doctor Doorstep for any queries or to book a home doctor visit in Mumbai. 24x7 support available.',
+  title: { absolute: SEO.contact.title },
+  description: SEO.contact.description,
   alternates: {
     canonical: 'https://www.doctordoorstep.com/contact',
   },
   openGraph: {
-    title: 'Contact Doctor Doorstep | Book Home Doctor in Mumbai',
-    description: 'Get in touch with Doctor Doorstep for any queries or to book a home doctor visit in Mumbai. 24x7 support available.',
+    title: SEO.contact.title,
+    description: SEO.contact.description,
     url: 'https://www.doctordoorstep.com/contact',
     type: 'website',
   },
@@ -26,7 +27,7 @@ export default function ContactPage() {
   return (
     <>
       <PageHero
-        title="Contact Doctor Doorstep"
+        title={SEO.contact.h1}
         subtitle="We're here to help. Reach out to us for any medical assistance or queries."
       />
 

@@ -11,6 +11,10 @@ import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import MasksIcon from '@mui/icons-material/Masks';
 import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import ElderlyIcon from '@mui/icons-material/Elderly';
+import AccessibleIcon from '@mui/icons-material/Accessible';
+import BiotechIcon from '@mui/icons-material/Biotech';
+import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import { useEffect, useState } from 'react';
@@ -38,6 +42,26 @@ const SERVICE_UI_MAP: Record<string, any> = {
     color: '#0284C7', // Sky Blue
     gradient: 'linear-gradient(135deg, #0284C7, #38BDF8)',
   },
+  'Orthopedic': {
+    icon: <AccessibleIcon sx={{ fontSize: 36 }} />,
+    color: '#EA580C',
+    gradient: 'linear-gradient(135deg, #EA580C, #FB923C)',
+  },
+  'Medical Equipment Rent & Sell': {
+    icon: <MedicalServicesIcon sx={{ fontSize: 36 }} />,
+    color: '#0D9488',
+    gradient: 'linear-gradient(135deg, #0D9488, #2DD4BF)',
+  },
+  'Lab Tests at Home': {
+    icon: <BiotechIcon sx={{ fontSize: 36 }} />,
+    color: '#DB2777',
+    gradient: 'linear-gradient(135deg, #DB2777, #F472B6)',
+  },
+  'ICU Setup at Home': {
+    icon: <MonitorHeartIcon sx={{ fontSize: 36 }} />,
+    color: '#DC2626',
+    gradient: 'linear-gradient(135deg, #DC2626, #F87171)',
+  },
 };
 
 const DEFAULT_UI = {
@@ -62,6 +86,22 @@ const FALLBACK_SERVICES = [
   {
     serviceName: 'Elder Care',
     description: 'Compassionate, specialised care designed for senior citizens — medical attention, companionship, and dignity at home.',
+  },
+  {
+    serviceName: 'Orthopedic',
+    description: 'Specialist orthopedic consultation for bone, joint, fracture and post-surgery care at home.',
+  },
+  {
+    serviceName: 'Medical Equipment Rent & Sell',
+    description: 'Hospital beds, oxygen concentrators, wheelchairs and more — available to rent or buy, delivered to your door.',
+  },
+  {
+    serviceName: 'Lab Tests at Home',
+    description: 'Blood and diagnostic sample collection at home, with reports delivered online.',
+  },
+  {
+    serviceName: 'ICU Setup at Home',
+    description: 'Complete home ICU setup with monitoring equipment and trained critical-care nursing staff.',
   },
 ];
 
@@ -110,7 +150,7 @@ export const ServicesSection = ({ showHeader = true }: { showHeader?: boolean })
                 },
                 areaServed: {
                   "@type": "City",
-                  name: "Mumbai"
+                  name: "Mira Road, Bhayandar & Dahisar, Mumbai"
                 }
               }))
             )
@@ -189,7 +229,7 @@ export const ServicesSection = ({ showHeader = true }: { showHeader?: boolean })
             )}
           </Grid>
           <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 2 }}>
-            Available 24/7 across Mumbai · Pricing varies by location and service type.
+            Available 24/7 in Mira Road, Bhayandar & Dahisar · Pricing varies by location and service type.
           </Typography>
           </Grid>
           <Grid size={{ xs: 12, md: 5 }}>

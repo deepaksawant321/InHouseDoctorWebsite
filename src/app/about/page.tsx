@@ -2,6 +2,7 @@ import { PageHero } from '@/components/ui/PageHero';
 import { CtaBanner } from '@/features/home/CtaBanner';
 import { Box, Container, Typography, alpha, Grid } from '@mui/material';
 import { Metadata } from 'next';
+import { SEO } from '@/constants/seo';
 import Image from 'next/image';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import SecurityIcon from '@mui/icons-material/Security';
@@ -9,14 +10,14 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 
 export const metadata: Metadata = {
-  title: 'About Us',
-  description: 'Learn about Doctor Doorstep, our mission to connect patients with trusted healthcare professionals in Mumbai.',
+  title: { absolute: SEO.about.title },
+  description: SEO.about.description,
   alternates: {
     canonical: 'https://www.doctordoorstep.com/about',
   },
   openGraph: {
-    title: 'About Us',
-    description: 'Learn about Doctor Doorstep, our mission to connect patients with trusted healthcare professionals in Mumbai.',
+    title: SEO.about.title,
+    description: SEO.about.description,
     url: 'https://www.doctordoorstep.com/about',
     type: 'website',
   },
@@ -33,7 +34,7 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
-        title="About Doctor Doorstep"
+        title={SEO.about.h1}
         subtitle="Professional healthcare at your doorstep. We are revolutionizing home healthcare in Mumbai."
       />
 

@@ -128,7 +128,9 @@ export default function LoginPage() {
         if (token) {
           localStorage.setItem('token', token);
           localStorage.setItem('loginId', loginId);
-          router.push('/dashboard');
+          // Honour ?redirect= only for same-site paths (blocks //evil.com and absolute URLs)
+          const redirect = new URLSearchParams(window.location.search).get('redirect');
+          router.push(redirect && /^\/(?!\/)/.test(redirect) ? redirect : '/dashboard');
         } else {
           throw new Error('No token received from server');
         }
