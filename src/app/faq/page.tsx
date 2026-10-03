@@ -5,16 +5,17 @@ import dynamic from 'next/dynamic';
 const FaqSection = dynamic(() => import('@/features/home/FaqSection').then(mod => mod.FaqSection));
 import { getPublicFaqs } from '@/services/serverApi';
 import type { Metadata } from 'next';
+import { SEO } from '@/constants/seo';
 
 export const metadata: Metadata = {
-  title: 'FAQs | Home Doctor Visits in Mumbai',
-  description: 'Find answers about doctor home visits, booking, pricing, availability, service areas and healthcare services provided by Doctor Doorstep.',
+  title: { absolute: SEO.faq.title },
+  description: SEO.faq.description,
   alternates: {
     canonical: 'https://www.doctordoorstep.com/faq',
   },
   openGraph: {
-    title: 'FAQs | Home Doctor Visits in Mumbai | Doctor Doorstep',
-    description: 'Find answers about doctor home visits, booking, pricing, availability, service areas and healthcare services provided by Doctor Doorstep.',
+    title: SEO.faq.title,
+    description: SEO.faq.description,
     url: 'https://www.doctordoorstep.com/faq',
     type: 'website',
   },
@@ -25,7 +26,7 @@ export default async function FaqPage() {
   return (
     <>
       <PageHero
-        title="Frequently Asked Questions"
+        title={SEO.faq.h1}
         subtitle="Everything you need to know about booking, payments, and our medical services."
       />
       <FaqSection initialFaqs={faqs} showHeader={false} />

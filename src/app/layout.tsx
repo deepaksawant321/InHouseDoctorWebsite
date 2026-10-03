@@ -4,16 +4,17 @@ import './globals.css';
 import { AppProvider } from '@/providers/AppProvider';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { SEO } from '@/constants/seo';
 
 const inter = Plus_Jakarta_Sans({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.doctordoorstep.com'),
   title: {
-    default: 'Doctor at Home in Mumbai | Doctor Doorstep',
+    default: SEO.home.title,
     template: '%s | Doctor Doorstep',
   },
-  description: 'Book verified doctors for convenient home visits across Mumbai. Doctor Doorstep provides trusted home doctor consultations with easy booking and 24×7 support.',
+  description: SEO.home.description,
   authors: [{ name: 'Doctor Doorstep' }],
   creator: 'Doctor Doorstep',
   publisher: 'Doctor Doorstep',
@@ -23,8 +24,8 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: 'Doctor at Home in Mumbai | Doctor Doorstep',
-    description: 'Book verified doctors for convenient home visits across Mumbai. Doctor Doorstep provides trusted home doctor consultations with easy booking and 24×7 support.',
+    title: SEO.home.title,
+    description: SEO.home.description,
     url: 'https://www.doctordoorstep.com',
     siteName: 'Doctor Doorstep',
     locale: 'en_IN',
@@ -32,8 +33,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Doctor at Home in Mumbai | Doctor Doorstep',
-    description: 'Book verified doctors for convenient home visits across Mumbai. Doctor Doorstep provides trusted home doctor consultations with easy booking and 24×7 support.',
+    title: SEO.home.title,
+    description: SEO.home.description,
     creator: '@InHouseDoctor',
   },
   robots: {

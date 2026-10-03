@@ -13,11 +13,12 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { scriptFont } from '@/theme/fonts';
+import { SEO, SOCIAL_PROOF } from '@/constants/seo';
+import CallIcon from '@mui/icons-material/Call';
 
 const stats = [
   { icon: <VerifiedIcon />, value: '500+', label: 'Verified Doctors' },
   { icon: <AccessTimeIcon />, value: '24x7', label: 'Care Support' },
-  { icon: <StarIcon />, value: '4.9', label: 'Patient Rating' },
 ];
 
 export const HeroSection = () => {
@@ -63,19 +64,31 @@ export const HeroSection = () => {
               <motion.div variants={fadeInUp}>
                 <Typography
                   variant="h1"
-                  sx={{ fontSize: { xs: '2.4rem', sm: '3.4rem', md: '3.4rem', lg: '4rem' }, mb: 2.5, color: 'text.primary' }}
+                  sx={{ fontSize: { xs: '2rem', sm: '2.6rem', md: '2.6rem', lg: '3.1rem' }, mb: 2.5, color: 'text.primary' }}
                 >
-                  Doctor At Your<br />Doorstep<br />
+                  {SEO.home.h1.replace(/ in Mira Bhayandar$/, '')}
                   <Box component="span" sx={{ background: isDark ? "linear-gradient(90deg, #6DB6F5 0%, #2DD4BF 100%)" : "linear-gradient(90deg, #0A5CB8 0%, #14B5A5 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                    In Minutes.
+                    {' '}in Mira Bhayandar
                   </Box>
                 </Typography>
               </motion.div>
 
               <motion.div variants={fadeInUp}>
                 <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400, mb: 4, maxWidth: 500, lineHeight: 1.7, fontSize: { xs: '1rem', md: '1.1rem' } }}>
-                  Connect with trusted healthcare professionals for home visits, nursing care, physiotherapy, and elder care — right at your doorstep.
+                  Connect with trusted healthcare professionals for home visits, nursing care, physiotherapy, elder care, lab tests and more — right at your doorstep.
                 </Typography>
+              </motion.div>
+
+              <motion.div variants={fadeInUp}>
+                <Box
+                  sx={{
+                    display: 'inline-flex', alignItems: 'center', gap: 1, mb: 3, px: 2, py: 0.9, borderRadius: '999px',
+                    bgcolor: alpha('#14B5A5', isDark ? 0.2 : 0.14), color: isDark ? '#5FD9CB' : 'secondary.dark',
+                    border: '1px solid', borderColor: alpha('#14B5A5', 0.35), fontWeight: 700, fontSize: '0.92rem',
+                  }}
+                >
+                  <CallIcon sx={{ fontSize: 18 }} /> First Online Telephonic Consultation Free
+                </Box>
               </motion.div>
 
               <motion.div variants={fadeInUp}>
@@ -95,9 +108,10 @@ export const HeroSection = () => {
                     Request Doctor <ArrowForwardIcon sx={{ fontSize: 18 }} />
                   </Box>
                   <Box
-                    component="button"
+                    component="a"
+                    href="tel:+919029190955"
                     sx={{
-                      display: 'inline-flex', alignItems: 'center', gap: 1, minHeight: 48,
+                      display: 'inline-flex', alignItems: 'center', gap: 1, minHeight: 48, textDecoration: 'none',
                       py: 1.6, px: 3.5, borderRadius: '999px', cursor: 'pointer',
                       border: '1.5px solid', borderColor: 'primary.main',
                       bgcolor: 'transparent', color: 'primary.main', fontWeight: 700, fontSize: '1rem', fontFamily: 'inherit',
@@ -111,6 +125,12 @@ export const HeroSection = () => {
               </motion.div>
 
               <motion.div variants={fadeInUp}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mb: 3 }} aria-label={`Rated 5 stars - ${SOCIAL_PROOF.reviewsLabel}`}>
+                  <Box sx={{ display: 'flex', gap: 0.3 }}>
+                    {[1, 2, 3, 4, 5].map((i) => <StarIcon key={i} sx={{ fontSize: 22, color: '#F59E0B' }} />)}
+                  </Box>
+                  <Typography sx={{ fontWeight: 600, color: 'text.secondary' }}>({SOCIAL_PROOF.reviewsLabel})</Typography>
+                </Box>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 2.5, sm: 4 } }}>
                   {stats.map((s) => (
                     <Box key={s.label} sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>

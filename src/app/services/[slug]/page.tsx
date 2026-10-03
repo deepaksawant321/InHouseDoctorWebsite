@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Box, Container, Typography, Grid } from '@mui/material';
 import { PageHero } from '@/components/ui/PageHero';
 import { CtaBanner } from '@/features/home/CtaBanner';
+import { SERVICE_SEO } from '@/constants/seo';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 
@@ -35,14 +36,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!service) return { title: 'Service Not Found', robots: { index: false } };
   // Short DB descriptions make weak snippets, so pad them with a generic, factual sentence
   const base = (service.description || '').trim();
-  const tail = `Book ${service.serviceName} at home in Mumbai with Doctor Doorstep.`;
-  const description = base.length >= 90 ? base : base ? `${base.replace(/[.\s]+$/, '')}. ${tail}` : tail;
+  const tail = `Book ${service.serviceName} at home in Mira Road, Bhayandar & Dahisar with Doctor Doorstep.`;
+  const generated = base.length >= 90 ? base : base ? `${base.replace(/[.\s]+$/, '')}. ${tail}` : tail;
+  const seo = SERVICE_SEO[slug];
+  const description = seo?.description ?? generated;
   return {
-    title: `${service.serviceName} at Home in Mumbai`,
+    title: seo ? { absolute: seo.title } : `${service.serviceName} at Home in Mira Road, Bhayandar & Dahisar`,
     description,
     alternates: { canonical: `https://www.doctordoorstep.com/services/${slug}` },
     openGraph: {
-      title: `${service.serviceName} at Home in Mumbai | Doctor Doorstep`,
+      title: seo?.title ?? `${service.serviceName} at Home in Mira Road, Bhayandar & Dahisar | Doctor Doorstep`,
       description,
       url: `https://www.doctordoorstep.com/services/${slug}`,
       type: 'website',
@@ -66,7 +69,7 @@ export default async function ServiceDetailsPage({ params }: { params: Promise<{
             name: service.serviceName,
             description: service.description || undefined,
             url: `https://www.doctordoorstep.com/services/${slug}`,
-            areaServed: { '@type': 'City', name: 'Mumbai' },
+            areaServed: { '@type': 'City', name: 'Mira Road, Bhayandar & Dahisar, Mumbai' },
             provider: { '@type': 'MedicalBusiness', name: 'Doctor Doorstep', url: 'https://www.doctordoorstep.com' },
             ...(Number(service.basePrice) > 0
               ? { offers: { '@type': 'Offer', price: Number(service.basePrice), priceCurrency: 'INR' } }
@@ -75,7 +78,7 @@ export default async function ServiceDetailsPage({ params }: { params: Promise<{
         }}
       />
       <PageHero
-        title={service.serviceName}
+        title={SERVICE_SEO[slug]?.h1 ?? service.serviceName}
         subtitle={service.description || 'Professional healthcare services at home.'}
       />
 
