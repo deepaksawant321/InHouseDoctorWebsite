@@ -1,38 +1,45 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Box, Container, Typography, Grid, useTheme, alpha, Avatar, Rating } from '@mui/material';
 import { m as motion } from 'framer-motion';
 import { staggerContainer, fadeInUp } from '@/constants/animations';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { cmsApi } from '@/services/api';
 
-// Placeholder data - replace with real data from CMS/backend
-const TESTIMONIALS = [
-  {
-    id: 1,
-    name: '[Patient Name]',
-    location: 'Mumbai',
-    review: 'The doctor arrived exactly on time and provided excellent care. Highly recommended for home visits in Mumbai.',
-    rating: 5,
-  },
-  {
-    id: 2,
-    name: '[Patient Name]',
-    location: 'Andheri',
-    review: 'Very professional and courteous. It was a relief not to have to travel to a clinic while feeling unwell.',
-    rating: 5,
-  },
-  {
-    id: 3,
-    name: '[Patient Name]',
-    location: 'Bandra',
-    review: 'Booking was easy and the service was prompt. The doctor took the time to explain everything clearly.',
-    rating: 4,
-  }
-];
+interface Testimonial {
+  id: number;
+  name: string;
+  role: string;
+  quote: string;
+  rating: number;
+}
+
+const MAX_TESTIMONIALS = 6;
+
+const clampRating = (value: unknown) => {
+  const n = Math.round(Number(value));
+  return Number.isFinite(n) ? Math.min(5, Math.max(1, n)) : 5;
+};
 
 export const TestimonialsSection = () => {
   const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    cmsApi.getTestimonials()
+      .then(res => {
+        if (cancelled) return;
+        const data: Testimonial[] = Array.isArray(res.data?.data) ? res.data.data : [];
+        setTestimonials(data.filter(t => t.name && t.quote).slice(0, MAX_TESTIMONIALS));
+      })
+      .catch(() => { if (!cancelled) setTestimonials([]); });
+    return () => { cancelled = true; };
+  }, []);
+
+  // Nothing to show (none active, or the API failed): hide the section rather than render placeholders.
+  if (testimonials.length === 0) return null;
 
   return (
     <Box component="section" sx={{ py: { xs: 7, md: 10 }, bgcolor: 'background.default' }}>
@@ -50,7 +57,7 @@ export const TestimonialsSection = () => {
           </motion.div>
 
           <Grid container spacing={3}>
-            {TESTIMONIALS.map((testimonial) => (
+            {testimonials.map((testimonial) => (
               <Grid size={{ xs: 12, md: 4 }} key={testimonial.id}>
                 <motion.div variants={fadeInUp} style={{ height: '100%' }}>
                   <Box
@@ -66,14 +73,16 @@ export const TestimonialsSection = () => {
                     </Avatar>
                     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                       <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5, flexGrow: 1 }}>
-                        &quot;{testimonial.review}&quot;
+                        &quot;{testimonial.quote}&quot;
                       </Typography>
                       <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>{testimonial.name}</Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: 'text.secondary', mb: 0.5 }}>
-                        <LocationOnIcon sx={{ fontSize: 14 }} />
-                        <Typography variant="caption">{testimonial.location}</Typography>
-                      </Box>
-                      <Rating value={testimonial.rating} readOnly size="small" sx={{ color: '#F59E0B' }} />
+                      {testimonial.role && (
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: 'text.secondary', mb: 0.5 }}>
+                          <LocationOnIcon sx={{ fontSize: 14 }} />
+                          <Typography variant="caption">{testimonial.role}</Typography>
+                        </Box>
+                      )}
+                      <Rating value={clampRating(testimonial.rating)} readOnly size="small" sx={{ color: '#F59E0B' }} />
                     </Box>
                   </Box>
                 </motion.div>

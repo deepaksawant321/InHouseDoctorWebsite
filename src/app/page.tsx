@@ -8,7 +8,6 @@ import { SEO } from '@/constants/seo';
 
 const ServicesSection = dynamic(() => import('@/features/home/ServicesSection').then(mod => mod.ServicesSection));
 const WhyChooseUs = dynamic(() => import('@/features/home/WhyChooseUs').then(mod => mod.WhyChooseUs));
-const Testimonials = dynamic(() => import('@/features/home/Testimonials').then(mod => mod.Testimonials));
 const CtaBanner = dynamic(() => import('@/features/home/CtaBanner').then(mod => mod.CtaBanner));
 const TestimonialsSection = dynamic(() => import('@/features/home/TestimonialsSection').then(mod => mod.TestimonialsSection));
 

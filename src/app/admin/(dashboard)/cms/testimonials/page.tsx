@@ -52,10 +52,22 @@ export default function TestimonialsManagementPage() {
   };
 
   const handleSaveTestimonial = async () => {
+    const rating = Number(currentTestimonial.rating);
+    if (!currentTestimonial.name.trim() || !currentTestimonial.quote.trim()) {
+      setSnackbar({ open: true, message: 'Name and quote are required', severity: 'error' });
+      return;
+    }
+    if (!Number.isFinite(rating) || rating < 1 || rating > 5) {
+      setSnackbar({ open: true, message: 'Rating must be between 1 and 5', severity: 'error' });
+      return;
+    }
     try {
       const payload = {
         ...currentTestimonial,
-        rating: Number(currentTestimonial.rating)
+        name: currentTestimonial.name.trim(),
+        role: currentTestimonial.role.trim(),
+        quote: currentTestimonial.quote.trim(),
+        rating
       };
 
       if (isEditing) {
@@ -125,7 +137,7 @@ export default function TestimonialsManagementPage() {
             <TextField label="Role / Title" fullWidth value={currentTestimonial.role} onChange={e => setCurrentTestimonial(p => ({ ...p, role: e.target.value }))} placeholder="e.g. Recovering Patient" />
           </Box>
           <TextField label="Quote / Feedback" fullWidth multiline rows={4} value={currentTestimonial.quote} onChange={e => setCurrentTestimonial(p => ({ ...p, quote: e.target.value }))} />
-          <TextField label="Rating (1-5)" type="number" fullWidth value={currentTestimonial.rating} onChange={e => setCurrentTestimonial(p => ({ ...p, rating: Number(e.target.value) }))} />
+          <TextField label="Rating (1-5)" type="number" fullWidth slotProps={{ htmlInput: { min: 1, max: 5, step: 1 } }} value={currentTestimonial.rating} onChange={e => setCurrentTestimonial(p => ({ ...p, rating: Number(e.target.value) }))} />
           <FormControlLabel control={<Switch checked={currentTestimonial.isActive} onChange={e => setCurrentTestimonial(p => ({ ...p, isActive: e.target.checked }))} />} label="Is Active" />
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 3 }}>
